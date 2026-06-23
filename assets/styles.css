@@ -1,0 +1,1576 @@
+/* ============================================================
+   Jose Andres Barrientos, Portfolio
+   Direction C3 "Final": Pulse editorial structure × Ledger DNA.
+   Archivo extra-wide caps, metric spark-bars, ledger footer.
+   Accent: electric blue. Dark theme by default with a dark/light toggle.
+   Comfortable density · lift-&-glow hover.
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Lenis smooth scroll, layout and native-scroll guards (active once mounted). */
+.lenis,
+.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+}
+
+/* ------------------------------------------------------------
+   Theme tokens, dark (default) and light, both on electric blue.
+   Page background follows the theme so the overscroll area matches.
+   ------------------------------------------------------------ */
+html[data-theme="dark"],
+html[data-theme="dark"] body {
+  background: oklch(0.165 0.022 268);
+}
+html[data-theme="light"],
+html[data-theme="light"] body {
+  background: #edf1f5;
+}
+
+html[data-theme="dark"] .sr {
+  --bg: oklch(0.165 0.022 268);
+  --bg2: oklch(0.205 0.026 268);
+  --text: oklch(0.94 0.008 280);
+  --muted: oklch(0.65 0.025 275);
+  --line: oklch(0.3 0.03 270);
+  --line-soft: oklch(0.24 0.026 270);
+  /* electric blue, brightened for contrast on the dark surface */
+  --accent: #3f6dff;
+  --accent-dim: rgba(63, 109, 255, 0.35);
+  --accent-ink: #ffffff;
+  /* liquid-glass header */
+  --glass-tint: rgba(255, 255, 255, 0.05);
+  --glass-edge: rgba(255, 255, 255, 0.28);
+  --glass-shadow: rgba(0, 0, 0, 0.3);
+  /* skill-meter unfilled segment */
+  --track: oklch(0.26 0.026 270);
+}
+html[data-theme="light"] .sr {
+  --bg: #edf1f5;
+  --bg2: #f6f9fc;
+  --text: #121821;
+  --muted: #5c6776;
+  --line: #d3dbe4;
+  --line-soft: #e3e9f0;
+  /* electric blue, exact */
+  --accent: #0145f2;
+  --accent-dim: rgba(1, 69, 242, 0.35);
+  --accent-ink: #ffffff;
+  /* liquid-glass header */
+  --glass-tint: rgba(255, 255, 255, 0.45);
+  --glass-edge: rgba(255, 255, 255, 0.85);
+  --glass-shadow: rgba(40, 60, 110, 0.18);
+  /* skill-meter unfilled segment */
+  --track: #dde3ea;
+}
+
+/* ------------------------------------------------------------
+   Root: structural tokens + base typography.
+   Color tokens are set per theme in the html[data-theme] blocks above.
+   ------------------------------------------------------------ */
+.sr {
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --sans: "IBM Plex Sans", system-ui, sans-serif;
+  --display: "Archivo", var(--sans);
+  --sp: 1;
+
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  position: relative;
+  /* clip horizontal overflow without becoming a scroll container,
+     "overflow: hidden" here would break the sticky header */
+  overflow-x: clip;
+}
+.sr * {
+  margin: 0;
+}
+.sr a {
+  color: inherit;
+}
+
+/* ------------------------------------------------------------
+   Motion keyframes + reveal/spark gating
+   ------------------------------------------------------------ */
+@keyframes srDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes srGrowY {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+@keyframes srFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes srMarquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* spark initial state (transform origin / dash) */
+.sr .spark-bars rect {
+  transform-origin: bottom;
+  transform-box: fill-box;
+}
+.sr .spark-area .stroke,
+.sr .spark-line polyline {
+  stroke-dasharray: 1;
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.pl-pad {
+  padding-left: 64px;
+  padding-right: 64px;
+}
+
+.pl-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 26px;
+  padding-bottom: 26px;
+}
+.pl-header .brand {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+.pl-header .brand em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.pl-hero {
+  position: relative;
+  padding-top: calc(72px * var(--sp));
+  padding-bottom: calc(30px * var(--sp));
+  overflow: hidden;
+}
+.pl-hero-content {
+  position: relative;
+  z-index: 2;
+  /* unconstrained so the display name can fill the width (bold-fill hero) and
+     so the name's clip-mask (.ml) never crops the line; the summary keeps its
+     own readable measure via .pl-hero-intro max-width. */
+  max-width: none;
+}
+.pl-kicker {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 26px;
+}
+.pl-name {
+  font-family: var(--display);
+  font-variation-settings: "wdth" 122;
+  font-weight: 800;
+  text-transform: uppercase;
+  /* fluid: scales with the viewport so the line never overflows/clips */
+  font-size: clamp(44px, 8.6vw, 104px);
+  line-height: 0.98;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+  margin-bottom: 34px;
+}
+.pl-name em {
+  font-style: normal;
+  color: var(--accent);
+}
+/* name reveals line-by-line behind a clip mask (driven by revealHero) */
+.pl-name .ml {
+  display: block;
+  overflow: hidden;
+}
+.pl-name .ml > span {
+  display: block;
+}
+.pl-hero-intro {
+  max-width: 56ch;
+  color: var(--muted);
+  font-size: 18px;
+  text-wrap: pretty;
+}
+.pl-hero-intro mark {
+  background: none;
+  color: var(--text);
+  border-bottom: 2px solid var(--accent-dim);
+}
+
+/* hero chart, faint backdrop, top-right, never under the text */
+.pl-hero-chart {
+  position: absolute;
+  top: 72px;
+  right: 0;
+  left: auto;
+  width: min(46%, 540px);
+  height: 300px;
+  opacity: 0.42;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* annotated metrics */
+.pl-metrics {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-items: center;
+  gap: 40px;
+  padding-top: calc(56px * var(--sp));
+}
+.pl-metric .num {
+  font-family: var(--display);
+  font-variation-settings: "wdth" 110;
+  font-weight: 700;
+  font-size: 62px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.pl-metric .num sup {
+  font-size: 20px;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-weight: 400;
+  vertical-align: super;
+  margin-left: 3px;
+}
+.pl-metric .num .unit {
+  font-size: 30px;
+  color: var(--accent);
+}
+.pl-metric .lbl {
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 10px;
+  max-width: 22ch;
+  text-wrap: pretty;
+}
+.fn-spark {
+  margin-top: 14px;
+}
+
+.pl-footnotes {
+  position: relative;
+  z-index: 2;
+  padding-top: 34px;
+  display: grid;
+  gap: 6px;
+}
+.pl-footnotes div {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+.pl-footnotes b {
+  color: var(--accent);
+  font-weight: 400;
+}
+
+.pl-rule {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: calc(56px * var(--sp)) 0 0;
+}
+
+/* ============================================================
+   SECTION HEADS
+   ============================================================ */
+.pl-section {
+  padding-top: calc(64px * var(--sp));
+}
+.pl-sec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: calc(38px * var(--sp));
+}
+.pl-sec-title {
+  font-family: var(--display);
+  font-variation-settings: "wdth" 122;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 32px;
+  letter-spacing: -0.01em;
+}
+.pl-sec-title::after {
+  content: ".";
+  color: var(--accent);
+}
+.pl-sec-fig {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ============================================================
+   ABOUT
+   ============================================================ */
+.pl-about {
+  display: grid;
+  grid-template-columns: 232px minmax(0, 1fr) clamp(220px, 24%, 300px);
+  grid-template-areas: "photo text facts";
+  gap: 56px;
+  align-items: start;
+}
+.pl-fig {
+  grid-area: photo;
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+  margin: 0;
+}
+.pl-fig-ring {
+  padding: 8px;
+  border: 1px dashed var(--accent-dim);
+  border-radius: 50%;
+}
+.pl-fig-cap {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.pl-fig-cap b {
+  color: var(--accent);
+  font-weight: 400;
+}
+
+/* about photo */
+.pl-photo {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.pl-about-text {
+  grid-area: text;
+  display: grid;
+  gap: 17px;
+}
+.pl-about-text p {
+  color: var(--muted);
+  max-width: 70ch;
+  text-wrap: pretty;
+}
+.pl-about-text p mark {
+  background: none;
+  color: var(--text);
+  border-bottom: 2px solid var(--accent-dim);
+}
+/* facts: right-hand sidebar that fills the section width */
+.pl-about-facts {
+  grid-area: facts;
+  display: grid;
+  gap: 20px;
+  align-content: start;
+  padding-top: 4px;
+}
+.pl-about-facts .f {
+  font-size: 13.5px;
+}
+.pl-about-facts .k {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* ============================================================
+   PROJECTS, figures
+   ============================================================ */
+.pl-proj {
+  border-top: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+}
+.pl-proj-list .pl-proj:last-child {
+  border-bottom: 1px solid var(--line);
+}
+.pl-proj-chart {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 380px;
+  height: 110px;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.45s,
+    height 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.pl-proj:hover .pl-proj-chart {
+  opacity: 0.55;
+}
+.pl-proj.open .pl-proj-chart {
+  height: 100%;
+  opacity: 0.45;
+}
+
+.pl-proj-head {
+  display: grid;
+  grid-template-columns: 130px 1fr auto;
+  gap: 36px;
+  align-items: start;
+  width: 100%;
+  padding: calc(30px * var(--sp)) 0;
+  text-align: left;
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  position: relative;
+}
+.pl-proj-fig {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-top: 8px;
+}
+.pl-proj-fig b {
+  color: var(--accent);
+  font-weight: 400;
+  display: block;
+  margin-bottom: 4px;
+}
+.pl-proj-title {
+  font-family: var(--display);
+  font-variation-settings: "wdth" 108;
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: -0.02em;
+  transition: color 0.2s;
+  display: block;
+}
+.pl-proj-head:hover .pl-proj-title {
+  color: var(--accent);
+}
+.pl-proj-tagline {
+  color: var(--muted);
+  font-size: 15px;
+  margin-top: 6px;
+  max-width: 52ch;
+  display: block;
+}
+.pl-proj-stat {
+  text-align: right;
+  padding-top: 2px;
+}
+.pl-proj-stat .v {
+  font-family: var(--display);
+  font-variation-settings: "wdth" 110;
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  white-space: nowrap;
+  display: block;
+}
+.pl-proj-stat .k {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 4px;
+  display: block;
+}
+.pl-proj-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.pl-proj.open .pl-proj-body {
+  grid-template-rows: 1fr;
+}
+.pl-proj-body > div {
+  overflow: hidden;
+}
+.pl-proj-detail {
+  padding: 0 0 calc(34px * var(--sp)) 166px;
+  display: grid;
+  gap: 15px;
+  position: relative;
+  z-index: 1;
+}
+.pl-proj-detail ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 9px;
+  max-width: 66ch;
+}
+.pl-proj-detail ul li {
+  color: var(--muted);
+  font-size: 15px;
+  padding-left: 20px;
+  position: relative;
+  text-wrap: pretty;
+}
+.pl-proj-detail ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 8px;
+  height: 2px;
+  background: var(--accent);
+}
+.pl-proj-tech {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+.pl-proj-tech b {
+  color: var(--accent);
+  font-weight: 400;
+}
+
+/* ============================================================
+   EXPERIENCE, timeline
+   ============================================================ */
+.pl-xp {
+  position: relative;
+  padding-left: 26px;
+}
+.pl-xp::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: var(--line);
+}
+.pl-xp-item {
+  position: relative;
+  padding: 0 0 calc(36px * var(--sp));
+}
+.pl-xp-item:last-child {
+  padding-bottom: 6px;
+}
+.pl-xp-item::before {
+  content: "";
+  position: absolute;
+  left: -26px;
+  top: 7px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px color-mix(in oklch, var(--accent) 18%, transparent);
+}
+/* role left, date pushed to the right edge, fills the row width */
+.pl-xp-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.pl-xp-when {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.pl-xp-role {
+  font-family: var(--display);
+  font-variation-settings: "wdth" 108;
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+.pl-xp-org {
+  color: var(--muted);
+  font-size: 14px;
+  margin-top: 4px;
+}
+/* bullets run in two columns so the body spans the full width */
+.pl-xp-item ul {
+  list-style: none;
+  margin: 0;
+  padding: 16px 0 0;
+  columns: 2;
+  column-gap: 56px;
+}
+.pl-xp-item ul li {
+  color: var(--muted);
+  font-size: 14.5px;
+  padding-left: 20px;
+  margin-bottom: 9px;
+  position: relative;
+  text-wrap: pretty;
+  break-inside: avoid;
+}
+.pl-xp-item ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 8px;
+  height: 2px;
+  background: var(--accent);
+}
+
+/* ============================================================
+   EDUCATION + SKILLS
+   ============================================================ */
+.pl-edu {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+}
+.pl-edu-cell {
+  display: grid;
+  gap: 7px;
+  align-content: start;
+}
+.pl-edu-dates {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.pl-edu-degree {
+  font-family: var(--display);
+  font-variation-settings: "wdth" 108;
+  font-weight: 700;
+  font-size: 23px;
+  letter-spacing: -0.01em;
+}
+.pl-edu-school {
+  font-size: 15px;
+}
+.pl-edu-detail {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.pl-skills {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+.pl-skill-card {
+  --ca: var(--accent);
+  border: 1px solid var(--line-soft);
+  border-radius: 16px;
+  padding: 26px 26px 22px;
+  background:
+    radial-gradient(
+      120% 80% at 12% 0%,
+      color-mix(in oklab, var(--ca) 8%, transparent),
+      transparent 60%
+    ),
+    var(--bg2);
+}
+/* per-category accents (Vivid): blue anchor + coral / teal / orchid */
+.pl-skills > .pl-skill-card:nth-child(2) {
+  --ca: #ff6b4a;
+}
+.pl-skills > .pl-skill-card:nth-child(3) {
+  --ca: #2dd4bf;
+}
+.pl-skills > .pl-skill-card:nth-child(4) {
+  --ca: #c084fc;
+}
+.pl-skill-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 18px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.pl-skill-ico {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  color: var(--ca);
+  background: color-mix(in oklab, var(--ca) 15%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--ca) 28%, transparent);
+}
+.pl-skill-ico svg {
+  width: 20px;
+  height: 20px;
+}
+.pl-skill-cat {
+  font-family: var(--display);
+  font-variation-settings: "wdth" 110;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+.pl-skill-cap {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.pl-skill-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.pl-skill-row {
+  display: grid;
+  gap: 7px;
+}
+.pl-skill-row .top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.pl-skill-sk {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text);
+}
+.pl-skill-lvl {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ca);
+}
+html[data-theme="light"] .pl-skill-lvl {
+  color: color-mix(in oklab, var(--ca) 78%, #0a0e14);
+}
+.pl-skill-meter {
+  display: flex;
+  gap: 5px;
+  height: 8px;
+}
+.pl-skill-meter span {
+  flex: 1;
+  border-radius: 3px;
+  background: var(--track);
+}
+.pl-skill-meter span.on {
+  background: var(--ca);
+}
+
+/* ============================================================
+   MARQUEE + CONTACT + FOOTER (Ledger DNA)
+   ============================================================ */
+.lg-marquee {
+  border-top: 1px solid var(--line);
+  overflow: hidden;
+  padding: 13px 0;
+  white-space: nowrap;
+}
+.lg-marquee .track {
+  display: inline-flex;
+  gap: 0;
+  animation: srMarquee 26s linear infinite;
+  will-change: transform;
+}
+.lg-marquee span {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0;
+}
+/* dot centered between the two words it separates (equal gap each side) */
+.lg-marquee span i {
+  font-style: normal;
+  color: var(--accent);
+  padding: 0 20px;
+}
+
+.lg-contact {
+  border-top: 1px solid var(--line);
+  padding: calc(72px * var(--sp)) 64px calc(60px * var(--sp));
+}
+.lg-contact-big {
+  font-family: var(--display);
+  font-variation-settings: "wdth" 122;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 96px;
+  line-height: 0.95;
+  letter-spacing: -0.015em;
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 38px;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--text);
+  transition:
+    color 0.3s,
+    -webkit-text-stroke-color 0.3s;
+}
+.lg-contact-big:hover {
+  color: var(--accent);
+  -webkit-text-stroke: 1.5px var(--accent);
+}
+.lg-contact-row {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+.lg-contact-row a {
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 3px;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+  white-space: nowrap;
+}
+.lg-contact-row a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.lg-footer {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid var(--line);
+  padding: 16px 64px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ============================================================
+   STANDALONE PAGE: sticky nav, scrollspy, reveals, responsive
+   ============================================================ */
+.pf-final {
+  min-height: 100vh;
+}
+.pf-final section[id],
+.pf-final .lg-contact {
+  scroll-margin-top: 84px;
+}
+
+/* sticky nav, liquid glass (full bar) */
+.pf-final .pl-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--glass-tint);
+  backdrop-filter: blur(16px) saturate(180%) brightness(1.06);
+  -webkit-backdrop-filter: blur(16px) saturate(180%) brightness(1.06);
+  border-bottom: 1px solid
+    color-mix(in oklab, var(--glass-edge) 60%, transparent);
+  box-shadow:
+    0 8px 26px -10px var(--glass-shadow),
+    inset 0 1px 0 0 var(--glass-edge);
+  transition:
+    background 0.3s,
+    box-shadow 0.3s,
+    border-color 0.3s;
+}
+.pf-final .pl-nav-links {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+.pf-final .pl-nav-links a {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  color: var(--muted);
+  position: relative;
+  padding: 4px 0;
+  text-transform: lowercase;
+  transition: color 0.18s;
+}
+.pf-final .pl-nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: -2px;
+  height: 1.5px;
+  background: var(--accent);
+  transition: right 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.pf-final .pl-nav-links a:hover {
+  color: var(--text);
+}
+.pf-final .pl-nav-links a:hover::after {
+  right: 0;
+}
+.pf-final .pl-nav-links a.active {
+  color: var(--accent);
+}
+.pf-final .pl-nav-links a.active::after {
+  right: 0;
+}
+.pf-final .pl-nav-links .nav-resume {
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 2px;
+  padding: 6px 13px;
+  text-transform: none;
+  transition:
+    background 0.18s,
+    color 0.18s;
+}
+.pf-final .pl-nav-links .nav-resume::after {
+  display: none;
+}
+.pf-final .pl-nav-links .nav-resume:hover {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.pf-final .pl-nav-toggle {
+  display: none;
+}
+
+/* header right-side controls (nav + theme toggle + mobile menu button) */
+.pl-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: none;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    color 0.18s,
+    border-color 0.18s,
+    background 0.18s;
+}
+.theme-toggle:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.theme-toggle svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+/* show the icon of the mode you'll switch TO: sun in dark, moon in light */
+html[data-theme="dark"] .theme-toggle .ic-moon {
+  display: none;
+}
+html[data-theme="light"] .theme-toggle .ic-sun {
+  display: none;
+}
+/* theme toggle: circle-expand reveal (View Transitions API). Scoped to the
+   toggle's .theme-vt class so the new theme grows in a clip-path circle (set in
+   main.js) instead of the default cross-fade. */
+html.theme-vt::view-transition-old(root),
+html.theme-vt::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+html.theme-vt::view-transition-old(root) {
+  z-index: 0;
+}
+html.theme-vt::view-transition-new(root) {
+  z-index: 1;
+}
+
+/* scroll reveal */
+@media (prefers-reduced-motion: no-preference) {
+  .pf-final .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+      transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .pf-final .reveal.in {
+    opacity: 1;
+    transform: none;
+  }
+  .pf-final .reveal-group > * {
+    opacity: 0;
+    transform: translateY(22px);
+    transition:
+      opacity 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+      transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .pf-final .reveal-group.in > * {
+    opacity: 1;
+    transform: none;
+  }
+  /* per-child stagger: --i index drives the delay (group children and
+     standalone reveals alike); falls back to no delay when --i is unset */
+  .pf-final .reveal.in,
+  .pf-final .reveal-group.in > * {
+    transition-delay: calc(var(--i, 0) * 90ms);
+  }
+
+  /* pop variant: a slight scale-in on a springy curve. Works on a standalone
+     reveal or on a group child tagged .pop */
+  .pf-final .reveal.pop,
+  .pf-final .reveal-group > .pop {
+    transform: translateY(20px) scale(0.96);
+    transition-timing-function: cubic-bezier(0, 0.71, 0.2, 1.4);
+  }
+  .pf-final .reveal.pop.in,
+  .pf-final .reveal-group.in > .pop {
+    transform: none;
+  }
+
+  /* hero name: each masked line rises into place; line 2 trails line 1 */
+  .pf-final .pl-name .ml > span {
+    transform: translateY(110%);
+    transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .pf-final .pl-name.in .ml > span {
+    transform: none;
+  }
+  .pf-final .pl-name .ml:nth-child(2) > span {
+    transition-delay: 0.13s;
+  }
+
+  /* slide-in variants: enter from the left or right. Used on the experience
+     entries so they alternate sides. Overrides the base reveal translateY. */
+  .pf-final .reveal.from-left {
+    transform: translateX(-48px);
+  }
+  .pf-final .reveal.from-right {
+    transform: translateX(48px);
+  }
+  .pf-final .reveal.from-left.in,
+  .pf-final .reveal.from-right.in {
+    transform: none;
+  }
+
+  /* experience entries take their time: a slower slide and a wider stagger */
+  .pf-final .pl-xp-item.reveal {
+    transition-duration: 1.1s;
+  }
+  .pf-final .pl-xp-item.reveal.in {
+    transition-delay: calc(var(--i, 0) * 0.16s);
+  }
+
+  /* sparkline draw gated until revealed */
+  .pf-final .spark-bars rect {
+    animation: none;
+    transform: scaleY(0);
+  }
+  .pf-final .reveal.in .spark-bars rect,
+  .pf-final .reveal-group.in .spark-bars rect {
+    animation: srGrowY 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  }
+  .pf-final .spark-area .stroke,
+  .pf-final .spark-line polyline {
+    animation: none;
+    stroke-dashoffset: 1;
+  }
+  .pf-final .reveal.in .spark-area .stroke,
+  .pf-final .reveal.in .spark-line polyline {
+    animation: srDraw 1.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  .pf-final .spark-area .fill {
+    opacity: 0;
+  }
+  .pf-final .reveal.in .spark-area .fill {
+    animation: srFade 1s 0.9s forwards;
+  }
+}
+
+/* hero chart draws regardless (it is the backdrop) */
+.pf-final .pl-hero-chart .spark-area .stroke {
+  animation: srDraw 1.8s 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.pf-final .pl-hero-chart .spark-area .fill {
+  animation: srFade 1.1s 1.2s forwards;
+}
+
+/* ------------------------------------------------------------
+   Hover: lift & glow
+   ------------------------------------------------------------ */
+.pf-final[data-hoverfx="lift"] .pl-edu-cell {
+  transition: transform 0.28s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+/* .pl-metric is a reveal-group child (.pop): keep the reveal opacity+transform
+   transitions and let hover lift ride the same transform transition so the
+   shorthand no longer wipes the fade/spring */
+.pf-final[data-hoverfx="lift"] .pl-metric {
+  transition:
+    opacity 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.6s cubic-bezier(0, 0.71, 0.2, 1.4);
+}
+.pf-final[data-hoverfx="lift"] .pl-metric:hover {
+  transform: translateY(-5px);
+}
+.pf-final[data-hoverfx="lift"] .pl-metric:hover .num {
+  text-shadow: 0 0 22px var(--accent-dim);
+}
+.pf-final[data-hoverfx="lift"] .pl-edu-cell:hover {
+  transform: translateY(-4px);
+}
+/* .pl-proj is a standalone reveal: keep its opacity+transform reveal and add
+   the hover background to the same list instead of replacing it */
+.pf-final[data-hoverfx="lift"] .pl-proj {
+  transition:
+    opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+    background 0.28s;
+}
+.pf-final[data-hoverfx="lift"] .pl-proj:hover {
+  background: color-mix(in oklch, var(--accent) 7%, transparent);
+}
+/* .pl-skill-card is a reveal-group child: keep the opacity+transform reveal and
+   add the hover lift + accent border to the same transition list */
+.pf-final[data-hoverfx="lift"] .pl-skill-card {
+  transition:
+    opacity 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+    border-color 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.pf-final[data-hoverfx="lift"] .pl-skill-card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in oklab, var(--ca) 50%, var(--line));
+}
+
+/* the hover-fx transition shorthands above reset transition-delay to 0, so
+   re-assert the --i stagger here (later in source) for the reveal targets */
+@media (prefers-reduced-motion: no-preference) {
+  .pf-final[data-hoverfx="lift"] .reveal.in.pl-proj,
+  .pf-final[data-hoverfx="lift"] .reveal-group.in > .pl-metric,
+  .pf-final[data-hoverfx="lift"] .reveal-group.in > .pl-skill-card {
+    transition-delay: calc(var(--i, 0) * 90ms);
+  }
+}
+
+/* ------------------------------------------------------------
+   Back-to-top
+   ------------------------------------------------------------ */
+.pf-final .pf-totop {
+  position: fixed;
+  right: 28px;
+  bottom: 28px;
+  z-index: 60;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.25);
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(12px) scale(0.9);
+  pointer-events: none;
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
+}
+.pf-final .pf-totop.show {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.pf-final .pf-totop:hover {
+  filter: brightness(1.08);
+}
+
+/* ============================================================
+   INTRO OVERLAY (first visit per session)
+   ============================================================ */
+/* Pre-paint guard: when the intro will play, a tiny inline script in <head>
+   tags <html> with .intro-arming so a solid --bg cover holds until the JS
+   overlay mounts. JS-driven only, so a JS-disabled page renders normally. */
+html.intro-arming .sr::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: var(--bg);
+  pointer-events: none;
+}
+
+/* The overlay is injected into .sr so it inherits the theme tokens. */
+.sr .intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: auto;
+}
+
+/* the two curtains (--bg) that split apart to reveal the page */
+.sr .intro-curtain {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 50vh;
+  background: var(--bg);
+  z-index: 101;
+  transition: transform 1.05s cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform;
+}
+.sr .intro-curtain.top {
+  top: 0;
+  border-bottom: 2px solid var(--accent);
+  box-shadow: inset 0 -12px 22px -10px var(--accent-dim);
+}
+.sr .intro-curtain.bottom {
+  bottom: 0;
+  border-top: 2px solid var(--accent);
+  box-shadow: inset 0 12px 22px -10px var(--accent-dim);
+}
+.sr .intro.reveal .intro-curtain.top {
+  transform: translateY(-101%);
+}
+.sr .intro.reveal .intro-curtain.bottom {
+  transform: translateY(101%);
+}
+
+/* thin crosshair frame behind the monogram */
+.sr .intro-cross-h,
+.sr .intro-cross-v {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 102;
+  transition:
+    transform 0.5s ease,
+    opacity 0.4s ease;
+}
+.sr .intro-cross-h {
+  width: 100vw;
+  height: 0;
+  transform: translate(-50%, -50%);
+  border-top: 1px solid var(--line);
+}
+.sr .intro-cross-v {
+  width: 0;
+  height: 100vh;
+  transform: translate(-50%, -50%);
+  border-left: 1px solid var(--line);
+}
+.sr .intro.reveal .intro-cross-h {
+  transform: translate(-50%, -50%) scaleX(0);
+  opacity: 0;
+}
+.sr .intro.reveal .intro-cross-v {
+  transform: translate(-50%, -50%) scaleY(0);
+  opacity: 0;
+}
+
+/* centered cluster: monogram + sparkline + percent, above the curtains */
+.sr .intro-center {
+  position: fixed;
+  inset: 0;
+  z-index: 103;
+  display: grid;
+  place-items: center;
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s ease;
+}
+.sr .intro.reveal .intro-center {
+  opacity: 0;
+  transform: scale(0.97);
+}
+.sr .intro-cluster {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.5s ease 0.05s,
+    transform 0.5s ease 0.05s;
+}
+.sr .intro.in .intro-cluster {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sr .intro-mark {
+  font-family: var(--display);
+  font-variation-settings: "wdth" 122;
+  font-weight: 800;
+  font-size: clamp(48px, 9vw, 104px);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+.sr .intro-mark em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+/* sparkline draws via stroke-dashoffset (reuses the srDraw mechanism) */
+.sr .intro-spark {
+  width: 300px;
+  height: 46px;
+  display: block;
+}
+.sr .intro-spark polyline {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.sr .intro-spark .grid {
+  stroke: var(--line-soft);
+  stroke-width: 1;
+}
+.sr .intro-pct {
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+.sr .intro-pct b {
+  color: var(--text);
+  font-weight: 500;
+}
+.sr .intro-pct .cap {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1040px) {
+  .pf-final .pl-pad {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  .pf-final .lg-contact,
+  .pf-final .lg-footer {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  .pf-final .pl-hero-chart {
+    width: 42%;
+    opacity: 0.5;
+  }
+  .pf-final .pl-metrics {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+  }
+  .pf-final .pl-about {
+    grid-template-columns: 200px 1fr;
+    grid-template-areas:
+      "photo text"
+      "facts facts";
+    gap: 40px 48px;
+  }
+  .pf-final .pl-about-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 36px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+  }
+}
+@media (max-width: 760px) {
+  .pf-final .pl-nav-links {
+    display: none;
+  }
+  .pf-final .pl-nav-links.open {
+    display: flex;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    padding: 22px 40px 28px;
+  }
+  .pf-final .pl-nav-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    width: 40px;
+    height: 36px;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 16px;
+  }
+  .pf-final .pl-name {
+    font-size: 44px;
+    white-space: normal;
+  }
+  .pf-final .pl-hero-chart {
+    display: none;
+  }
+  .pf-final .pl-hero-content {
+    max-width: 100%;
+  }
+  .pf-final .pl-metrics {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 26px;
+    padding-top: 36px;
+  }
+  .pf-final .pl-about {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "photo"
+      "text"
+      "facts";
+    gap: 32px;
+  }
+  .pf-final .pl-fig {
+    justify-items: center;
+  }
+  .pf-final .pl-xp-item ul {
+    columns: 1;
+  }
+  .pf-final .pl-sec-title {
+    font-size: 26px;
+  }
+  .pf-final .pl-proj-head {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .pf-final .pl-proj-stat {
+    text-align: left;
+  }
+  .pf-final .pl-proj-detail {
+    padding-left: 0;
+  }
+  .pf-final .pl-edu {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .pf-final .pl-skills {
+    grid-template-columns: 1fr;
+  }
+  .pf-final .lg-contact-big {
+    font-size: 52px;
+  }
+  .pf-final .lg-footer {
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+  }
+  .pf-final .pf-totop {
+    right: 16px;
+    bottom: 16px;
+  }
+}
+@media (max-width: 480px) {
+  .pf-final .pl-pad {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+  .pf-final .lg-contact,
+  .pf-final .lg-footer {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+  .pf-final .pl-metrics {
+    grid-template-columns: 1fr 1fr;
+  }
+  .pf-final .pl-name {
+    font-size: 38px;
+  }
+}
