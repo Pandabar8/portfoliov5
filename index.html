@@ -47,7 +47,7 @@
   })();
 </script>
 
-<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/styles.css?v=8">
 </head>
 
 <body>
@@ -78,6 +78,7 @@
 
   <!-- ============================= HERO ============================= -->
   <section class="pl-hero pl-pad">
+    <canvas class="pl-hero-ascii" id="hero-ascii" aria-hidden="true"></canvas>
     <div class="pl-hero-content">
       <p class="pl-kicker reveal">Data analyst, measured in outcomes</p>
       <h1 class="pl-name"><span class="ml"><span>José Andrés</span></span><span class="ml"><span>Barrientos<em>.</em></span></span></h1>
@@ -121,8 +122,11 @@
     <hr class="pl-rule">
   </section>
 
+  <!-- ===== Scroll-stacking deck: About -> Skills become full-screen cards ===== -->
+  <div class="pl-stack">
+
   <!-- ============================= ABOUT ============================= -->
-  <section id="about" class="pl-section pl-pad">
+  <section id="about" class="pl-section pl-card pl-pad">
     <div class="pl-sec-head reveal">
       <h2 class="pl-sec-title">about</h2>
       <span class="pl-sec-fig">fig. 01: the analyst</span>
@@ -148,7 +152,7 @@
   </section>
 
   <!-- ============================= PROJECTS ============================= -->
-  <section id="projects" class="pl-section pl-pad">
+  <section id="projects" class="pl-section pl-card pl-pad">
     <div class="pl-sec-head reveal">
       <h2 class="pl-sec-title">projects</h2>
       <span class="pl-sec-fig">figs. 02-04: selected work</span>
@@ -226,13 +230,13 @@
   </section>
 
   <!-- ============================= EXPERIENCE ============================= -->
-  <section id="experience" class="pl-section pl-pad">
+  <section id="experience" class="pl-section pl-card pl-pad">
     <div class="pl-sec-head reveal">
       <h2 class="pl-sec-title">experience</h2>
       <span class="pl-sec-fig">2020-2025</span>
     </div>
     <div class="pl-xp">
-      <div class="pl-xp-item reveal from-left" style="--i:0" data-reveal-mid>
+      <div class="pl-xp-item reveal from-left" style="--i:0">
         <div class="pl-xp-top">
           <span class="pl-xp-role">Data Analyst</span>
           <span class="pl-xp-when">Sep 2021 to Aug 2025</span>
@@ -245,7 +249,7 @@
           <li>Automated weekly reporting workflows in Excel + Power BI, cutting manual preparation time for commercial stakeholders.</li>
         </ul>
       </div>
-      <div class="pl-xp-item reveal from-right" style="--i:1" data-reveal-mid>
+      <div class="pl-xp-item reveal from-right" style="--i:1">
         <div class="pl-xp-top">
           <span class="pl-xp-role">Quality Assurance Coordinator</span>
           <span class="pl-xp-when">Jan to Jun 2021</span>
@@ -256,7 +260,7 @@
           <li>Analyzed quality metrics and customer feedback to find process improvements, increasing efficiency by 12%.</li>
         </ul>
       </div>
-      <div class="pl-xp-item reveal from-left" style="--i:2" data-reveal-mid>
+      <div class="pl-xp-item reveal from-left" style="--i:2">
         <div class="pl-xp-top">
           <span class="pl-xp-role">Customer Service Representative</span>
           <span class="pl-xp-when">Jun to Dec 2020</span>
@@ -271,7 +275,7 @@
   </section>
 
   <!-- ============================= EDUCATION ============================= -->
-  <section id="education" class="pl-section pl-pad">
+  <section id="education" class="pl-section pl-card pl-pad">
     <div class="pl-sec-head reveal">
       <h2 class="pl-sec-title">education</h2>
       <span class="pl-sec-fig">College Park · San Salvador</span>
@@ -293,7 +297,7 @@
   </section>
 
   <!-- ============================= SKILLS ============================= -->
-  <section id="skills" class="pl-section pl-pad" style="padding-bottom:56px">
+  <section id="skills" class="pl-section pl-card pl-pad">
     <div class="pl-sec-head reveal">
       <h2 class="pl-sec-title">skills</h2>
       <span class="pl-sec-fig"></span>
@@ -364,6 +368,8 @@
     </div>
   </section>
 
+  </div><!-- /.pl-stack -->
+
   <!-- ============================= MARQUEE + CONTACT (Ledger footer) ============================= -->
   <div class="lg-marquee" aria-hidden="true">
     <div class="track">
@@ -394,6 +400,7 @@
 </div>
 
 <script src="assets/lenis.min.js"></script>
-<script src="assets/main.js"></script>
+<script src="assets/main.js?v=2"></script>
+<script src="assets/hero-ascii.js?v=2"></script>
 </body>
 </html>

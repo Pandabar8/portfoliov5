@@ -828,6 +828,8 @@ html[data-theme="light"] .pl-skill-lvl {
   flex: 1;
   border-radius: 3px;
   background: var(--track);
+  position: relative;
+  overflow: hidden;
 }
 .pl-skill-meter span.on {
   background: var(--ca);
@@ -1572,5 +1574,241 @@ html.intro-arming .sr::before {
   }
   .pf-final .pl-name {
     font-size: 38px;
+  }
+}
+
+/* ============================================================
+   SCROLL-STACKING DECK
+   About -> Skills are wrapped in .pl-stack; each becomes a card.
+   On desktop with motion allowed the cards pin to the top and the
+   next slides fully over the last, stacking like a deck. On <=900px
+   or with reduced motion the deck flattens to plain stacked panels.
+   ============================================================ */
+.pl-stack {
+  position: relative;
+}
+.pl-stack > .pl-card {
+  --ca: var(--accent);
+  position: relative;
+  border-radius: 30px 30px 0 0;
+  padding-top: 64px;
+  padding-bottom: 56px;
+  background:
+    radial-gradient(
+      135% 62% at 50% 0%,
+      color-mix(in oklab, var(--ca) 8%, transparent),
+      transparent 58%
+    ),
+    var(--bg2);
+  box-shadow:
+    0 -18px 44px -28px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 0 color-mix(in oklab, var(--ca) 26%, var(--line-soft));
+}
+/* Per-section color: the card tint AND its content accents share one hue, so
+   each section reads as its own coherent surface. About (1) and Skills (5) keep
+   the site blue (Skills' sub-cards set their own per-category --ca). Projects,
+   Experience and Education override --ca + --accent together, theme-aware so the
+   colored text keeps contrast on the light background. */
+.pl-stack > .pl-card:nth-child(2) {
+  --section-accent: #34d399;
+} /* projects: emerald */
+.pl-stack > .pl-card:nth-child(3) {
+  --section-accent: #efe7d6;
+} /* experience: cream (warm neutral; bronze in light) */
+.pl-stack > .pl-card:nth-child(4) {
+  --section-accent: #c084fc;
+} /* education: orchid */
+html[data-theme="light"] .pl-stack > .pl-card:nth-child(2) {
+  --section-accent: #059669;
+}
+html[data-theme="light"] .pl-stack > .pl-card:nth-child(3) {
+  --section-accent: #8a6a3c;
+}
+html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
+  --section-accent: #9333ea;
+}
+.pl-stack > .pl-card:nth-child(2),
+.pl-stack > .pl-card:nth-child(3),
+.pl-stack > .pl-card:nth-child(4) {
+  --ca: var(--section-accent);
+  --accent: var(--section-accent);
+  --accent-dim: color-mix(in oklab, var(--section-accent) 35%, transparent);
+}
+
+/* full-screen pinned deck: desktop + motion allowed only */
+@media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
+  .pl-stack > .pl-card {
+    position: sticky;
+    top: 0;
+    height: 100vh; /* fallback for browsers without svh */
+    height: 100svh;
+    min-height: 560px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* fallback */
+    justify-content: safe center; /* clip the bottom, never the heading */
+    padding-top: 92px;
+    padding-bottom: 60px;
+    box-shadow:
+      0 -34px 70px -28px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 0 color-mix(in oklab, var(--ca) 32%, var(--line-soft));
+  }
+  /* trim section-head gap so centered content has more room */
+  .pl-stack > .pl-card .pl-sec-head {
+    margin-bottom: 30px;
+  }
+  /* keep the densest card (skills, 5th) inside one screen */
+  .pl-stack > .pl-card:nth-child(5) .pl-skills {
+    gap: 16px;
+  }
+  .pl-stack > .pl-card:nth-child(5) .pl-skill-card {
+    padding: 20px 24px 18px;
+  }
+}
+
+/* ============================================================
+   SKILLS FX
+   A: proficiency meters fill left-to-right when the group reveals.
+   B: an accent spotlight tracks the cursor across each card
+      (pointer position fed in as --mx/--my by main.js).
+   ============================================================ */
+/* B - cursor spotlight (hover only; falls back to a centered glow) */
+.pf-final .pl-skill-card {
+  position: relative;
+  overflow: hidden;
+}
+.pf-final .pl-skill-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    240px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in oklab, var(--ca) 30%, transparent),
+    transparent 62%
+  );
+  opacity: 0;
+  transition: opacity 0.32s;
+}
+.pf-final .pl-skill-card:hover::before {
+  opacity: 1;
+}
+/* keep the card content above the glow */
+.pf-final .pl-skill-head,
+.pf-final .pl-skill-rows {
+  position: relative;
+  z-index: 1;
+}
+
+/* A - animated meters (motion only; reduced motion keeps them solid).
+   Segments fill one after another: each bar only starts once the bar to its
+   left has finished (delay = segment index x fill duration). Three tweaks:
+   snappy ease-out fill, a height "tick" as each bar lands, and a leading-edge
+   glow that settles in. */
+@media (prefers-reduced-motion: no-preference) {
+  .pf-final .pl-skills .pl-skill-meter {
+    --fill: 0.42s; /* per-segment fill time; also the gap between segments */
+  }
+  .pf-final .pl-skills .pl-skill-meter span.on {
+    background: var(--track);
+  }
+  .pf-final .pl-skills .pl-skill-meter span.on::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    /* glow: bright leading edge sweeps across as the bar fills */
+    background: linear-gradient(
+      90deg,
+      var(--ca),
+      color-mix(in oklab, var(--ca) 45%, white)
+    );
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  /* later cards trail the earlier ones a touch */
+  .pf-final .pl-skills.in .pl-skill-card {
+    --card-delay: calc(var(--i, 0) * 140ms);
+  }
+  /* --seg = this segment's index; powers the sequential delays below */
+  .pf-final .pl-skills .pl-skill-meter span:nth-child(1).on {
+    --seg: 0;
+  }
+  .pf-final .pl-skills .pl-skill-meter span:nth-child(2).on {
+    --seg: 1;
+  }
+  .pf-final .pl-skills .pl-skill-meter span:nth-child(3).on {
+    --seg: 2;
+  }
+  .pf-final .pl-skills .pl-skill-meter span:nth-child(4).on {
+    --seg: 3;
+  }
+  /* fill: snappy ease-out so motion is instant */
+  .pf-final .pl-skills.in .pl-skill-meter span.on::after {
+    animation: mkMeterFill var(--fill, 0.42s) cubic-bezier(0.12, 0.85, 0.25, 1)
+      calc(var(--card-delay, 0ms) + var(--seg, 0) * var(--fill, 0.42s)) forwards;
+  }
+  /* tick (pulse taller as it lands) + glow (soft glow settles in) */
+  .pf-final .pl-skills.in .pl-skill-meter span.on {
+    animation:
+      mkMeterTick 0.3s ease-out
+        calc(
+          var(--card-delay, 0ms) + var(--seg, 0) * var(--fill, 0.42s) +
+            var(--fill, 0.42s) - 0.06s
+        )
+        both,
+      mkMeterGlow var(--fill, 0.42s) ease-out
+        calc(var(--card-delay, 0ms) + var(--seg, 0) * var(--fill, 0.42s))
+        forwards;
+  }
+}
+@keyframes mkMeterFill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes mkMeterTick {
+  0% {
+    transform: scaleY(1);
+  }
+  45% {
+    transform: scaleY(1.6);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+@keyframes mkMeterGlow {
+  from {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  to {
+    box-shadow: 0 0 9px 0 color-mix(in oklab, var(--ca) 55%, transparent);
+  }
+}
+
+/* ============================================================
+   HERO ASCII BACKDROP (Pointer Ripple Field) — see assets/hero-ascii.js.
+   Covers the whole hero, behind the content (z-index 2), and reacts to the
+   cursor anywhere in the section. Name/metrics stay readable on top.
+   ============================================================ */
+.pl-hero-ascii {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 1;
+  pointer-events: none;
+}
+@media (max-width: 760px) {
+  .pl-hero-ascii {
+    display: none;
   }
 }
