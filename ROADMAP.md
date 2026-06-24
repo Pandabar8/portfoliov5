@@ -5,6 +5,32 @@ build plan below. Newest work first.
 
 ---
 
+## 2026-06, Homepage redesign: stacking deck, section identity, reactive hero
+
+### In plain language
+
+A major visual pass on the homepage, still a plain static site (no framework,
+no build step) and still fully respectful of the "reduce motion" OS setting:
+
+1. **Scroll-stacking sections.** About, Projects, Experience, Education and
+   Skills now behave like a deck of full-screen cards: each one pins to the top
+   of the screen and the next slides up over it as you scroll, instead of one
+   long continuous page.
+2. **A colour identity per section.** Each section owns one accent colour used
+   for both its background tint and its highlights, so they read as distinct
+   chapters: Projects in emerald, Experience in a warm cream (a deeper bronze in
+   light mode), Education in orchid. About and Skills keep the signature blue.
+   Every colour is tuned to stay legible in both the dark and light themes.
+3. **Livelier Skills.** The proficiency meters fill one bar at a time when the
+   section appears, each bar giving a small "tick" and glow as it lands, and
+   each skill card lights up with a soft glow that follows the cursor.
+4. **An interactive hero.** Behind the name, the hero now carries a subtle field
+   of moving characters (ASCII art) that ripples toward the cursor as you move
+   across the section and recolours with the theme. It turns off for anyone who
+   prefers reduced motion and on small screens.
+
+---
+
 ## 2026-06, Motion upgrade (litebox-inspired, on-brand)
 
 ### In plain language
