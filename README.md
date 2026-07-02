@@ -1,7 +1,8 @@
 # Jose Andres Barrientos, Portfolio
 
 A single-page data-analyst portfolio. Dependency-free static site: semantic HTML,
-one stylesheet, one vanilla-JS file. No build step, no framework, host-ready.
+one stylesheet, vanilla JS. No build step, no framework, no CDN calls (fonts are
+self-hosted), host-ready.
 
 ## Design
 
@@ -40,18 +41,22 @@ Cloudflare Pages. No configuration needed, `index.html` is the entry point.
 ## Structure
 
 ```
-index.html                       Page markup + baked content
-assets/styles.css                All styling (tokens, components, responsive)
-assets/main.js                    Charts, count-up, reveals, scrollspy, nav, accordion
-assets/Jose-Barrientos-Resume.pdf   Resume (linked from the nav + footer)
+index.html                        Page markup + baked content, head metadata
+favicon.ico                       Legacy favicon fallback (SVG is primary)
+assets/styles.css                 All styling (tokens, components, deck, print, responsive)
+assets/main.js                    Deck fit, Lenis, intro, charts, count-up, reveals,
+                                  scrollspy, nav, accordion, theme toggle
+assets/hero-ascii.js              Hero "pointer ripple field" canvas backdrop
+assets/lenis.min.js               Vendored Lenis smooth-scroll runtime (v1.3.23)
+assets/fonts/                     Self-hosted woff2 subsets (Archivo, IBM Plex)
+assets/og.png                     1200x630 social share card
+assets/favicon.svg                Favicon (JB monogram)
+assets/apple-touch-icon.png       iOS home-screen icon
+assets/photo.jpg                  About-section photo
+assets/Jose-Barrientos-Resume.pdf Resume (linked from the nav + footer)
 ```
 
-## Before going live (placeholders to fill)
-
-- **LinkedIn / GitHub**, the two links in the contact footer point to `#`. Replace
-  the `href="#"` values (search `data-placeholder` in `index.html`).
-- **Photo**, the About section shows a "JB" monogram placeholder. To use a real
-  photo, drop `assets/photo.jpg` and replace the `.pl-photo` block in `index.html`
-  with `<img class="pl-photo" src="assets/photo.jpg" alt="Jose Andres Barrientos">`.
+The canonical deployment is <https://pandabar8.github.io/portfoliov5/>
+(declared via `<link rel="canonical">` and the Open Graph URL).
 
 All metrics and project numbers come straight from the resume, nothing invented.
