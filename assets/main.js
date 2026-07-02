@@ -742,15 +742,6 @@
     });
   }
 
-  /* Keep placeholder social links from jumping to the top of the page. */
-  function guardPlaceholderLinks() {
-    document.querySelectorAll("a[data-placeholder]").forEach(function (a) {
-      a.addEventListener("click", function (e) {
-        if (a.getAttribute("href") === "#") e.preventDefault();
-      });
-    });
-  }
-
   /* dark/light theme toggle (persists choice in localStorage). */
   function setupThemeToggle() {
     var btn = document.querySelector(".theme-toggle");
@@ -822,7 +813,6 @@
     setupNav();
     setupProjects();
     setupSkillSpotlight();
-    guardPlaceholderLinks();
     onIntroDone(revealHero);
     setupIntro();
   }
