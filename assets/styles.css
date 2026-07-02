@@ -844,6 +844,10 @@ html[data-theme="light"] .pl-skill-lvl {
   padding: 13px 0;
   white-space: nowrap;
 }
+/* the marquee content is JS-built; without JS hide the empty band */
+html:not(.js) .lg-marquee {
+  display: none;
+}
 .lg-marquee .track {
   display: inline-flex;
   gap: 0;
@@ -1066,9 +1070,11 @@ html.theme-vt::view-transition-new(root) {
   z-index: 1;
 }
 
-/* scroll reveal */
+/* scroll reveal. Hidden pre-animation states are gated on html.js (set by an
+   inline head script, zero-specificity via :where) so that without JS nothing
+   is left invisible waiting for an .in class that never comes. */
 @media (prefers-reduced-motion: no-preference) {
-  .pf-final .reveal {
+  :where(html.js) .pf-final .reveal {
     opacity: 0;
     transform: translateY(24px);
     transition:
@@ -1079,7 +1085,7 @@ html.theme-vt::view-transition-new(root) {
     opacity: 1;
     transform: none;
   }
-  .pf-final .reveal-group > * {
+  :where(html.js) .pf-final .reveal-group > * {
     opacity: 0;
     transform: translateY(22px);
     transition:
@@ -1099,8 +1105,8 @@ html.theme-vt::view-transition-new(root) {
 
   /* pop variant: a slight scale-in on a springy curve. Works on a standalone
      reveal or on a group child tagged .pop */
-  .pf-final .reveal.pop,
-  .pf-final .reveal-group > .pop {
+  :where(html.js) .pf-final .reveal.pop,
+  :where(html.js) .pf-final .reveal-group > .pop {
     transform: translateY(20px) scale(0.96);
     transition-timing-function: cubic-bezier(0, 0.71, 0.2, 1.4);
   }
@@ -1110,7 +1116,7 @@ html.theme-vt::view-transition-new(root) {
   }
 
   /* hero name: each masked line rises into place; line 2 trails line 1 */
-  .pf-final .pl-name .ml > span {
+  :where(html.js) .pf-final .pl-name .ml > span {
     transform: translateY(110%);
     transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -1123,10 +1129,10 @@ html.theme-vt::view-transition-new(root) {
 
   /* slide-in variants: enter from the left or right. Used on the experience
      entries so they alternate sides. Overrides the base reveal translateY. */
-  .pf-final .reveal.from-left {
+  :where(html.js) .pf-final .reveal.from-left {
     transform: translateX(-48px);
   }
-  .pf-final .reveal.from-right {
+  :where(html.js) .pf-final .reveal.from-right {
     transform: translateX(48px);
   }
   .pf-final .reveal.from-left.in,
@@ -1715,7 +1721,9 @@ html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
   .pf-final .pl-skills .pl-skill-meter {
     --fill: 0.42s; /* per-segment fill time; also the gap between segments */
   }
-  .pf-final .pl-skills .pl-skill-meter span.on {
+  /* html.js gate: without JS the .in fill animation never runs, so keep the
+     solid --ca segments instead of blanking them to the track color */
+  :where(html.js) .pf-final .pl-skills .pl-skill-meter span.on {
     background: var(--track);
   }
   .pf-final .pl-skills .pl-skill-meter span.on::after {
