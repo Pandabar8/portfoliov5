@@ -14,7 +14,9 @@
   font-family: "Archivo";
   font-style: normal;
   font-weight: 700 800;
-  font-stretch: 108% 122%;
+  /* the woff2 keeps Archivo's full width axis; declaring only 108-122%
+     would clamp text with no explicit wdth (the header brand) to 108% */
+  font-stretch: 62% 125%;
   font-display: swap;
   src: url("fonts/archivo-var.woff2") format("woff2");
   unicode-range:
