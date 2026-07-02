@@ -407,36 +407,74 @@
     });
   }
 
-  /* Highlight the nav link for the section in view. */
+  /* Highlight the nav link for the section in view. Position-based rather
+     than IntersectionObserver: pinned deck cards stay "intersecting" while
+     later cards slide over them, so an observer never re-fires for an
+     earlier card when scrolling back up. Offsets are derived from layout
+     geometry (deck cards via the stack, like anchorTarget in setupLenis). */
   function setupScrollspy() {
     var links = {};
+    var order = [];
     document
       .querySelectorAll(".pl-nav-links a[href^='#']")
       .forEach(function (a) {
-        links[a.getAttribute("href").slice(1)] = a;
+        var id = a.getAttribute("href").slice(1);
+        var el = id !== "top" && document.getElementById(id);
+        if (!el) return;
+        links[id] = a;
+        order.push(el);
       });
-    var sections = Object.keys(links)
-      .map(function (id) {
-        return document.getElementById(id);
-      })
-      .filter(Boolean);
-    if (!sections.length || !("IntersectionObserver" in window)) return;
+    if (!order.length) return;
 
-    var io = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (e) {
-          if (e.isIntersecting) {
-            Object.keys(links).forEach(function (id) {
-              links[id].classList.toggle("active", id === e.target.id);
-            });
-          }
+    function docTop(el) {
+      var card = el.closest(".pl-stack > .pl-card");
+      if (card && getComputedStyle(card).position === "sticky") {
+        var stack = card.parentElement;
+        var top = stack.getBoundingClientRect().top + window.scrollY;
+        for (
+          var sib = stack.firstElementChild;
+          sib && sib !== card;
+          sib = sib.nextElementSibling
+        ) {
+          top += sib.offsetHeight;
+        }
+        return top;
+      }
+      return el.getBoundingClientRect().top + window.scrollY;
+    }
+
+    var active = null;
+    function spy() {
+      var y = window.scrollY;
+      var line = y + window.innerHeight * 0.4;
+      var atEnd =
+        y + window.innerHeight >= document.documentElement.scrollHeight - 2;
+      var current = null;
+      for (var i = 0; i < order.length; i++) {
+        if (docTop(order[i]) <= line) current = order[i].id;
+      }
+      // the last section may never reach the 40% line on short pages
+      if (atEnd) current = order[order.length - 1].id;
+      if (current === active) return;
+      active = current;
+      Object.keys(links).forEach(function (id) {
+        links[id].classList.toggle("active", id === current);
+      });
+    }
+    var ticking = false;
+    window.addEventListener(
+      "scroll",
+      function () {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function () {
+          ticking = false;
+          spy();
         });
       },
-      { rootMargin: "-45% 0px -50% 0px" },
+      { passive: true },
     );
-    sections.forEach(function (s) {
-      io.observe(s);
-    });
+    spy();
   }
 
   /* Sticky header shadow + back-to-top visibility. */
