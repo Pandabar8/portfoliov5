@@ -50,9 +50,28 @@
 <script>
   (function () {
     try {
-      var p = new URLSearchParams(location.search).get("theme");
+      var qs = new URLSearchParams(location.search);
+      var p = qs.get("theme");
+      if (p !== "light" && p !== "dark") p = null;
       var t = p || localStorage.getItem("theme");
-      if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+      if (t === "light" || t === "dark") {
+        document.documentElement.dataset.theme = t;
+        // browser chrome must match before first paint too; main.js only
+        // corrects it after it loads
+        if (t === "light") {
+          var m = document.querySelector('meta[name="theme-color"]');
+          if (m) m.setAttribute("content", "#edf1f5");
+        }
+      }
+      if (p) {
+        qs.delete("theme");
+        var rest = qs.toString();
+        history.replaceState(
+          null,
+          "",
+          location.pathname + (rest ? "?" + rest : "") + location.hash
+        );
+      }
     } catch (e) {}
   })();
 </script>

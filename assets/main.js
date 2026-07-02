@@ -839,15 +839,30 @@
         : "dark";
     }
     var themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    var probeCtx = null;
+    // styles.css owns the surface colors; read what it actually paints and
+    // normalize (dark is authored in oklch, which fillStyle readback keeps
+    // verbatim) through getImageData to an rgb() string every theme-color
+    // parser accepts, instead of hand-maintaining hex copies here
+    function pageBgColor() {
+      var bg = getComputedStyle(document.body).backgroundColor;
+      if (!probeCtx) {
+        var c = document.createElement("canvas");
+        c.width = c.height = 1;
+        probeCtx = c.getContext("2d", { willReadFrequently: true });
+      }
+      if (!probeCtx) return bg;
+      probeCtx.fillStyle = bg;
+      probeCtx.fillRect(0, 0, 1, 1);
+      var d = probeCtx.getImageData(0, 0, 1, 1).data;
+      return "rgb(" + d[0] + ", " + d[1] + ", " + d[2] + ")";
+    }
     function apply(theme, persist) {
       document.documentElement.dataset.theme = theme;
       btn.setAttribute("aria-pressed", theme === "light" ? "true" : "false");
       // keep mobile browser chrome in step with the surface behind it
       if (themeColorMeta) {
-        themeColorMeta.setAttribute(
-          "content",
-          theme === "light" ? "#edf1f5" : "#0a0e18",
-        );
+        themeColorMeta.setAttribute("content", pageBgColor());
       }
       // Persist only explicit toggle choices. Syncing on load would let a
       // shared ?theme= link silently overwrite the visitor's saved theme.
