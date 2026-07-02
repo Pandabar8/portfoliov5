@@ -5,6 +5,57 @@ build plan below. Newest work first.
 
 ---
 
+## 2026-07, Audit hardening: navigation, resilience, reach
+
+### In plain language
+
+A deep audit of the site surfaced 21 confirmed issues; all are now fixed. The
+site looks the same but behaves better in the situations that used to break:
+
+1. **Navigation works in every direction.** Clicking an earlier section from
+   lower on the page used to do nothing on desktop (the pinned deck confused
+   the scroll math), and the nav highlight never updated when scrolling back
+   up. Both fixed; the highlight also reaches Contact at the bottom now.
+2. **Nothing gets cut off.** On common laptop screens the Projects and Skills
+   cards were clipping their bottom rows unreachably. Deck cards now grow to
+   their content and taller ones scroll fully into view before pinning.
+3. **The page survives failure.** With JavaScript blocked or broken, the whole
+   page now renders (it used to be blank below the header). Printing or
+   save-as-PDF produces a clean black-on-white document instead of empty dark
+   pages.
+4. **Easier to find and share.** Shared links now render a proper preview card
+   (og image + URL), search engines get one canonical URL, the meta
+   description no longer overstates the degree, and the tab shows a JB
+   favicon.
+5. **Faster and more private.** Fonts are self-hosted (no Google request, no
+   render-blocking stylesheet, ~128 KB of subsets), and the hero ASCII field
+   draws at a quarter of its old cost when idle.
+6. **Accessibility.** The skills marquee now respects the reduced-motion
+   setting (and pauses on hover), and every small accent-colored label meets
+   WCAG contrast in both themes.
+7. **Housekeeping.** The LinkedIn footer link (which 404'd) is fixed, the
+   editable resume .docx is no longer publicly served, a ?theme= link no
+   longer overwrites a visitor's saved theme, scrollbars/mobile chrome match
+   the theme, the ASCII field handles window resizes across the 760px
+   breakpoint, and README/footer content is current.
+
+### Design notes
+
+- Deck cards: `min-height: 100svh` + JS-measured negative sticky `top`
+  (`--deck-top`), gated behind `html.deck-ready` so no-JS gets the flat page.
+  Offsets re-measure on resize, font load and accordion changes.
+- Anchor scrolls and the scrollspy both derive deck positions from stack
+  geometry (pinned sticky cards report their stuck rect, which is useless).
+- No-JS: an inline head script sets `html.js`; all reveal hidden states are
+  scoped under `:where(html.js)` (zero specificity change).
+- Fonts: latin woff2 subsets under `assets/fonts/` (Archivo variable 700-800
+  at 108-122% width, Plex Sans 400, Plex Mono 400/500), `font-display: swap`,
+  two preloads.
+- Contrast: new `--accent-text` token (brighter on dark, darker emerald on
+  light projects card); fills and display text keep the original accents.
+
+---
+
 ## 2026-06, Homepage redesign: stacking deck, section identity, reactive hero
 
 ### In plain language
