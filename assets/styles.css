@@ -1893,3 +1893,115 @@ html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
     display: none;
   }
 }
+
+/* ============================================================
+   PRINT
+   Recruiters print or save-as-PDF: force black-on-white tokens (the
+   dark theme would print near-white text on stripped backgrounds),
+   lift every JS/scroll-gated hidden state, flatten the deck, expand
+   all project details, and drop screen-only chrome.
+   ============================================================ */
+@media print {
+  .sr,
+  .sr * {
+    --bg: #ffffff !important;
+    --bg2: #ffffff !important;
+    --text: #000000 !important;
+    --muted: #374151 !important;
+    --line: #c5ccd6 !important;
+    --line-soft: #e2e6ec !important;
+    --accent: #1a3fb3 !important;
+    --accent-text: #1a3fb3 !important;
+    --accent-dim: #9db4e8 !important;
+    --section-accent: #1a3fb3 !important;
+    --ca: #1a3fb3 !important;
+    --track: #e2e6ec !important;
+    --glass-tint: transparent !important;
+    --glass-edge: transparent !important;
+    --glass-shadow: transparent !important;
+  }
+  html,
+  body,
+  .sr,
+  .pl-stack > .pl-card,
+  .pl-skill-card {
+    background: #ffffff !important;
+  }
+
+  /* everything visible: reveals, hero name mask, sparks, meters */
+  .pf-final .reveal,
+  .pf-final .reveal-group > *,
+  .pf-final .pl-name .ml > span {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .pf-final .spark-bars rect {
+    animation: none !important;
+    transform: none !important;
+  }
+  .pf-final .spark-area .stroke,
+  .pf-final .spark-line polyline {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+  .pf-final .spark-area .fill {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+  .pl-skill-meter span.on {
+    background: var(--ca) !important;
+  }
+  .pl-skill-meter span,
+  .pl-xp-item::before,
+  .pl-xp-item ul li::before,
+  .pl-proj-detail ul li::before {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* flatten the deck and expand every project */
+  .pl-stack > .pl-card,
+  html.deck-ready .pl-stack > .pl-card {
+    position: static !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    display: block !important;
+  }
+  .pl-proj .pl-proj-body {
+    grid-template-rows: 1fr !important;
+  }
+
+  /* screen-only chrome */
+  .lg-marquee,
+  .pl-hero-ascii,
+  .pf-totop,
+  .theme-toggle,
+  .pl-nav-toggle,
+  .pl-nav-links,
+  .sr .intro {
+    display: none !important;
+  }
+  .pf-final .pl-header {
+    position: static !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+  }
+
+  /* outline-only display text would print invisible where text-stroke
+     is unsupported; print it solid */
+  .lg-contact-big {
+    color: var(--text) !important;
+    -webkit-text-stroke: 0 !important;
+  }
+
+  .pl-proj,
+  .pl-xp-item,
+  .pl-skill-card,
+  .pl-edu-cell,
+  .pl-metric {
+    break-inside: avoid;
+  }
+}
