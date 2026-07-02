@@ -69,6 +69,9 @@ html[data-theme="dark"] .sr {
   --accent: #3f6dff;
   --accent-dim: rgba(63, 109, 255, 0.35);
   --accent-ink: #ffffff;
+  /* small accent-colored text: #3f6dff only reaches 4.45:1 on --bg and
+     4.13:1 on --bg2, so text below ~24px uses this brighter step */
+  --accent-text: #5c82ff;
   /* liquid-glass header */
   --glass-tint: rgba(255, 255, 255, 0.05);
   --glass-edge: rgba(255, 255, 255, 0.28);
@@ -87,6 +90,8 @@ html[data-theme="light"] .sr {
   --accent: #0145f2;
   --accent-dim: rgba(1, 69, 242, 0.35);
   --accent-ink: #ffffff;
+  /* #0145f2 passes 4.5:1 on both light surfaces, so text shares the fill */
+  --accent-text: #0145f2;
   /* liquid-glass header */
   --glass-tint: rgba(255, 255, 255, 0.45);
   --glass-edge: rgba(255, 255, 255, 0.85);
@@ -213,7 +218,7 @@ html[data-theme="light"] .sr {
   font-size: 12px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   margin-bottom: 26px;
 }
 .pl-name {
@@ -286,7 +291,7 @@ html[data-theme="light"] .sr {
 }
 .pl-metric .num sup {
   font-size: 20px;
-  color: var(--accent);
+  color: var(--accent-text);
   font-family: var(--mono);
   font-weight: 400;
   vertical-align: super;
@@ -321,7 +326,7 @@ html[data-theme="light"] .sr {
   letter-spacing: 0.02em;
 }
 .pl-footnotes b {
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 400;
 }
 
@@ -392,7 +397,7 @@ html[data-theme="light"] .sr {
   color: var(--muted);
 }
 .pl-fig-cap b {
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 400;
 }
 
@@ -437,7 +442,7 @@ html[data-theme="light"] .sr {
   font-size: 10.5px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   display: block;
   margin-bottom: 4px;
 }
@@ -497,7 +502,7 @@ html[data-theme="light"] .sr {
   padding-top: 8px;
 }
 .pl-proj-fig b {
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 400;
   display: block;
   margin-bottom: 4px;
@@ -592,7 +597,7 @@ html[data-theme="light"] .sr {
   color: var(--muted);
 }
 .pl-proj-tech b {
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 400;
 }
 
@@ -643,7 +648,7 @@ html[data-theme="light"] .sr {
   font-size: 11.5px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   white-space: nowrap;
 }
 .pl-xp-role {
@@ -703,7 +708,7 @@ html[data-theme="light"] .sr {
   font-size: 11.5px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 .pl-edu-degree {
   font-family: var(--display);
@@ -814,10 +819,12 @@ html[data-theme="light"] .sr {
   font-size: 10px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--ca);
+  /* 10px labels need 4.5:1; nudge each category color toward the readable
+     end while the meters keep the pure hue */
+  color: color-mix(in oklab, var(--ca) 82%, white);
 }
 html[data-theme="light"] .pl-skill-lvl {
-  color: color-mix(in oklab, var(--ca) 78%, #0a0e14);
+  color: color-mix(in oklab, var(--ca) 58%, #0a0e14);
 }
 .pl-skill-meter {
   display: flex;
@@ -921,7 +928,7 @@ html:not(.js) .lg-marquee {
   white-space: nowrap;
 }
 .lg-contact-row a:hover {
-  color: var(--accent);
+  color: var(--accent-text);
   border-color: var(--accent);
 }
 
@@ -999,13 +1006,13 @@ html:not(.js) .lg-marquee {
   right: 0;
 }
 .pf-final .pl-nav-links a.active {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 .pf-final .pl-nav-links a.active::after {
   right: 0;
 }
 .pf-final .pl-nav-links .nav-resume {
-  color: var(--accent);
+  color: var(--accent-text);
   border: 1px solid var(--accent);
   border-radius: 2px;
   padding: 6px 13px;
@@ -1635,6 +1642,8 @@ html.intro-arming .sr::before {
 } /* education: orchid */
 html[data-theme="light"] .pl-stack > .pl-card:nth-child(2) {
   --section-accent: #059669;
+  /* the emerald fill is only 3.57:1 on the light card; small text steps darker */
+  --accent-text: #047857;
 }
 html[data-theme="light"] .pl-stack > .pl-card:nth-child(3) {
   --section-accent: #8a6a3c;
@@ -1647,6 +1656,7 @@ html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
 .pl-stack > .pl-card:nth-child(4) {
   --ca: var(--section-accent);
   --accent: var(--section-accent);
+  --accent-text: var(--section-accent);
   --accent-dim: color-mix(in oklab, var(--section-accent) 35%, transparent);
 }
 
