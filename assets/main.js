@@ -478,6 +478,25 @@
       });
     }
 
+    // Pinned deck cards report their stuck rect (top 0), so element-target
+    // scrolls resolve to "here" and upward navigation goes nowhere. Compute
+    // the card's natural document offset from the stack (never sticky) and
+    // its preceding siblings' layout heights instead.
+    function anchorTarget(el) {
+      var card = el.closest(".pl-stack > .pl-card");
+      if (!card || getComputedStyle(card).position !== "sticky") return el;
+      var stack = card.parentElement;
+      var top = stack.getBoundingClientRect().top + lenis.scroll;
+      for (
+        var sib = stack.firstElementChild;
+        sib && sib !== card;
+        sib = sib.nextElementSibling
+      ) {
+        top += sib.offsetHeight;
+      }
+      return top;
+    }
+
     // Route in-page anchors through Lenis so they share the eased settle.
     document.addEventListener("click", function (e) {
       if (!window.lenis) return;
@@ -488,7 +507,9 @@
       var target = href === "#top" ? 0 : document.getElementById(href.slice(1));
       if (target === null) return;
       e.preventDefault();
-      window.lenis.scrollTo(target);
+      window.lenis.scrollTo(
+        typeof target === "number" ? target : anchorTarget(target),
+      );
     });
   }
 
