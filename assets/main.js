@@ -37,7 +37,6 @@
 
   /* Decorative data series (shape only, no fabricated labels). */
   var SR_SERIES = {
-    hero: [4, 6, 5, 9, 7, 11, 9, 14, 12, 17, 15, 21, 19, 26],
     metrics: [
       [2, 4, 3, 6, 5, 8, 9, 12],
       [3, 3, 5, 4, 7, 8, 7, 10],
@@ -198,7 +197,7 @@
     document.querySelectorAll("[data-spark-area]").forEach(function (host) {
       var key = host.getAttribute("data-spark-area");
       var grid = parseInt(host.getAttribute("data-grid"), 10) || 0;
-      var series = key === "hero" ? SR_SERIES.hero : SR_SERIES.projects[key];
+      var series = SR_SERIES.projects[key];
       if (series) host.appendChild(buildSparkArea(series, key, grid));
     });
     document.querySelectorAll("[data-spark-bars]").forEach(function (host) {
@@ -544,14 +543,6 @@
       requestAnimationFrame(raf);
     }
     requestAnimationFrame(raf);
-
-    // One restrained parallax: the hero chart drifts at a fraction of scroll.
-    var heroChart = document.querySelector(".pl-hero-chart");
-    if (heroChart) {
-      lenis.on("scroll", function (e) {
-        heroChart.style.transform = "translateY(" + e.scroll * 0.12 + "px)";
-      });
-    }
 
     // Pinned deck cards report their stuck rect (top 0), so element-target
     // scrolls resolve to "here" and upward navigation goes nowhere. Compute

@@ -226,8 +226,7 @@ html[data-theme="light"] .sr {
   transform-origin: bottom;
   transform-box: fill-box;
 }
-.sr .spark-area .stroke,
-.sr .spark-line polyline {
+.sr .spark-area .stroke {
   stroke-dasharray: 1;
 }
 
@@ -314,19 +313,6 @@ html[data-theme="light"] .sr {
   background: none;
   color: var(--text);
   border-bottom: 2px solid var(--accent-dim);
-}
-
-/* hero chart, faint backdrop, top-right, never under the text */
-.pl-hero-chart {
-  position: absolute;
-  top: 72px;
-  right: 0;
-  left: auto;
-  width: min(46%, 540px);
-  height: 300px;
-  opacity: 0.42;
-  z-index: 0;
-  pointer-events: none;
 }
 
 /* annotated metrics */
@@ -1232,13 +1218,11 @@ html.theme-vt::view-transition-new(root) {
   .pf-final .reveal-group.in .spark-bars rect {
     animation: srGrowY 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
   }
-  .pf-final .spark-area .stroke,
-  .pf-final .spark-line polyline {
+  .pf-final .spark-area .stroke {
     animation: none;
     stroke-dashoffset: 1;
   }
-  .pf-final .reveal.in .spark-area .stroke,
-  .pf-final .reveal.in .spark-line polyline {
+  .pf-final .reveal.in .spark-area .stroke {
     animation: srDraw 1.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
   .pf-final .spark-area .fill {
@@ -1247,14 +1231,6 @@ html.theme-vt::view-transition-new(root) {
   .pf-final .reveal.in .spark-area .fill {
     animation: srFade 1s 0.9s forwards;
   }
-}
-
-/* hero chart draws regardless (it is the backdrop) */
-.pf-final .pl-hero-chart .spark-area .stroke {
-  animation: srDraw 1.8s 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-.pf-final .pl-hero-chart .spark-area .fill {
-  animation: srFade 1.1s 1.2s forwards;
 }
 
 /* ------------------------------------------------------------
@@ -1525,10 +1501,6 @@ html.intro-arming .sr::before {
     padding-left: 40px;
     padding-right: 40px;
   }
-  .pf-final .pl-hero-chart {
-    width: 42%;
-    opacity: 0.5;
-  }
   .pf-final .pl-metrics {
     grid-template-columns: repeat(2, 1fr);
     gap: 32px;
@@ -1581,9 +1553,6 @@ html.intro-arming .sr::before {
   .pf-final .pl-name {
     font-size: 44px;
     white-space: normal;
-  }
-  .pf-final .pl-hero-chart {
-    display: none;
   }
   .pf-final .pl-hero-content {
     max-width: 100%;
@@ -1947,8 +1916,7 @@ html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
     animation: none !important;
     transform: none !important;
   }
-  .pf-final .spark-area .stroke,
-  .pf-final .spark-line polyline {
+  .pf-final .spark-area .stroke {
     animation: none !important;
     stroke-dashoffset: 0 !important;
   }
