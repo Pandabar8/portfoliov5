@@ -847,9 +847,17 @@
         ? "light"
         : "dark";
     }
+    var themeColorMeta = document.querySelector('meta[name="theme-color"]');
     function apply(theme) {
       document.documentElement.dataset.theme = theme;
       btn.setAttribute("aria-pressed", theme === "light" ? "true" : "false");
+      // keep mobile browser chrome in step with the surface behind it
+      if (themeColorMeta) {
+        themeColorMeta.setAttribute(
+          "content",
+          theme === "light" ? "#edf1f5" : "#0a0e18",
+        );
+      }
       try {
         localStorage.setItem("theme", theme);
       } catch (e) {}

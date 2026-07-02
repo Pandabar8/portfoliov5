@@ -108,6 +108,14 @@ html[data-theme="light"],
 html[data-theme="light"] body {
   background: #edf1f5;
 }
+/* native UI (scrollbars, form controls) follows the active theme instead of
+   rendering a light scrollbar strip against the dark page */
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+html[data-theme="light"] {
+  color-scheme: light;
+}
 
 html[data-theme="dark"] .sr {
   --bg: oklch(0.165 0.022 268);
