@@ -279,9 +279,16 @@
   function init() {
     var canvas = document.getElementById("hero-ascii");
     if (!canvas || !canvas.getContext) return;
-    // no cursor field on touch / small layouts
-    if (window.matchMedia && window.matchMedia("(max-width: 760px)").matches)
-      return;
+    // No cursor field on touch / small layouts (CSS also hides the canvas).
+    // Tracked live rather than checked once: rotating a tablet or growing a
+    // window brings the field up, shrinking stops the loop instead of
+    // leaving it ticking against a display:none canvas.
+    var mqSmall = window.matchMedia
+      ? window.matchMedia("(max-width: 760px)")
+      : null;
+    function smallNow() {
+      return !!(mqSmall && mqSmall.matches);
+    }
 
     var ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -376,6 +383,7 @@
       } catch (e) {}
     }
     function start() {
+      if (smallNow()) return;
       if (reduce) {
         renderStatic();
         return;
@@ -454,6 +462,20 @@
         attributes: true,
         attributeFilter: ["data-theme"],
       });
+    }
+
+    if (mqSmall) {
+      var onMqSmall = function () {
+        if (smallNow()) {
+          stop();
+        } else {
+          resize();
+          start();
+        }
+      };
+      if (mqSmall.addEventListener)
+        mqSmall.addEventListener("change", onMqSmall);
+      else if (mqSmall.addListener) mqSmall.addListener(onMqSmall);
     }
 
     start();
