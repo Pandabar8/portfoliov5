@@ -21,9 +21,10 @@
 <meta property="og:image:alt" content="José Andrés Barrientos, Data Analyst. 4 years of retail supply-chain analytics for Walmart, Target &amp; Amazon.">
 <meta name="twitter:card" content="summary_large_image">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<!-- fonts are self-hosted (see @font-face in styles.css); preload the two
+     that shape first paint so the hero name and body text swap in early -->
+<link rel="preload" href="assets/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/ibm-plex-sans-400.woff2" as="font" type="font/woff2" crossorigin>
 
 <!-- JS marker: reveal/deck hidden states in styles.css only apply under
      html.js, so a page without scripts renders everything visible. -->
