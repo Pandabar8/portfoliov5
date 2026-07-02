@@ -851,8 +851,17 @@ html:not(.js) .lg-marquee {
 .lg-marquee .track {
   display: inline-flex;
   gap: 0;
-  animation: srMarquee 26s linear infinite;
-  will-change: transform;
+}
+/* the ticker only moves when the OS allows motion (WCAG 2.2.2); reduced
+   motion gets the same skills strip, static. Hovering pauses the scroll. */
+@media (prefers-reduced-motion: no-preference) {
+  .lg-marquee .track {
+    animation: srMarquee 26s linear infinite;
+    will-change: transform;
+  }
+  .lg-marquee:hover .track {
+    animation-play-state: paused;
+  }
 }
 .lg-marquee span {
   font-family: var(--mono);
