@@ -32,10 +32,21 @@
 <link rel="preload" href="assets/fonts/ibm-plex-sans-400.woff2" as="font" type="font/woff2" crossorigin>
 
 <!-- JS marker: reveal/deck hidden states in styles.css only apply under
-     html.js, so a page without scripts renders everything visible. -->
-<script>document.documentElement.classList.add("js");</script>
+     html.js, so a page without scripts renders everything visible. The
+     failsafe covers the other failure: inline scripts ran but main.js (which
+     delivers the .in classes) never executed - blocked, stale URL, network
+     drop - so the gate lifts rather than leaving the page invisible. -->
+<script>
+  document.documentElement.classList.add("js");
+  window.setTimeout(function () {
+    if (!window.__mainReady) document.documentElement.classList.remove("js");
+  }, 4000);
+</script>
 
-<!-- apply saved/linked theme before first paint to avoid a flash -->
+<!-- apply saved/linked theme before first paint to avoid a flash. A valid
+     ?theme= param styles this arrival only: it is consumed from the URL so a
+     reload or back-navigation cannot keep overriding an explicit toggle
+     choice, and an invalid param falls back to the saved theme. -->
 <script>
   (function () {
     try {

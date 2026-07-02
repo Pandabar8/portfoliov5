@@ -915,6 +915,9 @@
     setupSkillSpotlight();
     onIntroDone(revealHero);
     setupIntro();
+    // tells the inline head failsafe the reveal engine is live, so the
+    // html.js gate stays (a missing/broken main.js lifts it at 4s instead)
+    window.__mainReady = true;
   }
 
   if (document.readyState === "loading") {

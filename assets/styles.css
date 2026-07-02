@@ -599,6 +599,10 @@ html[data-theme="light"] .sr {
   grid-template-rows: 0fr;
   transition: grid-template-rows 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
+/* the accordion toggle is JS; without scripts every project shows expanded */
+html:not(.js) .pl-proj-body {
+  grid-template-rows: 1fr;
+}
 .pl-proj.open .pl-proj-body {
   grid-template-rows: 1fr;
 }
