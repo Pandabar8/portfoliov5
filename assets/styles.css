@@ -1901,7 +1901,6 @@ html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
     --track: #e2e6ec !important;
     --glass-tint: transparent !important;
     --glass-edge: transparent !important;
-    --glass-shadow: transparent !important;
   }
   html,
   body,
@@ -1933,6 +1932,11 @@ html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
   .pl-skill-meter span.on {
     background: var(--ca) !important;
   }
+  /* the screen rule mixes toward white on dark (washed out on paper) or
+     black on light; print ink must not depend on the on-screen theme */
+  .pl-skill-lvl {
+    color: var(--ca) !important;
+  }
   .pl-skill-meter span,
   .pl-xp-item::before,
   .pl-xp-item ul li::before,
@@ -1942,8 +1946,7 @@ html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
   }
 
   /* flatten the deck and expand every project */
-  .pl-stack > .pl-card,
-  html.deck-ready .pl-stack > .pl-card {
+  .pl-stack > .pl-card {
     position: static !important;
     min-height: 0 !important;
     height: auto !important;
