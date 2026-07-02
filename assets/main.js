@@ -266,15 +266,7 @@
       });
     }
     // refit when the viewport grows past the current fill
-    var resizeTimer;
-    window.addEventListener(
-      "resize",
-      function () {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(fit, 200);
-      },
-      { passive: true },
-    );
+    window.addEventListener("resize", debounce(fit, 200), { passive: true });
   }
 
   /* Count metric numbers up from 0 with an eased curve. */
@@ -406,11 +398,38 @@
     });
   }
 
+  /* Debounced trailing-edge callback for settle-sensitive listeners. */
+  function debounce(fn, ms) {
+    var t;
+    return function () {
+      clearTimeout(t);
+      t = setTimeout(fn, ms);
+    };
+  }
+
+  /* Document-space top of a pinned deck card. Stuck sticky cards report
+     their pinned rect (top 0), which breaks any geometry that reads it, so
+     cards resolve via the stack container (never sticky) plus the preceding
+     siblings' layout heights. Returns null when the element is not a pinned
+     deck card so callers fall back to rect math or native behavior. */
+  function stackDocTop(el, scroll) {
+    var card = el.closest(".pl-stack > .pl-card");
+    if (!card || getComputedStyle(card).position !== "sticky") return null;
+    var top = card.parentElement.getBoundingClientRect().top + scroll;
+    for (
+      var sib = card.parentElement.firstElementChild;
+      sib && sib !== card;
+      sib = sib.nextElementSibling
+    ) {
+      top += sib.offsetHeight;
+    }
+    return top;
+  }
+
   /* Highlight the nav link for the section in view. Position-based rather
      than IntersectionObserver: pinned deck cards stay "intersecting" while
      later cards slide over them, so an observer never re-fires for an
-     earlier card when scrolling back up. Offsets are derived from layout
-     geometry (deck cards via the stack, like anchorTarget in setupLenis). */
+     earlier card when scrolling back up. */
   function setupScrollspy() {
     var links = {};
     var order = [];
@@ -426,20 +445,10 @@
     if (!order.length) return;
 
     function docTop(el) {
-      var card = el.closest(".pl-stack > .pl-card");
-      if (card && getComputedStyle(card).position === "sticky") {
-        var stack = card.parentElement;
-        var top = stack.getBoundingClientRect().top + window.scrollY;
-        for (
-          var sib = stack.firstElementChild;
-          sib && sib !== card;
-          sib = sib.nextElementSibling
-        ) {
-          top += sib.offsetHeight;
-        }
-        return top;
-      }
-      return el.getBoundingClientRect().top + window.scrollY;
+      var top = stackDocTop(el, window.scrollY);
+      return top !== null
+        ? top
+        : el.getBoundingClientRect().top + window.scrollY;
     }
 
     var active = null;
@@ -499,24 +508,24 @@
     );
     if (!cards.length) return;
     function fit() {
-      cards.forEach(function (card) {
-        var over = card.offsetHeight - window.innerHeight;
-        card.style.setProperty("--deck-top", (over > 0 ? -over : 0) + "px");
+      // read every height before writing: interleaving reads with the
+      // --deck-top writes forces a layout per card while the accordion
+      // transition has the observer refitting every frame
+      var overs = cards.map(function (card) {
+        return card.offsetHeight - window.innerHeight;
+      });
+      cards.forEach(function (card, i) {
+        var top = (overs[i] > 0 ? -overs[i] : 0) + "px";
+        if (card.style.getPropertyValue("--deck-top") !== top) {
+          card.style.setProperty("--deck-top", top);
+        }
       });
       document.documentElement.classList.add("deck-ready");
     }
     fit();
     // Re-measure when anything changes a card's height: viewport resizes,
     // web fonts swapping in, or the projects accordion opening/closing.
-    var t;
-    window.addEventListener(
-      "resize",
-      function () {
-        clearTimeout(t);
-        t = setTimeout(fit, 150);
-      },
-      { passive: true },
-    );
+    window.addEventListener("resize", debounce(fit, 150), { passive: true });
     if (window.ResizeObserver) {
       var ro = new ResizeObserver(fit);
       cards.forEach(function (c) {
@@ -543,39 +552,34 @@
       requestAnimationFrame(raf);
     }
     requestAnimationFrame(raf);
+  }
 
-    // Pinned deck cards report their stuck rect (top 0), so element-target
-    // scrolls resolve to "here" and upward navigation goes nowhere. Compute
-    // the card's natural document offset from the stack (never sticky) and
-    // its preceding siblings' layout heights instead.
-    function anchorTarget(el) {
-      var card = el.closest(".pl-stack > .pl-card");
-      if (!card || getComputedStyle(card).position !== "sticky") return el;
-      var stack = card.parentElement;
-      var top = stack.getBoundingClientRect().top + lenis.scroll;
-      for (
-        var sib = stack.firstElementChild;
-        sib && sib !== card;
-        sib = sib.nextElementSibling
-      ) {
-        top += sib.offsetHeight;
-      }
-      return top;
-    }
-
-    // Route in-page anchors through Lenis so they share the eased settle.
+  /* Route in-page anchors. Independent of Lenis on purpose: native fragment
+     navigation resolves a pinned deck card's stuck rect and goes nowhere
+     when navigating upward, so deck targets always scroll to their computed
+     stack offset (through Lenis for the eased settle when it's running, an
+     animated window scroll when it is not). Flat-layout targets keep native
+     behavior without Lenis: scroll-margin handles the sticky header. */
+  function setupAnchorNav() {
     document.addEventListener("click", function (e) {
-      if (!window.lenis) return;
       var link = e.target.closest("a[href^='#']");
       if (!link) return;
       var href = link.getAttribute("href");
       if (href === "#") return;
-      var target = href === "#top" ? 0 : document.getElementById(href.slice(1));
-      if (target === null) return;
+      var el = href === "#top" ? null : document.getElementById(href.slice(1));
+      if (href !== "#top" && !el) return;
+      var scroll = window.lenis ? window.lenis.scroll : window.scrollY;
+      var top = href === "#top" ? 0 : stackDocTop(el, scroll);
+      if (top === null) {
+        if (window.lenis) {
+          e.preventDefault();
+          window.lenis.scrollTo(el);
+        }
+        return;
+      }
       e.preventDefault();
-      window.lenis.scrollTo(
-        typeof target === "number" ? target : anchorTarget(target),
-      );
+      if (window.lenis) window.lenis.scrollTo(top);
+      else window.scrollTo({ top: top, behavior: "smooth" });
     });
   }
 
@@ -919,6 +923,7 @@
   function init() {
     setupDeckFit();
     setupLenis();
+    setupAnchorNav();
     setupThemeToggle();
     buildCharts();
     buildMarquee();

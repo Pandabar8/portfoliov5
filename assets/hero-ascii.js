@@ -294,8 +294,9 @@
     if (!ctx) return;
     var sr = document.querySelector(".sr") || document.documentElement;
     var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    // Decorative low-alpha layer: render at 1x. Retina sharpness is invisible
-    // at these alphas and 2x quadruples the pixels pushed every frame.
+    // Decorative layer rendered at 1x: cursor-hot glyphs do trade away a
+    // little retina crispness, accepted because 2x quadruples the pixels
+    // pushed exactly when pointer motion forces the full-rate path.
     var dpr = 1;
     var W = 0,
       H = 0;
@@ -412,12 +413,14 @@
       "mousemove",
       function (e) {
         if (!ctrl || !ctrl.pointer) return;
-        lastPointerMove = now();
         var rect = canvas.getBoundingClientRect();
         var x = e.clientX - rect.left,
           y = e.clientY - rect.top;
+        var inside = x >= 0 && y >= 0 && x <= W && y <= H;
+        // only motion over the field itself warrants the full frame rate
+        if (inside) lastPointerMove = now();
         try {
-          ctrl.pointer(x, y, x >= 0 && y >= 0 && x <= W && y <= H);
+          ctrl.pointer(x, y, inside);
         } catch (er) {}
       },
       { passive: true },
