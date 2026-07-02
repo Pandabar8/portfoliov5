@@ -839,7 +839,7 @@
         : "dark";
     }
     var themeColorMeta = document.querySelector('meta[name="theme-color"]');
-    function apply(theme) {
+    function apply(theme, persist) {
       document.documentElement.dataset.theme = theme;
       btn.setAttribute("aria-pressed", theme === "light" ? "true" : "false");
       // keep mobile browser chrome in step with the surface behind it
@@ -849,11 +849,15 @@
           theme === "light" ? "#edf1f5" : "#0a0e18",
         );
       }
-      try {
-        localStorage.setItem("theme", theme);
-      } catch (e) {}
+      // Persist only explicit toggle choices. Syncing on load would let a
+      // shared ?theme= link silently overwrite the visitor's saved theme.
+      if (persist) {
+        try {
+          localStorage.setItem("theme", theme);
+        } catch (e) {}
+      }
     }
-    apply(current());
+    apply(current(), false);
 
     // Toggle with a circle-expand reveal that grows from the button, via the
     // View Transitions API. Falls back to an instant swap when the API is
@@ -861,7 +865,7 @@
     btn.addEventListener("click", function () {
       var next = current() === "light" ? "dark" : "light";
       if (reduceMotion || !document.startViewTransition) {
-        apply(next);
+        apply(next, true);
         return;
       }
       var r = btn.getBoundingClientRect();
@@ -874,7 +878,7 @@
       var root = document.documentElement;
       root.classList.add("theme-vt");
       var vt = document.startViewTransition(function () {
-        apply(next);
+        apply(next, true);
       });
       vt.ready.then(function () {
         root.animate(
