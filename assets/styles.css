@@ -1635,19 +1635,22 @@ html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
   --accent-dim: color-mix(in oklab, var(--section-accent) 35%, transparent);
 }
 
-/* full-screen pinned deck: desktop + motion allowed only */
+/* Full-screen pinned deck: desktop + motion allowed, and only once JS has
+   measured the cards (html.deck-ready). Cards grow past 100svh when their
+   content needs it; main.js pins tall cards at a negative --deck-top so the
+   bottom scrolls into view before the next card slides over. Without JS the
+   deck stays flat and fully readable. */
 @media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
-  .pl-stack > .pl-card {
+  html.deck-ready .pl-stack > .pl-card {
     position: sticky;
-    top: 0;
-    height: 100vh; /* fallback for browsers without svh */
-    height: 100svh;
-    min-height: 560px;
+    top: var(--deck-top, 0px);
+    min-height: 100vh; /* fallback for browsers without svh */
+    min-height: 100svh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: center; /* fallback */
-    justify-content: safe center; /* clip the bottom, never the heading */
+    justify-content: safe center; /* keep the heading, never clip it */
     padding-top: 92px;
     padding-bottom: 60px;
     box-shadow:

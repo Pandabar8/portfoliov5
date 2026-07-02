@@ -452,6 +452,43 @@
     window.addEventListener("scroll", onScroll, { passive: true });
   }
 
+  /* Stacking deck: cards taller than the viewport pin at a negative top so
+     their bottom scrolls into view before the next card slides over. Sticky
+     mode only engages after the first measurement (html.deck-ready), so a
+     JS failure leaves the flat, fully readable layout. */
+  function setupDeckFit() {
+    var cards = Array.prototype.slice.call(
+      document.querySelectorAll(".pl-stack > .pl-card"),
+    );
+    if (!cards.length) return;
+    function fit() {
+      cards.forEach(function (card) {
+        var over = card.offsetHeight - window.innerHeight;
+        card.style.setProperty("--deck-top", (over > 0 ? -over : 0) + "px");
+      });
+      document.documentElement.classList.add("deck-ready");
+    }
+    fit();
+    // Re-measure when anything changes a card's height: viewport resizes,
+    // web fonts swapping in, or the projects accordion opening/closing.
+    var t;
+    window.addEventListener(
+      "resize",
+      function () {
+        clearTimeout(t);
+        t = setTimeout(fit, 150);
+      },
+      { passive: true },
+    );
+    if (window.ResizeObserver) {
+      var ro = new ResizeObserver(fit);
+      cards.forEach(function (c) {
+        ro.observe(c);
+      });
+    }
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  }
+
   /* Smooth scroll via Lenis; native scroll when motion is reduced. */
   function setupLenis() {
     if (reduceMotion || !window.Lenis) return;
@@ -824,6 +861,7 @@
   }
 
   function init() {
+    setupDeckFit();
     setupLenis();
     setupThemeToggle();
     buildCharts();
