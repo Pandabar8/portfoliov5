@@ -798,26 +798,124 @@
     });
   }
 
-  /* Single-open project accordion (first card open by default). */
+  /* Project cards open a focus-trapped detail lightbox. Each card's detail
+     markup (.pl-pcard-detail) lives in the DOM so it is present for no-JS and
+     print; here it is lifted into one reusable dialog on demand. */
   function setupProjects() {
-    var cards = Array.prototype.slice.call(
-      document.querySelectorAll(".pl-proj"),
-    );
-    cards.forEach(function (card) {
-      var head = card.querySelector(".pl-proj-head");
-      if (!head) return;
-      head.addEventListener("click", function () {
-        var isOpen = card.classList.contains("open");
-        cards.forEach(function (c) {
-          c.classList.remove("open");
-          var h = c.querySelector(".pl-proj-head");
-          if (h) h.setAttribute("aria-expanded", "false");
+    var grid = document.querySelector(".pl-proj-grid");
+    if (!grid) return;
+    var cards = Array.prototype.slice.call(grid.querySelectorAll(".pl-pcard"));
+    if (!cards.length) return;
+
+    var overlay = document.createElement("div");
+    overlay.className = "pl-lightbox";
+    overlay.setAttribute("hidden", "");
+    var panel = document.createElement("div");
+    panel.className = "pl-lightbox-panel";
+    panel.setAttribute("role", "dialog");
+    panel.setAttribute("aria-modal", "true");
+    panel.setAttribute("aria-labelledby", "pl-lightbox-title");
+    panel.setAttribute("tabindex", "-1");
+    var closeBtn = document.createElement("button");
+    closeBtn.type = "button";
+    closeBtn.className = "pl-lightbox-close";
+    closeBtn.setAttribute("aria-label", "Close");
+    closeBtn.innerHTML = "&times;";
+    var content = document.createElement("div");
+    panel.appendChild(closeBtn);
+    panel.appendChild(content);
+    overlay.appendChild(panel);
+    document.body.appendChild(overlay);
+
+    var lastFocus = null;
+
+    function build(card) {
+      content.innerHTML = "";
+      var fig = card.querySelector(".pl-proj-fig");
+      var title = card.querySelector(".pl-pcard-title");
+      var stat = card.querySelector(".pl-proj-stat");
+      var stack = card.querySelector(".pl-proj-stack");
+      var detail = card.querySelector(".pl-pcard-detail");
+      var acts = card.querySelector(".pl-pcard-acts");
+
+      var head = document.createElement("div");
+      head.className = "pl-lightbox-head";
+      if (fig) head.appendChild(fig.cloneNode(true));
+      var h = document.createElement("h3");
+      h.id = "pl-lightbox-title";
+      h.textContent = title ? title.textContent : "";
+      head.appendChild(h);
+      if (stat) head.appendChild(stat.cloneNode(true));
+      content.appendChild(head);
+
+      if (stack) content.appendChild(stack.cloneNode(true));
+      if (detail) {
+        // the grid copy is display:none under html.js; the clone is the
+        // dialog's main content, so force it visible (inline beats the rule)
+        var d = detail.cloneNode(true);
+        d.style.display = "block";
+        content.appendChild(d);
+      }
+      if (acts) content.appendChild(acts.cloneNode(true));
+    }
+
+    function focusable() {
+      return Array.prototype.slice
+        .call(panel.querySelectorAll("a[href], button:not([disabled])"))
+        .filter(function (n) {
+          return n.offsetParent !== null;
         });
-        if (!isOpen) {
-          card.classList.add("open");
-          head.setAttribute("aria-expanded", "true");
-        }
-      });
+    }
+
+    function onKey(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        close();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      var f = focusable();
+      if (!f.length) return;
+      var first = f[0];
+      var last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    function open(card) {
+      lastFocus = document.activeElement;
+      build(card);
+      overlay.removeAttribute("hidden");
+      document.documentElement.classList.add("lightbox-open");
+      if (window.lenis) window.lenis.stop();
+      document.addEventListener("keydown", onKey, true);
+      panel.focus();
+    }
+
+    function close() {
+      overlay.setAttribute("hidden", "");
+      document.documentElement.classList.remove("lightbox-open");
+      if (window.lenis) window.lenis.start();
+      document.removeEventListener("keydown", onKey, true);
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+
+    closeBtn.addEventListener("click", close);
+    overlay.addEventListener("click", function (e) {
+      if (e.target === overlay) close();
+    });
+    cards.forEach(function (card) {
+      var main = card.querySelector(".pl-pcard-main");
+      if (main) {
+        main.addEventListener("click", function () {
+          open(card);
+        });
+      }
     });
   }
 

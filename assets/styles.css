@@ -497,56 +497,122 @@ html[data-theme="light"] .sr {
 /* ============================================================
    PROJECTS, figures
    ============================================================ */
-.pl-proj {
-  border-top: 1px solid var(--line);
-  position: relative;
-  overflow: hidden;
-}
-.pl-proj-list .pl-proj:last-child {
-  border-bottom: 1px solid var(--line);
-}
-.pl-proj-chart {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 380px;
-  height: 110px;
-  opacity: 0;
-  pointer-events: none;
-  transition:
-    opacity 0.45s,
-    height 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.pl-proj:hover .pl-proj-chart {
-  opacity: 0.55;
-}
-.pl-proj.open .pl-proj-chart {
-  height: 100%;
-  opacity: 0.45;
-}
-
-.pl-proj-head {
+.pl-proj-grid {
   display: grid;
-  grid-template-columns: 130px 1fr auto;
-  gap: 36px;
-  align-items: start;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+.pl-pcard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line-soft);
+  border-radius: 18px;
+  background:
+    radial-gradient(
+      120% 80% at 12% 0%,
+      color-mix(in oklab, var(--accent) 7%, transparent),
+      transparent 60%
+    ),
+    var(--bg2);
+}
+.pl-pcard:hover {
+  border-color: color-mix(in oklab, var(--accent) 42%, var(--line));
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.6);
+}
+.pl-pcard-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
   width: 100%;
-  padding: calc(30px * var(--sp)) 0;
+  padding: 22px 26px 14px;
   text-align: left;
   background: none;
   border: none;
   color: inherit;
   font: inherit;
   cursor: pointer;
-  position: relative;
 }
+.pl-pcard-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+.pl-pcard-title {
+  font-family: var(--display);
+  font-variation-settings: "wdth" 108;
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  transition: color 0.2s;
+}
+.pl-pcard:hover .pl-pcard-title {
+  color: var(--accent);
+}
+.pl-pcard-tag {
+  color: var(--muted);
+  font-size: 14.5px;
+  line-height: 1.45;
+}
+.pl-pcard-main .pl-proj-stack {
+  margin-top: 4px;
+}
+.pl-pcard-acts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0 26px 16px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.03em;
+}
+.pl-pcard-acts a {
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  transition:
+    color 0.2s,
+    border-color 0.2s,
+    background 0.2s,
+    filter 0.2s;
+}
+.pl-pcard-src {
+  color: var(--muted);
+}
+.pl-pcard-src:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+/* client-facing demo link: filled accent so it reads as the primary action */
+.pl-pcard-live {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+.pl-pcard-live:hover {
+  filter: brightness(1.08);
+}
+/* detail stays in the DOM for no-JS and print; JS hides it and the lightbox
+   presents it on demand */
+.pl-pcard-detail {
+  padding: 0 26px 22px;
+}
+html.js .pl-pcard-detail {
+  display: none;
+}
+
+/* reused by the cards and the detail lightbox */
 .pl-proj-fig {
   font-family: var(--mono);
   font-size: 11.5px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
-  padding-top: 8px;
 }
 .pl-proj-fig b {
   color: var(--accent-text);
@@ -554,34 +620,15 @@ html[data-theme="light"] .sr {
   display: block;
   margin-bottom: 4px;
 }
-.pl-proj-title {
-  font-family: var(--display);
-  font-variation-settings: "wdth" 108;
-  font-weight: 700;
-  font-size: 26px;
-  letter-spacing: -0.02em;
-  transition: color 0.2s;
-  display: block;
-}
-.pl-proj-head:hover .pl-proj-title {
-  color: var(--accent);
-}
-.pl-proj-tagline {
-  color: var(--muted);
-  font-size: 15px;
-  margin-top: 6px;
-  max-width: 52ch;
-  display: block;
-}
 .pl-proj-stat {
   text-align: right;
-  padding-top: 2px;
+  flex: 0 0 auto;
 }
 .pl-proj-stat .v {
   font-family: var(--display);
   font-variation-settings: "wdth" 110;
   font-weight: 700;
-  font-size: 26px;
+  font-size: 24px;
   letter-spacing: -0.02em;
   color: var(--accent);
   white-space: nowrap;
@@ -589,74 +636,25 @@ html[data-theme="light"] .sr {
 }
 .pl-proj-stat .k {
   font-family: var(--mono);
-  font-size: 10.5px;
-  letter-spacing: 0.1em;
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-top: 4px;
+  margin-top: 5px;
+  max-width: 150px;
+  margin-left: auto;
   display: block;
 }
-.pl-proj-body {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-/* the accordion toggle is JS; without scripts every project shows expanded */
-html:not(.js) .pl-proj-body {
-  grid-template-rows: 1fr;
-}
-.pl-proj.open .pl-proj-body {
-  grid-template-rows: 1fr;
-}
-.pl-proj-body > div {
-  overflow: hidden;
-}
-.pl-proj-detail {
-  padding: 0 0 calc(34px * var(--sp)) 166px;
-  display: grid;
-  gap: 15px;
-  position: relative;
-  z-index: 1;
-}
-.pl-proj-detail ul {
-  list-style: none;
-  padding: 0;
-  display: grid;
-  gap: 9px;
-  max-width: 66ch;
-}
-.pl-proj-detail ul li {
-  color: var(--muted);
-  font-size: 15px;
-  padding-left: 20px;
-  position: relative;
-  text-wrap: pretty;
-}
-.pl-proj-detail ul li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.62em;
-  width: 8px;
-  height: 2px;
-  background: var(--accent);
-}
-.pl-proj-tech,
 .pl-proj-stack {
   font-family: var(--mono);
   font-size: 11.5px;
   letter-spacing: 0.05em;
-  color: var(--muted);
+  color: var(--text);
+  display: block;
 }
-.pl-proj-tech b,
 .pl-proj-stack b {
   color: var(--accent-text);
   font-weight: 400;
-}
-.pl-proj-stack {
-  display: block;
-  margin-top: 10px;
-  color: var(--text);
 }
 .pl-proj-stack .t {
   display: inline-block;
@@ -665,16 +663,141 @@ html:not(.js) .pl-proj-body {
   padding: 2px 8px;
   margin: 2px 6px 0 0;
 }
-.pl-proj-tech a {
-  text-decoration: none;
-  border-bottom: 1px solid var(--line);
+.pl-pcard-detail ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 9px;
+  max-width: 62ch;
+}
+.pl-pcard-detail ul li {
+  color: var(--muted);
+  font-size: 15px;
+  padding-left: 20px;
+  position: relative;
+  text-wrap: pretty;
+}
+.pl-pcard-detail ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 8px;
+  height: 2px;
+  background: var(--accent);
+}
+
+/* ============================================================
+   PROJECT DETAIL LIGHTBOX (built and toggled by main.js)
+   ============================================================ */
+.pl-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: color-mix(in oklab, #05070d 72%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.pl-lightbox[hidden] {
+  display: none;
+}
+.pl-lightbox-panel {
+  position: relative;
+  width: min(640px, 100%);
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: 36px 40px 40px;
+  border-radius: 20px;
+  border: 1px solid color-mix(in oklab, var(--accent) 26%, var(--line));
+  background:
+    radial-gradient(
+      120% 60% at 50% 0%,
+      color-mix(in oklab, var(--accent) 10%, transparent),
+      transparent 62%
+    ),
+    var(--bg2);
+  box-shadow: 0 40px 90px -30px rgba(0, 0, 0, 0.7);
+}
+.pl-lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: none;
+  color: var(--muted);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
   transition:
     color 0.2s,
     border-color 0.2s;
 }
-.pl-proj-tech a:hover {
-  color: var(--accent);
+.pl-lightbox-close:hover {
+  color: var(--text);
   border-color: var(--accent);
+}
+.pl-lightbox-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px 20px;
+  align-items: start;
+  margin-bottom: 18px;
+  padding-right: 32px;
+}
+.pl-lightbox-head .pl-proj-fig {
+  grid-column: 1 / -1;
+}
+.pl-lightbox-head h3 {
+  font-family: var(--display);
+  font-variation-settings: "wdth" 108;
+  font-weight: 700;
+  font-size: 27px;
+  letter-spacing: -0.02em;
+}
+.pl-lightbox-panel .pl-proj-stack {
+  margin: 0 0 20px;
+}
+/* the cloned detail is force-shown inline by main.js; drop the card padding */
+.pl-lightbox-panel .pl-pcard-detail {
+  padding: 0;
+}
+.pl-lightbox-panel .pl-pcard-acts {
+  padding: 22px 0 0;
+  margin-top: 22px;
+  border-top: 1px solid var(--line-soft);
+}
+/* lock scroll while the lightbox is open; Lenis also stops when it is mounted,
+   this covers the reduced-motion path where Lenis never runs */
+html.lightbox-open,
+html.lightbox-open body {
+  overflow: hidden;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .pl-lightbox {
+    animation: srFade 0.2s ease both;
+  }
+  .pl-lightbox-panel {
+    animation: lbPop 0.28s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+}
+@keyframes lbPop {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* ============================================================
@@ -1287,16 +1410,14 @@ html.theme-vt::view-transition-new(root) {
 .pf-final[data-hoverfx="lift"] .pl-edu-cell:hover {
   transform: translateY(-4px);
 }
-/* .pl-proj is a standalone reveal: keep its opacity+transform reveal and add
-   the hover background to the same list instead of replacing it */
-.pf-final[data-hoverfx="lift"] .pl-proj {
+/* .pl-pcard is a standalone reveal: keep its opacity+transform reveal and add
+   the hover border/shadow to the same transition list so neither is dropped */
+.pf-final[data-hoverfx="lift"] .pl-pcard {
   transition:
     opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
     transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
-    background 0.28s;
-}
-.pf-final[data-hoverfx="lift"] .pl-proj:hover {
-  background: color-mix(in oklch, var(--accent) 7%, transparent);
+    border-color 0.25s,
+    box-shadow 0.25s;
 }
 /* .pl-skill-card is a reveal-group child: keep the opacity+transform reveal and
    add the hover lift + accent border to the same transition list */
@@ -1314,7 +1435,7 @@ html.theme-vt::view-transition-new(root) {
 /* the hover-fx transition shorthands above reset transition-delay to 0, so
    re-assert the --i stagger here (later in source) for the reveal targets */
 @media (prefers-reduced-motion: no-preference) {
-  .pf-final[data-hoverfx="lift"] .reveal.in.pl-proj,
+  .pf-final[data-hoverfx="lift"] .reveal.in.pl-pcard,
   .pf-final[data-hoverfx="lift"] .reveal-group.in > .pl-metric,
   .pf-final[data-hoverfx="lift"] .reveal-group.in > .pl-skill-card {
     transition-delay: calc(var(--i, 0) * 90ms);
@@ -1610,15 +1731,8 @@ html.intro-arming .sr::before {
   .pf-final .pl-sec-title {
     font-size: 26px;
   }
-  .pf-final .pl-proj-head {
+  .pf-final .pl-proj-grid {
     grid-template-columns: 1fr;
-    gap: 10px;
-  }
-  .pf-final .pl-proj-stat {
-    text-align: left;
-  }
-  .pf-final .pl-proj-detail {
-    padding-left: 0;
   }
   .pf-final .pl-edu {
     grid-template-columns: 1fr;
@@ -1752,8 +1866,8 @@ html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
     margin-bottom: 30px;
   }
   /* Skills (5th) is the densest card: lay the four category cards in a single
-     row so the card's height is the tallest one, not the sum of two rows.
-     This keeps it inside one screen so only Projects overflows the deck. */
+     row so the card's height is the tallest one, not the sum of two rows,
+     keeping it inside one screen. */
   .pl-stack > .pl-card:nth-child(5) .pl-skills {
     grid-template-columns: repeat(4, 1fr);
     gap: 16px;
@@ -1765,6 +1879,19 @@ html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
      clear one screen and it pins at the header like the other cards. */
   .pl-stack > .pl-card:nth-child(3) .pl-xp-item {
     padding-bottom: 14px;
+  }
+  /* Projects (2nd) holds a 2x2 card grid; trim its deck padding, section-head
+     gap and grid gap so the four cards clear one screen at common laptop
+     heights instead of running well past it. */
+  .pl-stack > .pl-card:nth-child(2) {
+    padding-top: 64px;
+    padding-bottom: 46px;
+  }
+  .pl-stack > .pl-card:nth-child(2) .pl-sec-head {
+    margin-bottom: 20px;
+  }
+  .pl-stack > .pl-card:nth-child(2) .pl-proj-grid {
+    gap: 14px;
   }
 }
 
@@ -1979,7 +2106,7 @@ html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
   .pl-skill-meter span,
   .pl-xp-item::before,
   .pl-xp-item ul li::before,
-  .pl-proj-detail ul li::before {
+  .pl-pcard-detail ul li::before {
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
   }
@@ -1993,8 +2120,12 @@ html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
     box-shadow: none !important;
     display: block !important;
   }
-  .pl-proj .pl-proj-body {
-    grid-template-rows: 1fr !important;
+  /* print the projects in one column with each card's detail visible */
+  .pf-final .pl-proj-grid {
+    grid-template-columns: 1fr !important;
+  }
+  html.js .pl-pcard-detail {
+    display: block !important;
   }
 
   /* screen-only chrome */
@@ -2021,7 +2152,7 @@ html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
     -webkit-text-stroke: 0 !important;
   }
 
-  .pl-proj,
+  .pl-pcard,
   .pl-xp-item,
   .pl-skill-card,
   .pl-edu-cell,

@@ -96,7 +96,7 @@
   })();
 </script>
 
-<link rel="stylesheet" href="assets/styles.css?v=12">
+<link rel="stylesheet" href="assets/styles.css?v=13">
 </head>
 
 <body>
@@ -206,101 +206,93 @@
       <h2 class="pl-sec-title">projects</h2>
       <span class="pl-sec-fig">figs. 02-05: selected work</span>
     </div>
-    <div class="pl-proj-list">
+    <div class="pl-proj-grid">
 
-      <article class="pl-proj reveal open" style="--i:0" data-pid="gh-issues">
-        <div class="pl-proj-chart" data-spark-area="gh-issues" aria-hidden="true"></div>
-        <button type="button" class="pl-proj-head" aria-expanded="true">
-          <span class="pl-proj-fig"><b>fig. 02</b>University of Maryland </span>
-          <span>
-            <span class="pl-proj-title">GitHub Issues Analytics Platform</span>
-            <span class="pl-proj-tagline">Analytics pipeline turning 5,200+ raw GitHub issues into prioritization signals.</span>
-            <span class="pl-proj-stack"><b>stack:</b> <span class="t">Python</span><span class="t">Scikit-learn</span><span class="t">Pandas</span><span class="t">Plotly</span><span class="t">pytest</span></span>
+      <article class="pl-pcard reveal" style="--i:0" data-pid="gh-issues">
+        <button type="button" class="pl-pcard-main" aria-haspopup="dialog" aria-label="Open details for GitHub Issues Analytics Platform">
+          <span class="pl-pcard-top">
+            <span class="pl-proj-fig"><b>fig. 02</b>University of Maryland</span>
+            <span class="pl-proj-stat"><span class="v">80%</span><span class="k">priority-classification accuracy</span></span>
           </span>
-          <span class="pl-proj-stat">
-            <span class="v">80%</span>
-            <span class="k">priority-classification accuracy</span>
-          </span>
+          <span class="pl-pcard-title">GitHub Issues Analytics Platform</span>
+          <span class="pl-pcard-tag">Analytics pipeline turning 5,200+ raw GitHub issues into prioritization signals.</span>
+          <span class="pl-proj-stack"><b>stack:</b> <span class="t">Python</span><span class="t">Scikit-learn</span><span class="t">Pandas</span><span class="t">Plotly</span><span class="t">pytest</span></span>
         </button>
-        <div class="pl-proj-body"><div><div class="pl-proj-detail">
+        <div class="pl-pcard-acts">
+          <a class="pl-pcard-src" href="https://github.com/javrobs/ENPM611-application-test" target="_blank" rel="noopener">Source &#8599;</a>
+        </div>
+        <div class="pl-pcard-detail">
           <ul>
             <li>Built a data analytics pipeline processing 5,200+ GitHub issues with 90% test coverage using pytest.</li>
             <li>Developed Random Forest and Gradient Boosting classifiers achieving 80% accuracy for issue priority classification.</li>
             <li>Created 7 interactive Plotly visualizations, including contributor lifecycle analysis and engagement heatmaps.</li>
           </ul>
-          <div class="pl-proj-tech"><b>source:</b> <a href="https://github.com/javrobs/ENPM611-application-test" target="_blank" rel="noopener">github.com/javrobs/ENPM611-application-test</a></div>
-        </div></div></div>
+        </div>
       </article>
 
-      <article class="pl-proj reveal" style="--i:1" data-pid="road-damage">
-        <div class="pl-proj-chart" data-spark-area="road-damage" aria-hidden="true"></div>
-        <button type="button" class="pl-proj-head" aria-expanded="false">
-          <span class="pl-proj-fig"><b>fig. 03</b>University of Maryland </span>
-          <span>
-            <span class="pl-proj-title">Road Damage Detection with Deep Learning</span>
-            <span class="pl-proj-tagline">Transfer-learning image classifier benchmarked across four architectures.</span>
-            <span class="pl-proj-stack"><b>stack:</b> <span class="t">Python</span><span class="t">PyTorch</span><span class="t">TensorFlow</span><span class="t">Google Colab</span></span>
+      <article class="pl-pcard reveal" style="--i:1" data-pid="road-damage">
+        <button type="button" class="pl-pcard-main" aria-haspopup="dialog" aria-label="Open details for Road Damage Detection with Deep Learning">
+          <span class="pl-pcard-top">
+            <span class="pl-proj-fig"><b>fig. 03</b>University of Maryland</span>
+            <span class="pl-proj-stat"><span class="v">44%</span><span class="k">training-time reduction</span></span>
           </span>
-          <span class="pl-proj-stat">
-            <span class="v">44%</span>
-            <span class="k">training-time reduction</span>
-          </span>
+          <span class="pl-pcard-title">Road Damage Detection with Deep Learning</span>
+          <span class="pl-pcard-tag">Transfer-learning image classifier benchmarked across four architectures.</span>
+          <span class="pl-proj-stack"><b>stack:</b> <span class="t">Python</span><span class="t">PyTorch</span><span class="t">TensorFlow</span><span class="t">Google Colab</span></span>
         </button>
-        <div class="pl-proj-body"><div><div class="pl-proj-detail">
+        <div class="pl-pcard-acts">
+          <a class="pl-pcard-src" href="https://github.com/Pandabar8/road_damage_project" target="_blank" rel="noopener">Source &#8599;</a>
+        </div>
+        <div class="pl-pcard-detail">
           <ul>
             <li>Built an image-classification pipeline for 907 images using transfer learning and data augmentation in PyTorch.</li>
             <li>Benchmarked 4 architectures (ResNet-18, MobileNetV3, EfficientNet-B0, ViT-Tiny) and reduced training time by 44%.</li>
           </ul>
-          <div class="pl-proj-tech"><b>source:</b> <a href="https://github.com/Pandabar8/road_damage_project" target="_blank" rel="noopener">github.com/Pandabar8/road_damage_project</a></div>
-        </div></div></div>
+        </div>
       </article>
 
-      <article class="pl-proj reveal" style="--i:2" data-pid="minimax">
-        <div class="pl-proj-chart" data-spark-area="minimax" aria-hidden="true"></div>
-        <button type="button" class="pl-proj-head" aria-expanded="false">
-          <span class="pl-proj-fig"><b>fig. 04</b>University of Maryland </span>
-          <span>
-            <span class="pl-proj-title">AI Game Engine with Minimax</span>
-            <span class="pl-proj-tagline">Adversarial search engine with alpha-beta pruning and heuristic evaluation.</span>
-            <span class="pl-proj-stack"><b>stack:</b> <span class="t">Python</span><span class="t">Algorithm design</span></span>
+      <article class="pl-pcard reveal" style="--i:2" data-pid="minimax">
+        <button type="button" class="pl-pcard-main" aria-haspopup="dialog" aria-label="Open details for AI Game Engine with Minimax">
+          <span class="pl-pcard-top">
+            <span class="pl-proj-fig"><b>fig. 04</b>University of Maryland</span>
+            <span class="pl-proj-stat"><span class="v">90%+</span><span class="k">win/draw rate at depth 6</span></span>
           </span>
-          <span class="pl-proj-stat">
-            <span class="v">90%+</span>
-            <span class="k">win/draw rate at depth 6</span>
-          </span>
+          <span class="pl-pcard-title">AI Game Engine with Minimax</span>
+          <span class="pl-pcard-tag">Adversarial search engine with alpha-beta pruning and heuristic evaluation.</span>
+          <span class="pl-proj-stack"><b>stack:</b> <span class="t">Python</span><span class="t">Algorithm design</span></span>
         </button>
-        <div class="pl-proj-body"><div><div class="pl-proj-detail">
+        <div class="pl-pcard-acts">
+          <a class="pl-pcard-src" href="https://github.com/Pandabar8/tictactoe-minimax" target="_blank" rel="noopener">Source &#8599;</a>
+        </div>
+        <div class="pl-pcard-detail">
           <ul>
             <li>Implemented minimax with alpha-beta pruning, achieving a 40-60% reduction in search-space complexity.</li>
             <li>Developed a heuristic evaluation function; the AI achieves a 90%+ win/draw rate at search depth 6.</li>
           </ul>
-          <div class="pl-proj-tech"><b>source:</b> <a href="https://github.com/Pandabar8/tictactoe-minimax" target="_blank" rel="noopener">github.com/Pandabar8/tictactoe-minimax</a></div>
-        </div></div></div>
+        </div>
       </article>
 
-      <article class="pl-proj reveal" style="--i:3" data-pid="margaux-arden">
-        <div class="pl-proj-chart" data-spark-area="margaux-arden" aria-hidden="true"></div>
-        <button type="button" class="pl-proj-head" aria-expanded="false">
-          <span class="pl-proj-fig"><b>fig. 05</b>Freelance </span>
-          <span>
-            <span class="pl-proj-title">Margaux &amp; Arden</span>
-            <span class="pl-proj-tagline">One-page demo site for a fictional luxury wedding studio in San Salvador, no build step, no libraries.</span>
-            <span class="pl-proj-stack"><b>stack:</b> <span class="t">HTML</span><span class="t">CSS</span><span class="t">JavaScript (ES modules)</span></span>
+      <article class="pl-pcard reveal" style="--i:3" data-pid="margaux-arden">
+        <button type="button" class="pl-pcard-main" aria-haspopup="dialog" aria-label="Open details for Margaux and Arden">
+          <span class="pl-pcard-top">
+            <span class="pl-proj-fig"><b>fig. 05</b>Freelance</span>
+            <span class="pl-proj-stat"><span class="v">0</span><span class="k">runtime dependencies</span></span>
           </span>
-          <span class="pl-proj-stat">
-            <span class="v">0</span>
-            <span class="k">runtime dependencies</span>
-          </span>
+          <span class="pl-pcard-title">Margaux &amp; Arden</span>
+          <span class="pl-pcard-tag">One-page demo site for a fictional luxury wedding studio in San Salvador, no build step, no libraries.</span>
+          <span class="pl-proj-stack"><b>stack:</b> <span class="t">HTML</span><span class="t">CSS</span><span class="t">JavaScript (ES modules)</span></span>
         </button>
-        <div class="pl-proj-body"><div><div class="pl-proj-detail">
+        <div class="pl-pcard-acts">
+          <a class="pl-pcard-src" href="https://github.com/Pandabar8/margaux-arden" target="_blank" rel="noopener">Source &#8599;</a>
+        </div>
+        <div class="pl-pcard-detail">
           <ul>
             <li>Choreographed a sticky full-viewport &ldquo;wedding day&rdquo; scroll sequence: four scenes crossfade with time-of-day captions and a progress line.</li>
             <li>Hand-rolled a focus-trapped lightbox and a swipeable carousel, fully keyboard- and touch-operable.</li>
             <li>Built an IntersectionObserver reveal system with prefers-reduced-motion honored globally; Bodoni Moda and Archivo self-hosted as WOFF2.</li>
             <li>Wrote the copy in Spanish, localized for the Salvadoran market.</li>
           </ul>
-          <div class="pl-proj-tech"><b>source:</b> <a href="https://github.com/Pandabar8/margaux-arden" target="_blank" rel="noopener">github.com/Pandabar8/margaux-arden</a></div>
-        </div></div></div>
+        </div>
       </article>
 
     </div>
@@ -476,7 +468,7 @@
 </div>
 
 <script src="assets/lenis.min.js"></script>
-<script src="assets/main.js?v=6"></script>
+<script src="assets/main.js?v=7"></script>
 <script src="assets/hero-ascii.js?v=3"></script>
 </body>
 </html>

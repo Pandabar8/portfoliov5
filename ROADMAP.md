@@ -5,35 +5,38 @@ build plan below. Newest work first.
 
 ---
 
-## 2026-07, Projects revamp: fourth card, visible stacks, uniform deck cards
+## 2026-07, Projects revamp: fourth project, card grid, uniform deck
 
 ### In plain language
 
-1. **New project card (fig. 05): Margaux & Arden.** A one-page demo site for a
+1. **New project (fig. 05): Margaux & Arden.** A one-page demo site for a
    fictional luxury wedding studio in San Salvador, built in vanilla
    HTML/CSS/JS with zero runtime dependencies and no build step. Headline
    stat: 0 runtime dependencies.
-2. **Stacks visible at a glance.** Each card now shows its stack line in the
-   collapsed head (under the tagline) instead of only inside the expanded
-   body, printed as bordered chips so the technologies scan as tags.
-3. **Source links.** Every card's expanded body ends with a "source:" link to
-   its GitHub repository.
-4. **Section cards stack uniformly.** About through Skills still pin to the top
-   of the screen and stack like a deck, but every card is now sized to one
-   screen so they meet the header consistently, instead of some (Experience,
-   Skills) landing short because their content ran past a laptop screen. Skills
-   lays its four category cards in a single row and Experience tightens its
-   spacing so both clear one screen. Projects is the one deliberate exception:
-   it holds four entries plus an expandable body, so it stays taller than a
-   screen and scrolls its lower entries into view before the next card arrives.
-   (Refines the scroll-stacking deck from the 2026-06 redesign below.)
+2. **Projects are now a card grid.** The four projects sit in a two-by-two
+   grid of cards instead of an expandable list. Each card shows its figure,
+   headline stat, title, tagline and stack (as bordered chips), plus a
+   "Source" link (and a filled "View live site" link for projects that have a
+   public demo). Clicking a card opens a focus-trapped detail lightbox with
+   the project's bullet points; the detail also stays in the page for no-JS
+   and print. The grid fits one screen, so Projects now stacks uniformly with
+   the other deck cards instead of being the tall exception.
+3. **Real source links.** The three university projects link to their real
+   repositories; Margaux & Arden links to its placeholder until it has one.
+4. **Section cards stack uniformly.** About through Skills pin to the top of
+   the screen and stack like a deck, and every card is sized to one screen so
+   they meet the header consistently. Skills lays its four category cards in a
+   single row and Experience tightens its role spacing so both clear one
+   screen. (Refines the scroll-stacking deck from the 2026-06 redesign below.)
 
 ### Open items
 
-- [ ] **Swap the Margaux & Arden repo URL.** Its "source:" link points at
-      the placeholder `github.com/Pandabar8/margaux-arden` because the
-      project has no GitHub repo yet. Replace it once the project is
-      published. The other three cards now link to their real repos.
+- [ ] **Add the Margaux & Arden live link once it is deployed.** The card grid
+      already supports a filled "View live site" link (the `.pl-pcard-live`
+      style); the Margaux card currently shows only "Source" because the demo
+      is not hosted yet, and its "Source" link points at the placeholder
+      `github.com/Pandabar8/margaux-arden`. When the project is published, add
+      the live URL and swap the repo URL.
 
 ---
 
