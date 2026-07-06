@@ -1723,16 +1723,19 @@ html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
 }
 
 /* Full-screen pinned deck: desktop + motion allowed, and only once JS has
-   measured the cards (html.deck-ready). Cards grow past 100svh when their
-   content needs it; main.js pins tall cards at a negative --deck-top so the
-   bottom scrolls into view before the next card slides over. Without JS the
-   deck stays flat and fully readable. */
+   measured the cards (html.deck-ready). Cards fill the viewport below the
+   sticky header (--header-h, JS-measured) and pin at its bottom edge, so a
+   covered card's top stays visible; cards taller than that grow to their
+   content and main.js pins them lower so the bottom scrolls into view
+   before the next card slides over. Without JS the deck stays flat and
+   fully readable. */
 @media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
   html.deck-ready .pl-stack > .pl-card {
     position: sticky;
     top: var(--deck-top, 0px);
-    min-height: 100vh; /* fallback for browsers without svh */
-    min-height: 100svh;
+    /* fallback for browsers without svh */
+    min-height: calc(100vh - var(--header-h, 0px));
+    min-height: calc(100svh - var(--header-h, 0px));
     overflow: hidden;
     display: flex;
     flex-direction: column;

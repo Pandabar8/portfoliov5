@@ -499,24 +499,29 @@
     window.addEventListener("scroll", onScroll, { passive: true });
   }
 
-  /* Stacking deck: cards taller than the viewport pin at a negative top so
-     their bottom scrolls into view before the next card slides over. Sticky
-     mode only engages after the first measurement (html.deck-ready), so a
-     JS failure leaves the flat, fully readable layout. */
+  /* Stacking deck: cards pin just below the sticky header so a covered
+     card's top edge stays visible while the next slides over it. Cards
+     taller than the remaining viewport pin lower so their bottom scrolls
+     into view before the next card arrives. Sticky mode only engages after
+     the first measurement (html.deck-ready), so a JS failure leaves the
+     flat, fully readable layout. */
   function setupDeckFit() {
     var cards = Array.prototype.slice.call(
       document.querySelectorAll(".pl-stack > .pl-card"),
     );
     if (!cards.length) return;
+    var header = document.getElementById("site-header");
     function fit() {
+      var headerH = header ? header.offsetHeight : 0;
+      document.documentElement.style.setProperty("--header-h", headerH + "px");
       // read every height before writing: interleaving reads with the
       // --deck-top writes forces a layout per card while the accordion
       // transition has the observer refitting every frame
       var overs = cards.map(function (card) {
-        return card.offsetHeight - window.innerHeight;
+        return card.offsetHeight - (window.innerHeight - headerH);
       });
       cards.forEach(function (card, i) {
-        var top = (overs[i] > 0 ? -overs[i] : 0) + "px";
+        var top = headerH - Math.max(0, overs[i]) + "px";
         if (card.style.getPropertyValue("--deck-top") !== top) {
           card.style.setProperty("--deck-top", top);
         }
