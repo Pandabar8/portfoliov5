@@ -656,6 +656,14 @@ html:not(.js) .pl-proj-body {
 .pl-proj-stack {
   display: block;
   margin-top: 10px;
+  color: var(--text);
+}
+.pl-proj-stack .t {
+  display: inline-block;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 2px 8px;
+  margin: 2px 6px 0 0;
 }
 .pl-proj-tech a {
   text-decoration: none;
