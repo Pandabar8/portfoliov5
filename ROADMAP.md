@@ -5,7 +5,7 @@ build plan below. Newest work first.
 
 ---
 
-## 2026-07, Projects revamp: fourth card, visible stacks, flat section cards
+## 2026-07, Projects revamp: fourth card, visible stacks, uniform deck cards
 
 ### In plain language
 
@@ -18,14 +18,15 @@ build plan below. Newest work first.
    body, printed as bordered chips so the technologies scan as tags.
 3. **Source links.** Every card's expanded body ends with a "source:" link to
    its GitHub repository.
-4. **Section cards no longer pin.** About through Skills used to pin to the top
-   of the screen and stack like a deck as you scrolled. Because only cards
-   short enough to fit under the sticky header could reach it, taller cards met
-   the header inconsistently and content could freeze mid-card. The cards now
-   scroll as ordinary stacked panels, keeping their colour tints, rounded tops
-   and shadows. This matches the layout already used on mobile, print and the
-   no-JS fallback. (Supersedes the scroll-stacking deck from the 2026-06
-   redesign below.)
+4. **Section cards stack uniformly.** About through Skills still pin to the top
+   of the screen and stack like a deck, but every card is now sized to one
+   screen so they meet the header consistently, instead of some (Experience,
+   Skills) landing short because their content ran past a laptop screen. Skills
+   lays its four category cards in a single row and Experience tightens its
+   spacing so both clear one screen. Projects is the one deliberate exception:
+   it holds four entries plus an expandable body, so it stays taller than a
+   screen and scrolls its lower entries into view before the next card arrives.
+   (Refines the scroll-stacking deck from the 2026-06 redesign below.)
 
 ### Open items
 

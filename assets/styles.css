@@ -1659,10 +1659,11 @@ html.intro-arming .sr::before {
 }
 
 /* ============================================================
-   SECTION CARDS
-   About -> Skills are wrapped in .pl-stack; each becomes a card
-   with its own accent tint, rounded top and shadow, and the cards
-   scroll as plain stacked panels.
+   SCROLL-STACKING DECK
+   About -> Skills are wrapped in .pl-stack; each becomes a card.
+   On desktop with motion allowed the cards pin to the top and the
+   next slides fully over the last, stacking like a deck. On <=900px
+   or with reduced motion the deck flattens to plain stacked panels.
    ============================================================ */
 .pl-stack {
   position: relative;
@@ -1719,6 +1720,52 @@ html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
   --accent: var(--section-accent);
   --accent-text: var(--section-accent);
   --accent-dim: color-mix(in oklab, var(--section-accent) 35%, transparent);
+}
+
+/* Full-screen pinned deck: desktop + motion allowed, and only once JS has
+   measured the cards (html.deck-ready). Cards fill the viewport below the
+   sticky header (--header-h, JS-measured) and pin at its bottom edge, so a
+   covered card's top stays visible; cards taller than that grow to their
+   content and main.js pins them lower so the bottom scrolls into view
+   before the next card slides over. Without JS the deck stays flat and
+   fully readable. */
+@media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
+  html.deck-ready .pl-stack > .pl-card {
+    position: sticky;
+    top: var(--deck-top, 0px);
+    /* fallback for browsers without svh */
+    min-height: calc(100vh - var(--header-h, 0px));
+    min-height: calc(100svh - var(--header-h, 0px));
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* fallback */
+    justify-content: safe center; /* keep the heading, never clip it */
+    padding-top: 92px;
+    padding-bottom: 60px;
+    box-shadow:
+      0 -34px 70px -28px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 0 color-mix(in oklab, var(--ca) 32%, var(--line-soft));
+  }
+  /* trim section-head gap so centered content has more room */
+  .pl-stack > .pl-card .pl-sec-head {
+    margin-bottom: 30px;
+  }
+  /* Skills (5th) is the densest card: lay the four category cards in a single
+     row so the card's height is the tallest one, not the sum of two rows.
+     This keeps it inside one screen so only Projects overflows the deck. */
+  .pl-stack > .pl-card:nth-child(5) .pl-skills {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .pl-stack > .pl-card:nth-child(5) .pl-skill-card {
+    padding: 20px 20px 18px;
+  }
+  /* Experience (3rd): tighten the gap between roles so its three entries
+     clear one screen and it pins at the header like the other cards. */
+  .pl-stack > .pl-card:nth-child(3) .pl-xp-item {
+    padding-bottom: 14px;
+  }
 }
 
 /* ============================================================
