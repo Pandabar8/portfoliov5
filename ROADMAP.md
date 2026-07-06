@@ -21,12 +21,10 @@ build plan below. Newest work first.
 
 ### Open items
 
-- [ ] **Swap the placeholder repo URLs.** All four "source:" links are
-      placeholders. The three UMD cards link to
-      `github.com/Pandabar8/PLACEHOLDER-*` stubs pending the real URLs, and
-      Margaux & Arden links to `github.com/Pandabar8/margaux-arden` because
-      the project has no GitHub repo yet. Replace all four before or right
-      after the next deploy.
+- [ ] **Swap the Margaux & Arden repo URL.** Its "source:" link points at
+      the placeholder `github.com/Pandabar8/margaux-arden` because the
+      project has no GitHub repo yet. Replace it once the project is
+      published. The other three cards now link to their real repos.
 
 ---
 
