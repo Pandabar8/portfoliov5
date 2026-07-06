@@ -5,6 +5,31 @@ build plan below. Newest work first.
 
 ---
 
+## 2026-07, Projects revamp: fourth card, visible stacks, source links
+
+### In plain language
+
+1. **New project card (fig. 05): Margaux & Arden.** A one-page demo site for a
+   fictional luxury wedding studio in San Salvador, built in vanilla
+   HTML/CSS/JS with zero runtime dependencies and no build step. Headline
+   stat: 0 runtime dependencies.
+2. **Stacks visible at a glance.** Each card now shows its stack line in the
+   collapsed head (under the tagline) instead of only inside the expanded
+   body.
+3. **Source links.** Every card's expanded body ends with a "source:" link to
+   its GitHub repository.
+
+### Open items
+
+- [ ] **Swap the placeholder repo URLs.** All four "source:" links are
+      placeholders. The three UMD cards link to
+      `github.com/Pandabar8/PLACEHOLDER-*` stubs pending the real URLs, and
+      Margaux & Arden links to `github.com/Pandabar8/margaux-arden` because
+      the project has no GitHub repo yet. Replace all four before or right
+      after the next deploy.
+
+---
+
 ## 2026-07, Audit hardening: navigation, resilience, reach
 
 ### In plain language

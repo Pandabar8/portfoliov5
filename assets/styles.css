@@ -641,15 +641,32 @@ html:not(.js) .pl-proj-body {
   height: 2px;
   background: var(--accent);
 }
-.pl-proj-tech {
+.pl-proj-tech,
+.pl-proj-stack {
   font-family: var(--mono);
   font-size: 11.5px;
   letter-spacing: 0.05em;
   color: var(--muted);
 }
-.pl-proj-tech b {
+.pl-proj-tech b,
+.pl-proj-stack b {
   color: var(--accent-text);
   font-weight: 400;
+}
+.pl-proj-stack {
+  display: block;
+  margin-top: 10px;
+}
+.pl-proj-tech a {
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+}
+.pl-proj-tech a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
 /* ============================================================
