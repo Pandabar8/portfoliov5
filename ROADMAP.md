@@ -31,12 +31,12 @@ build plan below. Newest work first.
 
 ### Open items
 
-- [ ] **Add the Margaux & Arden live link once it is deployed.** The card grid
-      already supports a filled "View live site" link (the `.pl-pcard-live`
-      style); the Margaux card currently shows only "Source" because the demo
-      is not hosted yet, and its "Source" link points at the placeholder
-      `github.com/Pandabar8/margaux-arden`. When the project is published, add
-      the live URL and swap the repo URL.
+- [ ] **Fill in the "Visit" links.** Every project card now has a filled
+      "Visit" button whose `href` is a `#` placeholder (grep `pl-pcard-live`).
+      Replace each with the project's live URL, or remove the button from any
+      project without a public demo. Margaux & Arden also still points its
+      "Source" link at the placeholder `github.com/Pandabar8/margaux-arden`
+      until it has a repo.
 
 ---
 

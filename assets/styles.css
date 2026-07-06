@@ -612,12 +612,19 @@ html[data-theme="light"] .sr {
   color: var(--text);
   border-color: var(--accent);
 }
-/* client-facing demo link: filled accent so it reads as the primary action */
+/* client-facing demo link: filled accent so it reads as the primary action.
+   Dark theme's emerald is bright, so it takes dark ink; light theme steps the
+   fill darker so white ink clears contrast. */
 .pl-pcard-live {
   background: var(--accent);
-  color: var(--accent-ink);
+  color: #06231a;
   border-color: var(--accent);
   font-weight: 600;
+}
+html[data-theme="light"] .pl-pcard-live {
+  background: #047857;
+  border-color: #047857;
+  color: #ffffff;
 }
 .pl-pcard-live:hover {
   filter: brightness(1.08);
