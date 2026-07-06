@@ -504,22 +504,47 @@ html[data-theme="light"] .sr {
 }
 .pl-pcard {
   position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   border: 1px solid var(--line-soft);
   border-radius: 18px;
-  background:
-    radial-gradient(
-      120% 80% at 12% 0%,
-      color-mix(in oklab, var(--accent) 7%, transparent),
-      transparent 60%
-    ),
-    var(--bg2);
+  /* flat surface: the section already carries the accent gradient, so a second
+     one on the card read as muddy. The accent arrives on hover via the
+     cursor-tracked spotlight below instead. */
+  background: var(--bg2);
 }
 .pl-pcard:hover {
-  border-color: color-mix(in oklab, var(--accent) 42%, var(--line));
+  border-color: color-mix(in oklab, var(--accent) 45%, var(--line));
   transform: translateY(-3px);
-  box-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.6);
+}
+/* cursor-tracking accent spotlight on hover, matching the skills cards; the
+   pointer position is fed in as --mx/--my by main.js, with a centered glow as
+   the reduced-motion / touch fallback */
+.pl-pcard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in oklab, var(--ca) 30%, transparent),
+    transparent 62%
+  );
+  opacity: 0;
+  transition: opacity 0.32s;
+}
+.pl-pcard:hover::before {
+  opacity: 1;
+}
+/* keep the card content above the glow */
+.pl-pcard-main,
+.pl-pcard-acts,
+.pl-pcard-detail {
+  position: relative;
+  z-index: 1;
 }
 .pl-pcard-main {
   flex: 1;
@@ -1416,8 +1441,7 @@ html.theme-vt::view-transition-new(root) {
   transition:
     opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
     transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
-    border-color 0.25s,
-    box-shadow 0.25s;
+    border-color 0.25s;
 }
 /* .pl-skill-card is a reveal-group child: keep the opacity+transform reveal and
    add the hover lift + accent border to the same transition list */
