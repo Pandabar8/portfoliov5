@@ -5,7 +5,7 @@ build plan below. Newest work first.
 
 ---
 
-## 2026-07, Projects revamp: fourth card, visible stacks, source links
+## 2026-07, Projects revamp: fourth card, visible stacks, flat section cards
 
 ### In plain language
 
@@ -15,9 +15,17 @@ build plan below. Newest work first.
    stat: 0 runtime dependencies.
 2. **Stacks visible at a glance.** Each card now shows its stack line in the
    collapsed head (under the tagline) instead of only inside the expanded
-   body.
+   body, printed as bordered chips so the technologies scan as tags.
 3. **Source links.** Every card's expanded body ends with a "source:" link to
    its GitHub repository.
+4. **Section cards no longer pin.** About through Skills used to pin to the top
+   of the screen and stack like a deck as you scrolled. Because only cards
+   short enough to fit under the sticky header could reach it, taller cards met
+   the header inconsistently and content could freeze mid-card. The cards now
+   scroll as ordinary stacked panels, keeping their colour tints, rounded tops
+   and shadows. This matches the layout already used on mobile, print and the
+   no-JS fallback. (Supersedes the scroll-stacking deck from the 2026-06
+   redesign below.)
 
 ### Open items
 
