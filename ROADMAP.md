@@ -21,8 +21,8 @@ build plan below. Newest work first.
    the project's bullet points; the detail also stays in the page for no-JS
    and print. The grid fits one screen, so Projects now stacks uniformly with
    the other deck cards instead of being the tall exception.
-3. **Real source links.** The three university projects link to their real
-   repositories; Margaux & Arden links to its placeholder until it has one.
+3. **Real source links.** All four projects link to their real repositories,
+   and Margaux & Arden also links to its deployed live demo.
 4. **Section cards stack uniformly.** About through Skills pin to the top of
    the screen and stack like a deck, and every card is sized to one screen so
    they meet the header consistently. Skills lays its four category cards in a
