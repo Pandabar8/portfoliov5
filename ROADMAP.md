@@ -31,12 +31,9 @@ build plan below. Newest work first.
 
 ### Open items
 
-- [ ] **Fill in the Margaux & Arden "Visit" link.** Only the Margaux card
-      carries a "Visit" button (the other three projects have no public demo
-      and are source-only); its `href` is a `#` placeholder (grep
-      `pl-pcard-live`) pending the live URL. Margaux also still points its
-      "Source" link at the placeholder `github.com/Pandabar8/margaux-arden`
-      until it has a repo.
+None. Margaux & Arden's "Visit" button links to the live demo
+(`pandabar8.github.io/wedding-planner-demo/`) and its "Source" link to the
+`Pandabar8/wedding-planner-demo` repo.
 
 ---
 
