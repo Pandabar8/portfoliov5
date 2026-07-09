@@ -13,13 +13,17 @@ outline "LET'S TALK" that fills on hover, three-column footer bar).
 
 - **Theme:** dark by default, with a dark/light toggle in the header (persists per
   browser via `localStorage`; deep-linkable with `?theme=light` / `?theme=dark`)
+- **Language:** English/Spanish toggle in the header. Spanish-language browsers
+  get Spanish automatically; an explicit choice persists via `localStorage`.
+  English lives in the markup, Spanish in `assets/i18n-es.js`.
 - **Accent:** Electric blue, `#0145F2` in light mode, brightened to `#3f6dff` on
   dark for legible contrast
 - **Type:** Archivo (display) · IBM Plex Sans (body) · IBM Plex Mono (labels)
 - **Motion:** scroll-triggered reveals, count-up metrics, sparklines that draw on
   entry, lift-&-glow hover. All gated behind `prefers-reduced-motion`.
-- **Behaviour:** sticky nav with scrollspy, mobile menu, expandable project cards
-  (the chart grows to fill the card when opened), back-to-top.
+- **Behaviour:** auto-hiding utility header (resume, GitHub/LinkedIn, language +
+  theme toggles), scroll-stacking section deck, project detail lightbox,
+  back-to-top.
 
 ## Run locally
 
@@ -45,7 +49,8 @@ index.html                        Page markup + baked content, head metadata
 favicon.ico                       Legacy favicon fallback (SVG is primary)
 assets/styles.css                 All styling (tokens, components, deck, print, responsive)
 assets/main.js                    Deck fit, Lenis, intro, charts, count-up, reveals,
-                                  scrollspy, nav, accordion, theme toggle
+                                  language swap, lightbox, theme toggle
+assets/i18n-es.js                 Spanish strings (English is harvested from the markup)
 assets/hero-ascii.js              Hero "pointer ripple field" canvas backdrop
 assets/lenis.min.js               Vendored Lenis smooth-scroll runtime (v1.3.23)
 assets/fonts/                     Self-hosted woff2 subsets (Archivo, IBM Plex)
@@ -53,7 +58,7 @@ assets/og.png                     1200x630 social share card
 assets/favicon.svg                Favicon (JB monogram)
 assets/apple-touch-icon.png       iOS home-screen icon
 assets/photo.jpg                  About-section photo
-assets/Jose-Barrientos-Resume.pdf Resume (linked from the nav + footer)
+assets/Jose-Barrientos-Resume.pdf Resume (linked from the header + footer)
 ```
 
 The canonical deployment is <https://pandabar8.github.io/portfoliov5/>

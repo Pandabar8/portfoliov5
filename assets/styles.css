@@ -1623,70 +1623,80 @@ html:not(.js) .lg-marquee {
 .pf-final .pl-header.nav-hidden:focus-within {
   transform: none;
 }
-.pf-final .pl-nav-links {
+/* header right-side controls: resume, GitHub/LinkedIn, language, theme */
+.pl-header-actions {
   display: flex;
-  gap: 24px;
   align-items: center;
+  gap: 14px;
 }
-.pf-final .pl-nav-links a {
+.pf-final .hdr-resume {
   font-family: var(--mono);
   font-size: 12px;
   letter-spacing: 0.04em;
   text-decoration: none;
-  color: var(--muted);
-  position: relative;
-  padding: 4px 0;
-  text-transform: lowercase;
-  transition: color 0.18s;
-}
-.pf-final .pl-nav-links a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 100%;
-  bottom: -2px;
-  height: 1.5px;
-  background: var(--accent);
-  transition: right 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.pf-final .pl-nav-links a:hover {
-  color: var(--text);
-}
-.pf-final .pl-nav-links a:hover::after {
-  right: 0;
-}
-.pf-final .pl-nav-links a.active {
-  color: var(--accent-text);
-}
-.pf-final .pl-nav-links a.active::after {
-  right: 0;
-}
-.pf-final .pl-nav-links .nav-resume {
   color: var(--accent-text);
   border: 1px solid var(--accent);
   border-radius: 2px;
   padding: 6px 13px;
-  text-transform: none;
   transition:
     background 0.18s,
     color 0.18s;
 }
-.pf-final .pl-nav-links .nav-resume::after {
-  display: none;
-}
-.pf-final .pl-nav-links .nav-resume:hover {
+.pf-final .hdr-resume:hover {
   background: var(--accent);
   color: var(--accent-ink);
 }
-.pf-final .pl-nav-toggle {
-  display: none;
-}
-
-/* header right-side controls (nav + theme toggle + mobile menu button) */
-.pl-header-actions {
-  display: flex;
+.hdr-icon {
+  display: inline-flex;
   align-items: center;
-  gap: 18px;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  transition:
+    color 0.18s,
+    border-color 0.18s;
+}
+.hdr-icon:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.hdr-icon svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 34px;
+  padding: 0 12px;
+  flex: 0 0 auto;
+  border-radius: 17px;
+  background: none;
+  border: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  cursor: pointer;
+  transition: border-color 0.18s;
+}
+.lang-toggle:hover {
+  border-color: var(--accent);
+}
+.lang-toggle .sep {
+  opacity: 0.5;
+}
+/* highlight the language currently shown */
+html[lang="en"] .lang-toggle .l-en,
+html[lang="es"] .lang-toggle .l-es {
+  color: var(--accent-text);
+  font-weight: 600;
 }
 .theme-toggle {
   display: inline-flex;
@@ -2123,35 +2133,6 @@ html.intro-arming .sr::before {
   }
 }
 @media (max-width: 760px) {
-  .pf-final .pl-nav-links {
-    display: none;
-  }
-  .pf-final .pl-nav-links.open {
-    display: flex;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 18px;
-    background: var(--bg);
-    border-bottom: 1px solid var(--line);
-    padding: 22px 40px 28px;
-  }
-  .pf-final .pl-nav-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: none;
-    border: 1px solid var(--line);
-    border-radius: 3px;
-    width: 40px;
-    height: 36px;
-    color: var(--text);
-    cursor: pointer;
-    font-size: 16px;
-  }
   .pf-final .pl-name {
     font-size: 44px;
     white-space: normal;
@@ -2202,6 +2183,16 @@ html.intro-arming .sr::before {
   .pf-final .pf-totop {
     right: 16px;
     bottom: 16px;
+  }
+}
+@media (max-width: 600px) {
+  /* the resume CTA yields to the toggles on narrow screens; the footer
+     still carries a resume link */
+  .pf-final .hdr-resume {
+    display: none;
+  }
+  .pl-header-actions {
+    gap: 10px;
   }
 }
 @media (max-width: 480px) {
@@ -2648,9 +2639,7 @@ html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
   .lg-marquee,
   .pl-hero-ascii,
   .pf-totop,
-  .theme-toggle,
-  .pl-nav-toggle,
-  .pl-nav-links,
+  .pl-header-actions,
   .pl-pcard-wm,
   .pl-win-bar,
   .pl-win-pill,

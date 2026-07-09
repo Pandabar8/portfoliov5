@@ -5,6 +5,57 @@ build plan below. Newest work first.
 
 ---
 
+## 2026-07, Bilingual site + a leaner header
+
+### In plain language
+
+1. **The site speaks English and Spanish.** An EN / ES toggle sits in the
+   header next to the theme button. Everything a recruiter reads translates:
+   hero, bio console, project cards and their lightbox, experience,
+   education, skills, footer, screen-reader labels, even the tab title.
+   Tech flavor deliberately stays English: skill and tool names, stack
+   chips, the Python code lines in the About console, fig. labels and the
+   console UI (PROFILE LOADED, run, the trait meters).
+2. **Spanish finds its audience on its own.** A browser set to Spanish gets
+   Spanish on first visit; everyone else gets English. Flipping the toggle
+   saves the choice (localStorage, same contract as the theme toggle) and an
+   explicit choice always wins over auto-detection. The About console types
+   itself in whichever language is active, and a toggle after it has typed
+   swaps the text in place without replaying.
+3. **The navbar is gone.** The section links and the mobile hamburger are
+   removed: the page is a linear scroll deck, so the scroll is the
+   navigation. The header now carries exactly five things: a Resume button,
+   GitHub and LinkedIn icons (drawn in the site's stroke-icon language), the
+   EN / ES toggle and the theme toggle. Under 600px the Resume button yields
+   to the toggles (the footer still has a resume link).
+
+### Open items
+
+- The Resume button downloads the English PDF in both languages; a Spanish
+  resume PDF could be added later and swapped by the same mechanism.
+
+### Design notes
+
+- English is never written twice: main.js harvests it from the markup
+  (`data-i18n` / `data-i18n-aria` attributes) at boot, and
+  `assets/i18n-es.js` carries only the Spanish strings. Strings with inline
+  markup (`<mark>`, `<b>`) swap as HTML fragments, so the Spanish file
+  mirrors those tags.
+- An inline head script resolves `<html lang>` before first paint (saved
+  choice, else `navigator.language`); `init()` applies the content swap
+  first so the About window snapshot and the intro caption are built from
+  the active language.
+- `setupAboutWindow` re-snapshots its typed segments on language change:
+  mid-type or after typing it settles instantly on the full new-language
+  text; before first view it simply types the new language when scrolled in.
+- Deleted with the navbar: `setupScrollspy`, `setupNav`, the hamburger
+  branch of `setupAutoHideNav`, and all `.pl-nav-*` CSS including the
+  mobile overlay menu. Anchor routing stays (brand and back-to-top).
+- Social-card and Open Graph metadata stay English: scrapers do not run JS,
+  and the canonical page is the English arrival.
+
+---
+
 ## 2026-07, Scroll feel + section identity: tighter deck, icons, console About, overlay nav
 
 ### In plain language

@@ -76,6 +76,21 @@
   })();
 </script>
 
+<!-- resolve the UI language before first paint: an explicit toggle choice
+     wins, otherwise a Spanish-language browser gets Spanish. This only sets
+     the <html lang> signal; main.js swaps the content when it boots. -->
+<script>
+  (function () {
+    try {
+      var l = localStorage.getItem("lang");
+      if (l !== "en" && l !== "es") {
+        l = /^es/i.test(navigator.language || "") ? "es" : "en";
+      }
+      document.documentElement.lang = l;
+    } catch (e) {}
+  })();
+</script>
+
 <!-- when the first-visit intro will play, hold a solid cover until the overlay
      mounts. JS-driven so a JS-disabled page still renders normally. -->
 <script>
@@ -96,7 +111,7 @@
   })();
 </script>
 
-<link rel="stylesheet" href="assets/styles.css?v=21">
+<link rel="stylesheet" href="assets/styles.css?v=22">
 </head>
 
 <body>
@@ -124,6 +139,8 @@
   <symbol id="pi-nodes" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5.5" r="2.2"></circle><circle cx="5.5" cy="18" r="2.2"></circle><circle cx="18.5" cy="18" r="2.2"></circle><path d="M10.8 7.4 6.6 16M13.2 7.4l4.2 8.6M7.7 18h8.6"></path></g></symbol>
   <symbol id="pi-bolt" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3 5.5 13.5h5L11 21l7.5-10.5h-5z"></path></g></symbol>
   <symbol id="pi-play" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4.5 19 12 7 19.5z"></path></g></symbol>
+  <symbol id="pi-github" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.4c0-1 .1-1.5-.5-2.1 2.8-.3 5.7-1.4 5.7-6.2a4.8 4.8 0 0 0-1.3-3.3 4.4 4.4 0 0 0-.1-3.3s-1.1-.3-3.5 1.3a12.2 12.2 0 0 0-6.4 0C6.5 2.4 5.4 2.7 5.4 2.7a4.4 4.4 0 0 0-.1 3.3A4.8 4.8 0 0 0 4 9.3c0 4.8 2.9 5.9 5.7 6.2-.6.6-.6 1.2-.5 2.1V21"></path></g></symbol>
+  <symbol id="pi-linkedin" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4V8h4v1.6A6 6 0 0 1 16 8z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></g></symbol>
 </svg>
 
 <div class="sr pf-final" data-skin="final" data-mode="dark" data-density="comfortable" data-hoverfx="lift">
@@ -132,20 +149,14 @@
   <header class="pl-header pl-pad" id="site-header">
     <a class="brand" href="#top">José Barrientos<em>.</em></a>
     <div class="pl-header-actions">
-      <nav class="pl-nav-links" id="primary-nav" aria-label="Primary">
-        <a href="#about">About</a>
-        <a href="#projects">Projects</a>
-        <a href="#experience">Experience</a>
-        <a href="#education">Education</a>
-        <a href="#skills">Skills</a>
-        <a href="#contact">Contact</a>
-        <a class="nav-resume" href="assets/Jose-Barrientos-Resume.pdf" download="Jose-Barrientos-Resume.pdf">Resume &#8595;</a>
-      </nav>
-      <button type="button" class="theme-toggle" aria-label="Switch between dark and light theme" aria-pressed="false">
+      <a class="hdr-resume" href="assets/Jose-Barrientos-Resume.pdf" download="Jose-Barrientos-Resume.pdf" data-i18n="nav.resume">Resume &#8595;</a>
+      <a class="hdr-icon" href="https://github.com/Pandabar8" target="_blank" rel="noopener" aria-label="GitHub"><svg aria-hidden="true"><use href="#pi-github"></use></svg></a>
+      <a class="hdr-icon" href="https://www.linkedin.com/in/andres-barrientos" target="_blank" rel="noopener" aria-label="LinkedIn"><svg aria-hidden="true"><use href="#pi-linkedin"></use></svg></a>
+      <button type="button" class="lang-toggle" aria-label="Cambiar a español"><span class="l l-en" aria-hidden="true">EN</span><span class="sep" aria-hidden="true">/</span><span class="l l-es" aria-hidden="true">ES</span></button>
+      <button type="button" class="theme-toggle" data-i18n-aria="a11y.theme" aria-label="Switch between dark and light theme" aria-pressed="false">
         <svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 2.5v2.4M12 19.1v2.4M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"></path></svg>
         <svg class="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a6.5 6.5 0 1 0 10.5 10.5z"></path></svg>
       </button>
-      <button type="button" class="pl-nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="primary-nav">≡</button>
     </div>
   </header>
 
@@ -155,9 +166,9 @@
   <section class="pl-hero pl-pad">
     <canvas class="pl-hero-ascii" id="hero-ascii" aria-hidden="true"></canvas>
     <div class="pl-hero-content">
-      <p class="pl-kicker reveal">Data analyst, measured in outcomes</p>
+      <p class="pl-kicker reveal" data-i18n="hero.kicker">Data analyst, measured in outcomes</p>
       <h1 class="pl-name"><span class="ml"><span>José Andrés</span></span><span class="ml"><span>Barrientos<em>.</em></span></span></h1>
-      <p class="pl-hero-intro reveal">
+      <p class="pl-hero-intro reveal" data-i18n="hero.intro">
         I turn messy supply-chain and product data into decisions. <mark>4 years of retail analytics</mark> for
         Walmart, Target and Amazon drop-ship operations, now layering on a <mark>Master&rsquo;s in Software
         Engineering</mark> at the University of Maryland.
@@ -166,32 +177,32 @@
 
     <div class="pl-metrics">
       <div class="pl-metric reveal pop">
-        <div class="num"><span class="cnt" data-count="4">4</span><span class="unit">yrs</span><sup>1</sup></div>
-        <div class="lbl">supply-chain analytics experience</div>
+        <div class="num"><span class="cnt" data-count="4">4</span><span class="unit" data-i18n="hero.m1.unit">yrs</span><sup>1</sup></div>
+        <div class="lbl" data-i18n="hero.m1.lbl">supply-chain analytics experience</div>
         <div class="fn-spark" data-spark-bars="0" aria-hidden="true"></div>
       </div>
       <div class="pl-metric reveal pop">
         <div class="num"><span class="cnt" data-count="3">3</span><sup>2</sup></div>
-        <div class="lbl">Fortune-500 retail channels served</div>
+        <div class="lbl" data-i18n="hero.m2.lbl">Fortune-500 retail channels served</div>
         <div class="fn-spark" data-spark-bars="1" aria-hidden="true"></div>
       </div>
       <div class="pl-metric reveal pop">
         <div class="num"><span class="cnt" data-count="18">18</span><span class="unit">%</span><sup>3</sup></div>
-        <div class="lbl">defect-rate reduction via QA frameworks</div>
+        <div class="lbl" data-i18n="hero.m3.lbl">defect-rate reduction via QA frameworks</div>
         <div class="fn-spark" data-spark-bars="2" aria-hidden="true"></div>
       </div>
       <div class="pl-metric reveal pop">
         <div class="num"><span class="cnt" data-count="80">80</span><span class="unit">%</span><sup>4</sup></div>
-        <div class="lbl">ML issue-classification accuracy</div>
+        <div class="lbl" data-i18n="hero.m4.lbl">ML issue-classification accuracy</div>
         <div class="fn-spark" data-spark-bars="3" aria-hidden="true"></div>
       </div>
     </div>
 
     <div class="pl-footnotes reveal">
-      <div><b>1</b> Intradeco &middot; supply-chain analytics, 2021-2025</div>
-      <div><b>2</b> Walmart &middot; Target &middot; Amazon B2C drop-ship channels</div>
-      <div><b>3</b> SigmaQ Specialty &middot; QA data-collection frameworks, 2021</div>
-      <div><b>4</b> Random Forest / Gradient Boosting classifiers &middot; UMD, 2025</div>
+      <div data-i18n="hero.fn1"><b>1</b> Intradeco &middot; supply-chain analytics, 2021-2025</div>
+      <div data-i18n="hero.fn2"><b>2</b> Walmart &middot; Target &middot; Amazon B2C drop-ship channels</div>
+      <div data-i18n="hero.fn3"><b>3</b> SigmaQ Specialty &middot; QA data-collection frameworks, 2021</div>
+      <div data-i18n="hero.fn4"><b>4</b> Random Forest / Gradient Boosting classifiers &middot; UMD, 2025</div>
     </div>
 
     <hr class="pl-rule">
@@ -205,7 +216,7 @@
     <div class="pl-sec-head reveal">
       <div class="pl-sec-lead">
         <span class="pl-sec-ico" aria-hidden="true"><svg><use href="#pi-user"></use></svg></span>
-        <h2 class="pl-sec-title">about</h2>
+        <h2 class="pl-sec-title" data-i18n="sec.about">about</h2>
       </div>
       <span class="pl-sec-fig">fig. 01: the analyst</span>
     </div>
@@ -224,26 +235,26 @@
           <div class="pl-win-bar">
             <span class="pl-win-dot r"></span><span class="pl-win-dot y"></span><span class="pl-win-dot g"></span>
             <span class="pl-win-title">~/profile/about_me.py</span>
-            <button type="button" class="pl-win-run" aria-label="Replay the typing animation"><svg aria-hidden="true"><use href="#pi-play"></use></svg>run</button>
+            <button type="button" class="pl-win-run" data-i18n-aria="a11y.replay" aria-label="Replay the typing animation"><svg aria-hidden="true"><use href="#pi-play"></use></svg>run</button>
           </div>
           <div class="pl-win-body">
             <span class="pl-win-pill"><i></i>PROFILE LOADED</span>
             <div class="pl-win-code">
               <div class="ln"><span class="kw">from</span> career <span class="kw">import</span> analyst</div>
               <div class="pl-win-stanza">
-                <div class="ln cm"># what I built</div>
+                <div class="ln cm" data-i18n="about.c1"># what I built</div>
                 <div class="ln">analyst.<span class="fn">built</span>()</div>
-                <p class="pl-win-out">I spent four years at Intradeco building the analytics layer for B2C drop-ship operations across Walmart, Target and Amazon. I built <mark>Power BI dashboards on SAP data</mark> that gave managers real-time visibility into delivery, inventory and SKU-level performance.</p>
+                <p class="pl-win-out" data-i18n="about.p1">I spent four years at Intradeco building the analytics layer for B2C drop-ship operations across Walmart, Target and Amazon. I built <mark>Power BI dashboards on SAP data</mark> that gave managers real-time visibility into delivery, inventory and SKU-level performance.</p>
               </div>
               <div class="pl-win-stanza">
-                <div class="ln cm"># what I found</div>
+                <div class="ln cm" data-i18n="about.c2"># what I found</div>
                 <div class="ln">analyst.<span class="fn">found</span>()</div>
-                <p class="pl-win-out">Along the way I found that the most valuable problems sat between systems: I traced a <mark>data-transmission discrepancy between FedEx, Intradeco and Walmart</mark> that, once fixed, eliminated a recurring reconciliation error and its associated costs.</p>
+                <p class="pl-win-out" data-i18n="about.p2">Along the way I found that the most valuable problems sat between systems: I traced a <mark>data-transmission discrepancy between FedEx, Intradeco and Walmart</mark> that, once fixed, eliminated a recurring reconciliation error and its associated costs.</p>
               </div>
               <div class="pl-win-stanza">
-                <div class="ln cm"># where I'm headed</div>
+                <div class="ln cm" data-i18n="about.c3"># where I'm headed</div>
                 <div class="ln">analyst.<span class="fn">next</span>()</div>
-                <p class="pl-win-out">Self-taught in Python and SQL, I&rsquo;m now formalizing that foundation with a Master&rsquo;s in Software Engineering at UMD, focused on <mark>machine learning, algorithms and distributed systems</mark>.</p>
+                <p class="pl-win-out" data-i18n="about.p3">Self-taught in Python and SQL, I&rsquo;m now formalizing that foundation with a Master&rsquo;s in Software Engineering at UMD, focused on <mark>machine learning, algorithms and distributed systems</mark>.</p>
               </div>
             </div>
             <div class="pl-win-traits">
@@ -255,9 +266,9 @@
         </div>
       </div>
       <div class="pl-about-facts">
-        <div class="f"><span class="k"><svg class="pl-k-ico" aria-hidden="true"><use href="#pi-gradcap"></use></svg>Now</span>M.Eng SWE @ UMD, College Park</div>
-        <div class="f"><span class="k"><svg class="pl-k-ico" aria-hidden="true"><use href="#pi-briefcase"></use></svg>Previously</span>Data Analyst @ Intradeco</div>
-        <div class="f"><span class="k"><svg class="pl-k-ico" aria-hidden="true"><use href="#pi-pin"></use></svg>Based in</span>Silver Spring, MD</div>
+        <div class="f"><span class="k"><svg class="pl-k-ico" aria-hidden="true"><use href="#pi-gradcap"></use></svg><span data-i18n="about.f1k">Now</span></span>M.Eng SWE @ UMD, College Park</div>
+        <div class="f"><span class="k"><svg class="pl-k-ico" aria-hidden="true"><use href="#pi-briefcase"></use></svg><span data-i18n="about.f2k">Previously</span></span><span data-i18n="about.f2v">Data Analyst @ Intradeco</span></div>
+        <div class="f"><span class="k"><svg class="pl-k-ico" aria-hidden="true"><use href="#pi-pin"></use></svg><span data-i18n="about.f3k">Based in</span></span>Silver Spring, MD</div>
       </div>
     </div>
   </section>
@@ -267,99 +278,99 @@
     <div class="pl-sec-head reveal">
       <div class="pl-sec-lead">
         <span class="pl-sec-ico" aria-hidden="true"><svg><use href="#pi-modules"></use></svg></span>
-        <h2 class="pl-sec-title">projects</h2>
+        <h2 class="pl-sec-title" data-i18n="sec.projects">projects</h2>
       </div>
       <span class="pl-sec-fig">figs. 02-05: selected work</span>
     </div>
     <div class="pl-proj-grid">
 
       <article class="pl-pcard reveal" style="--i:0" data-pid="gh-issues">
-        <button type="button" class="pl-pcard-main" aria-haspopup="dialog" aria-label="Open details for GitHub Issues Analytics Platform">
+        <button type="button" class="pl-pcard-main" aria-haspopup="dialog" data-i18n-aria="proj.gh.aria" aria-label="Open details for GitHub Issues Analytics Platform">
           <span class="pl-pcard-top">
             <span class="pl-proj-fig"><b>fig. 02</b>University of Maryland</span>
-            <span class="pl-proj-stat"><span class="v">80%</span><span class="k">priority-classification accuracy</span></span>
+            <span class="pl-proj-stat"><span class="v">80%</span><span class="k" data-i18n="proj.gh.statk">priority-classification accuracy</span></span>
           </span>
-          <span class="pl-pcard-trow"><span class="pl-pcard-ico" aria-hidden="true"><svg><use href="#pi-chart"></use></svg></span><span class="pl-pcard-title">GitHub Issues Analytics Platform</span></span>
-          <span class="pl-pcard-tag">Analytics pipeline turning 5,200+ raw GitHub issues into prioritization signals.</span>
+          <span class="pl-pcard-trow"><span class="pl-pcard-ico" aria-hidden="true"><svg><use href="#pi-chart"></use></svg></span><span class="pl-pcard-title" data-i18n="proj.gh.title">GitHub Issues Analytics Platform</span></span>
+          <span class="pl-pcard-tag" data-i18n="proj.gh.tag">Analytics pipeline turning 5,200+ raw GitHub issues into prioritization signals.</span>
           <span class="pl-proj-stack"><b>stack:</b> <span class="t">Python</span><span class="t">Scikit-learn</span><span class="t">Pandas</span><span class="t">Plotly</span><span class="t">pytest</span></span>
         </button>
         <div class="pl-pcard-acts">
-          <a class="pl-pcard-src" href="https://github.com/javrobs/ENPM611-application-test" target="_blank" rel="noopener">Source &#8599;</a>
+          <a class="pl-pcard-src" data-i18n="proj.src" href="https://github.com/javrobs/ENPM611-application-test" target="_blank" rel="noopener">Source &#8599;</a>
         </div>
         <div class="pl-pcard-detail">
           <ul>
-            <li>Built a data analytics pipeline processing 5,200+ GitHub issues with 90% test coverage using pytest.</li>
-            <li>Developed Random Forest and Gradient Boosting classifiers achieving 80% accuracy for issue priority classification.</li>
-            <li>Created 7 interactive Plotly visualizations, including contributor lifecycle analysis and engagement heatmaps.</li>
+            <li data-i18n="proj.gh.d1">Built a data analytics pipeline processing 5,200+ GitHub issues with 90% test coverage using pytest.</li>
+            <li data-i18n="proj.gh.d2">Developed Random Forest and Gradient Boosting classifiers achieving 80% accuracy for issue priority classification.</li>
+            <li data-i18n="proj.gh.d3">Created 7 interactive Plotly visualizations, including contributor lifecycle analysis and engagement heatmaps.</li>
           </ul>
         </div>
         <span class="pl-pcard-wm" aria-hidden="true"><svg><use href="#pi-chart"></use></svg></span>
       </article>
 
       <article class="pl-pcard reveal" style="--i:1" data-pid="road-damage">
-        <button type="button" class="pl-pcard-main" aria-haspopup="dialog" aria-label="Open details for Road Damage Detection with Deep Learning">
+        <button type="button" class="pl-pcard-main" aria-haspopup="dialog" data-i18n-aria="proj.rd.aria" aria-label="Open details for Road Damage Detection with Deep Learning">
           <span class="pl-pcard-top">
             <span class="pl-proj-fig"><b>fig. 03</b>University of Maryland</span>
-            <span class="pl-proj-stat"><span class="v">44%</span><span class="k">training-time reduction</span></span>
+            <span class="pl-proj-stat"><span class="v">44%</span><span class="k" data-i18n="proj.rd.statk">training-time reduction</span></span>
           </span>
-          <span class="pl-pcard-trow"><span class="pl-pcard-ico" aria-hidden="true"><svg><use href="#pi-road"></use></svg></span><span class="pl-pcard-title">Road Damage Detection with Deep Learning</span></span>
-          <span class="pl-pcard-tag">Transfer-learning image classifier benchmarked across four architectures.</span>
+          <span class="pl-pcard-trow"><span class="pl-pcard-ico" aria-hidden="true"><svg><use href="#pi-road"></use></svg></span><span class="pl-pcard-title" data-i18n="proj.rd.title">Road Damage Detection with Deep Learning</span></span>
+          <span class="pl-pcard-tag" data-i18n="proj.rd.tag">Transfer-learning image classifier benchmarked across four architectures.</span>
           <span class="pl-proj-stack"><b>stack:</b> <span class="t">Python</span><span class="t">PyTorch</span><span class="t">TensorFlow</span><span class="t">Google Colab</span></span>
         </button>
         <div class="pl-pcard-acts">
-          <a class="pl-pcard-src" href="https://github.com/Pandabar8/road_damage_project" target="_blank" rel="noopener">Source &#8599;</a>
+          <a class="pl-pcard-src" data-i18n="proj.src" href="https://github.com/Pandabar8/road_damage_project" target="_blank" rel="noopener">Source &#8599;</a>
         </div>
         <div class="pl-pcard-detail">
           <ul>
-            <li>Built an image-classification pipeline for 907 images using transfer learning and data augmentation in PyTorch.</li>
-            <li>Benchmarked 4 architectures (ResNet-18, MobileNetV3, EfficientNet-B0, ViT-Tiny) and reduced training time by 44%.</li>
+            <li data-i18n="proj.rd.d1">Built an image-classification pipeline for 907 images using transfer learning and data augmentation in PyTorch.</li>
+            <li data-i18n="proj.rd.d2">Benchmarked 4 architectures (ResNet-18, MobileNetV3, EfficientNet-B0, ViT-Tiny) and reduced training time by 44%.</li>
           </ul>
         </div>
         <span class="pl-pcard-wm" aria-hidden="true"><svg><use href="#pi-road"></use></svg></span>
       </article>
 
       <article class="pl-pcard reveal" style="--i:2" data-pid="minimax">
-        <button type="button" class="pl-pcard-main" aria-haspopup="dialog" aria-label="Open details for AI Game Engine with Minimax">
+        <button type="button" class="pl-pcard-main" aria-haspopup="dialog" data-i18n-aria="proj.mm.aria" aria-label="Open details for AI Game Engine with Minimax">
           <span class="pl-pcard-top">
             <span class="pl-proj-fig"><b>fig. 04</b>University of Maryland</span>
-            <span class="pl-proj-stat"><span class="v">90%+</span><span class="k">win/draw rate at depth 6</span></span>
+            <span class="pl-proj-stat"><span class="v">90%+</span><span class="k" data-i18n="proj.mm.statk">win/draw rate at depth 6</span></span>
           </span>
-          <span class="pl-pcard-trow"><span class="pl-pcard-ico" aria-hidden="true"><svg><use href="#pi-grid"></use></svg></span><span class="pl-pcard-title">AI Game Engine with Minimax</span></span>
-          <span class="pl-pcard-tag">Adversarial search engine with alpha-beta pruning and heuristic evaluation.</span>
+          <span class="pl-pcard-trow"><span class="pl-pcard-ico" aria-hidden="true"><svg><use href="#pi-grid"></use></svg></span><span class="pl-pcard-title" data-i18n="proj.mm.title">AI Game Engine with Minimax</span></span>
+          <span class="pl-pcard-tag" data-i18n="proj.mm.tag">Adversarial search engine with alpha-beta pruning and heuristic evaluation.</span>
           <span class="pl-proj-stack"><b>stack:</b> <span class="t">Python</span><span class="t">Algorithm design</span></span>
         </button>
         <div class="pl-pcard-acts">
-          <a class="pl-pcard-src" href="https://github.com/Pandabar8/tictactoe-minimax" target="_blank" rel="noopener">Source &#8599;</a>
+          <a class="pl-pcard-src" data-i18n="proj.src" href="https://github.com/Pandabar8/tictactoe-minimax" target="_blank" rel="noopener">Source &#8599;</a>
         </div>
         <div class="pl-pcard-detail">
           <ul>
-            <li>Implemented minimax with alpha-beta pruning, achieving a 40-60% reduction in search-space complexity.</li>
-            <li>Developed a heuristic evaluation function; the AI achieves a 90%+ win/draw rate at search depth 6.</li>
+            <li data-i18n="proj.mm.d1">Implemented minimax with alpha-beta pruning, achieving a 40-60% reduction in search-space complexity.</li>
+            <li data-i18n="proj.mm.d2">Developed a heuristic evaluation function; the AI achieves a 90%+ win/draw rate at search depth 6.</li>
           </ul>
         </div>
         <span class="pl-pcard-wm" aria-hidden="true"><svg><use href="#pi-grid"></use></svg></span>
       </article>
 
       <article class="pl-pcard reveal" style="--i:3" data-pid="margaux-arden">
-        <button type="button" class="pl-pcard-main" aria-haspopup="dialog" aria-label="Open details for Margaux and Arden">
+        <button type="button" class="pl-pcard-main" aria-haspopup="dialog" data-i18n-aria="proj.ma.aria" aria-label="Open details for Margaux and Arden">
           <span class="pl-pcard-top">
-            <span class="pl-proj-fig"><b>fig. 05</b>Freelance</span>
-            <span class="pl-proj-stat"><span class="v">0</span><span class="k">runtime dependencies</span></span>
+            <span class="pl-proj-fig"><b>fig. 05</b><span data-i18n="proj.ma.fig">Freelance</span></span>
+            <span class="pl-proj-stat"><span class="v">0</span><span class="k" data-i18n="proj.ma.statk">runtime dependencies</span></span>
           </span>
           <span class="pl-pcard-trow"><span class="pl-pcard-ico" aria-hidden="true"><svg><use href="#pi-rings"></use></svg></span><span class="pl-pcard-title">Margaux &amp; Arden</span></span>
-          <span class="pl-pcard-tag">One-page demo site for a fictional luxury wedding studio in San Salvador, no build step, no libraries.</span>
+          <span class="pl-pcard-tag" data-i18n="proj.ma.tag">One-page demo site for a fictional luxury wedding studio in San Salvador, no build step, no libraries.</span>
           <span class="pl-proj-stack"><b>stack:</b> <span class="t">HTML</span><span class="t">CSS</span><span class="t">JavaScript (ES modules)</span></span>
         </button>
         <div class="pl-pcard-acts">
-          <a class="pl-pcard-live" href="https://pandabar8.github.io/wedding-planner-demo/" target="_blank" rel="noopener">Visit &#8599;</a>
-          <a class="pl-pcard-src" href="https://github.com/Pandabar8/wedding-planner-demo" target="_blank" rel="noopener">Source &#8599;</a>
+          <a class="pl-pcard-live" data-i18n="proj.visit" href="https://pandabar8.github.io/wedding-planner-demo/" target="_blank" rel="noopener">Visit &#8599;</a>
+          <a class="pl-pcard-src" data-i18n="proj.src" href="https://github.com/Pandabar8/wedding-planner-demo" target="_blank" rel="noopener">Source &#8599;</a>
         </div>
         <div class="pl-pcard-detail">
           <ul>
-            <li>Choreographed a sticky full-viewport &ldquo;wedding day&rdquo; scroll sequence: four scenes crossfade with time-of-day captions and a progress line.</li>
-            <li>Hand-rolled a focus-trapped lightbox and a swipeable carousel, fully keyboard- and touch-operable.</li>
-            <li>Built an IntersectionObserver reveal system with prefers-reduced-motion honored globally; Bodoni Moda and Archivo self-hosted as WOFF2.</li>
-            <li>Wrote the copy in Spanish, localized for the Salvadoran market.</li>
+            <li data-i18n="proj.ma.d1">Choreographed a sticky full-viewport &ldquo;wedding day&rdquo; scroll sequence: four scenes crossfade with time-of-day captions and a progress line.</li>
+            <li data-i18n="proj.ma.d2">Hand-rolled a focus-trapped lightbox and a swipeable carousel, fully keyboard- and touch-operable.</li>
+            <li data-i18n="proj.ma.d3">Built an IntersectionObserver reveal system with prefers-reduced-motion honored globally; Bodoni Moda and Archivo self-hosted as WOFF2.</li>
+            <li data-i18n="proj.ma.d4">Wrote the copy in Spanish, localized for the Salvadoran market.</li>
           </ul>
         </div>
         <span class="pl-pcard-wm" aria-hidden="true"><svg><use href="#pi-rings"></use></svg></span>
@@ -373,7 +384,7 @@
     <div class="pl-sec-head reveal">
       <div class="pl-sec-lead">
         <span class="pl-sec-ico" aria-hidden="true"><svg><use href="#pi-briefcase"></use></svg></span>
-        <h2 class="pl-sec-title">experience</h2>
+        <h2 class="pl-sec-title" data-i18n="sec.experience">experience</h2>
       </div>
       <span class="pl-sec-fig">2020-2025</span>
     </div>
@@ -381,39 +392,39 @@
       <div class="pl-xp-item reveal from-left" style="--i:0">
         <div class="pl-xp-top">
           <span class="pl-xp-ico" aria-hidden="true"><svg><use href="#pi-truck"></use></svg></span>
-          <span class="pl-xp-role">Data Analyst</span>
-          <span class="pl-xp-when">Sep 2021 to Aug 2025</span>
+          <span class="pl-xp-role" data-i18n="xp.1.role">Data Analyst</span>
+          <span class="pl-xp-when" data-i18n="xp.1.when">Sep 2021 to Aug 2025</span>
         </div>
         <div class="pl-xp-org">Intradeco &middot; San Salvador, El Salvador</div>
         <ul>
-          <li>Built and maintained Power BI dashboards from SAP-exported Excel data, showing real-time delivery, inventory and SKU metrics for Walmart, Target and Amazon.</li>
-          <li>Developed drill-through reports from product style down to individual SKU, enabling granular analysis of inventory gaps and delivery performance.</li>
-          <li>Identified and resolved a data-transmission discrepancy between FedEx, Intradeco and Walmart, eliminating a recurring, costly reconciliation error.</li>
-          <li>Automated weekly reporting workflows in Excel + Power BI, cutting manual preparation time for commercial stakeholders.</li>
+          <li data-i18n="xp.1.d1">Built and maintained Power BI dashboards from SAP-exported Excel data, showing real-time delivery, inventory and SKU metrics for Walmart, Target and Amazon.</li>
+          <li data-i18n="xp.1.d2">Developed drill-through reports from product style down to individual SKU, enabling granular analysis of inventory gaps and delivery performance.</li>
+          <li data-i18n="xp.1.d3">Identified and resolved a data-transmission discrepancy between FedEx, Intradeco and Walmart, eliminating a recurring, costly reconciliation error.</li>
+          <li data-i18n="xp.1.d4">Automated weekly reporting workflows in Excel + Power BI, cutting manual preparation time for commercial stakeholders.</li>
         </ul>
       </div>
       <div class="pl-xp-item reveal from-right" style="--i:1">
         <div class="pl-xp-top">
           <span class="pl-xp-ico" aria-hidden="true"><svg><use href="#pi-clipboard"></use></svg></span>
-          <span class="pl-xp-role">Quality Assurance Coordinator</span>
-          <span class="pl-xp-when">Jan to Jun 2021</span>
+          <span class="pl-xp-role" data-i18n="xp.2.role">Quality Assurance Coordinator</span>
+          <span class="pl-xp-when" data-i18n="xp.2.when">Jan to Jun 2021</span>
         </div>
         <div class="pl-xp-org">SigmaQ Specialty &middot; San Salvador, El Salvador</div>
         <ul>
-          <li>Designed testing procedures and data-collection frameworks that reduced defect rates by 18%.</li>
-          <li>Analyzed quality metrics and customer feedback to find process improvements, increasing efficiency by 12%.</li>
+          <li data-i18n="xp.2.d1">Designed testing procedures and data-collection frameworks that reduced defect rates by 18%.</li>
+          <li data-i18n="xp.2.d2">Analyzed quality metrics and customer feedback to find process improvements, increasing efficiency by 12%.</li>
         </ul>
       </div>
       <div class="pl-xp-item reveal from-left" style="--i:2">
         <div class="pl-xp-top">
           <span class="pl-xp-ico" aria-hidden="true"><svg><use href="#pi-headset"></use></svg></span>
-          <span class="pl-xp-role">Customer Service Representative</span>
-          <span class="pl-xp-when">Jun to Dec 2020</span>
+          <span class="pl-xp-role" data-i18n="xp.3.role">Customer Service Representative</span>
+          <span class="pl-xp-when" data-i18n="xp.3.when">Jun to Dec 2020</span>
         </div>
         <div class="pl-xp-org">Telus International &middot; San Salvador, El Salvador</div>
         <ul>
-          <li>Resolved 40+ inquiries daily across channels at a 95%+ satisfaction rating.</li>
-          <li>Surfaced recurring complaint patterns to technical teams, reducing support volume by 12%.</li>
+          <li data-i18n="xp.3.d1">Resolved 40+ inquiries daily across channels at a 95%+ satisfaction rating.</li>
+          <li data-i18n="xp.3.d2">Surfaced recurring complaint patterns to technical teams, reducing support volume by 12%.</li>
         </ul>
       </div>
     </div>
@@ -424,7 +435,7 @@
     <div class="pl-sec-head reveal">
       <div class="pl-sec-lead">
         <span class="pl-sec-ico" aria-hidden="true"><svg><use href="#pi-gradcap"></use></svg></span>
-        <h2 class="pl-sec-title">education</h2>
+        <h2 class="pl-sec-title" data-i18n="sec.education">education</h2>
       </div>
       <span class="pl-sec-fig">College Park · San Salvador</span>
     </div>
@@ -432,17 +443,17 @@
       <div class="pl-edu-cell">
         <span class="pl-edu-ico" aria-hidden="true"><svg><use href="#pi-gradcap"></use></svg></span>
         <div class="pl-edu-body">
-          <div class="pl-edu-dates">Expected May 2027</div>
-          <div class="pl-edu-degree">Master of Engineering, Software Engineering</div>
+          <div class="pl-edu-dates" data-i18n="edu.1.dates">Expected May 2027</div>
+          <div class="pl-edu-degree" data-i18n="edu.1.degree">Master of Engineering, Software Engineering</div>
           <div class="pl-edu-school">University of Maryland, College Park</div>
-          <div class="pl-edu-detail">Coursework: Machine Learning &middot; Algorithms &middot; Data Structures &middot; Distributed Systems</div>
+          <div class="pl-edu-detail" data-i18n="edu.1.detail">Coursework: Machine Learning &middot; Algorithms &middot; Data Structures &middot; Distributed Systems</div>
         </div>
       </div>
       <div class="pl-edu-cell">
         <span class="pl-edu-ico" aria-hidden="true"><svg><use href="#pi-compass"></use></svg></span>
         <div class="pl-edu-body">
-          <div class="pl-edu-dates">December 2019</div>
-          <div class="pl-edu-degree">B.S. Industrial Engineering</div>
+          <div class="pl-edu-dates" data-i18n="edu.2.dates">December 2019</div>
+          <div class="pl-edu-degree" data-i18n="edu.2.degree">B.S. Industrial Engineering</div>
           <div class="pl-edu-school">Universidad Dr. José Matías Delgado</div>
           <div class="pl-edu-detail">San Salvador, El Salvador</div>
         </div>
@@ -455,7 +466,7 @@
     <div class="pl-sec-head reveal">
       <div class="pl-sec-lead">
         <span class="pl-sec-ico" aria-hidden="true"><svg><use href="#pi-layers"></use></svg></span>
-        <h2 class="pl-sec-title">skills</h2>
+        <h2 class="pl-sec-title" data-i18n="sec.skills">skills</h2>
       </div>
       <span class="pl-sec-fig"></span>
     </div>
@@ -465,13 +476,13 @@
         <div class="pl-skill-head">
           <span class="pl-skill-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><rect x="7" y="11" width="3" height="6"></rect><rect x="12" y="7" width="3" height="10"></rect><rect x="17" y="13" width="3" height="4"></rect></svg></span>
           <div>
-            <h3 class="pl-skill-cat">Analytics &amp; BI</h3>
-            <span class="pl-skill-cap">4 yrs &middot; production</span>
+            <h3 class="pl-skill-cat" data-i18n="skills.c1">Analytics &amp; BI</h3>
+            <span class="pl-skill-cap" data-i18n="skills.c1cap">4 yrs &middot; production</span>
           </div>
         </div>
         <ul class="pl-skill-rows">
-          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">Excel</span><span class="pl-skill-lvl">advanced</span></div><div class="pl-skill-meter"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></div></li>
-          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">Power BI</span><span class="pl-skill-lvl">advanced</span></div><div class="pl-skill-meter"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></div></li>
+          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">Excel</span><span class="pl-skill-lvl" data-i18n="lvl.advanced">advanced</span></div><div class="pl-skill-meter"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></div></li>
+          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">Power BI</span><span class="pl-skill-lvl" data-i18n="lvl.advanced">advanced</span></div><div class="pl-skill-meter"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></div></li>
         </ul>
       </article>
 
@@ -479,14 +490,14 @@
         <div class="pl-skill-head">
           <span class="pl-skill-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6l-5 6 5 6"></path><path d="M16 6l5 6-5 6"></path></svg></span>
           <div>
-            <h3 class="pl-skill-cat">Programming</h3>
-            <span class="pl-skill-cap">self-taught</span>
+            <h3 class="pl-skill-cat" data-i18n="skills.c2">Programming</h3>
+            <span class="pl-skill-cap" data-i18n="skills.c2cap">self-taught</span>
           </div>
         </div>
         <ul class="pl-skill-rows">
-          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">Python</span><span class="pl-skill-lvl">intermediate</span></div><div class="pl-skill-meter"><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
-          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">SQL</span><span class="pl-skill-lvl">developing</span></div><div class="pl-skill-meter"><span class="on"></span><span class="on"></span><span></span><span></span></div></li>
-          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">JavaScript</span><span class="pl-skill-lvl">basic</span></div><div class="pl-skill-meter"><span class="on"></span><span></span><span></span><span></span></div></li>
+          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">Python</span><span class="pl-skill-lvl" data-i18n="lvl.intermediate">intermediate</span></div><div class="pl-skill-meter"><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
+          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">SQL</span><span class="pl-skill-lvl" data-i18n="lvl.developing">developing</span></div><div class="pl-skill-meter"><span class="on"></span><span class="on"></span><span></span><span></span></div></li>
+          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">JavaScript</span><span class="pl-skill-lvl" data-i18n="lvl.basic">basic</span></div><div class="pl-skill-meter"><span class="on"></span><span></span><span></span><span></span></div></li>
         </ul>
       </article>
 
@@ -494,16 +505,16 @@
         <div class="pl-skill-head">
           <span class="pl-skill-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"></path><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"></path></svg></span>
           <div>
-            <h3 class="pl-skill-cat">Data &amp; ML</h3>
-            <span class="pl-skill-cap">coursework + projects</span>
+            <h3 class="pl-skill-cat" data-i18n="skills.c3">Data &amp; ML</h3>
+            <span class="pl-skill-cap" data-i18n="skills.c3cap">coursework + projects</span>
           </div>
         </div>
         <ul class="pl-skill-rows">
-          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">Pandas</span><span class="pl-skill-lvl">applied</span></div><div class="pl-skill-meter"><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
-          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">Scikit-learn</span><span class="pl-skill-lvl">applied</span></div><div class="pl-skill-meter"><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
-          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">NumPy</span><span class="pl-skill-lvl">coursework</span></div><div class="pl-skill-meter"><span class="on"></span><span class="on"></span><span></span><span></span></div></li>
-          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">PyTorch</span><span class="pl-skill-lvl">coursework</span></div><div class="pl-skill-meter"><span class="on"></span><span class="on"></span><span></span><span></span></div></li>
-          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">TensorFlow</span><span class="pl-skill-lvl">coursework</span></div><div class="pl-skill-meter"><span class="on"></span><span class="on"></span><span></span><span></span></div></li>
+          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">Pandas</span><span class="pl-skill-lvl" data-i18n="lvl.applied">applied</span></div><div class="pl-skill-meter"><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
+          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">Scikit-learn</span><span class="pl-skill-lvl" data-i18n="lvl.applied">applied</span></div><div class="pl-skill-meter"><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
+          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">NumPy</span><span class="pl-skill-lvl" data-i18n="lvl.coursework">coursework</span></div><div class="pl-skill-meter"><span class="on"></span><span class="on"></span><span></span><span></span></div></li>
+          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">PyTorch</span><span class="pl-skill-lvl" data-i18n="lvl.coursework">coursework</span></div><div class="pl-skill-meter"><span class="on"></span><span class="on"></span><span></span><span></span></div></li>
+          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">TensorFlow</span><span class="pl-skill-lvl" data-i18n="lvl.coursework">coursework</span></div><div class="pl-skill-meter"><span class="on"></span><span class="on"></span><span></span><span></span></div></li>
         </ul>
       </article>
 
@@ -511,14 +522,14 @@
         <div class="pl-skill-head">
           <span class="pl-skill-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"></line><circle cx="9" cy="7" r="2.4"></circle><line x1="4" y1="17" x2="20" y2="17"></line><circle cx="15" cy="17" r="2.4"></circle></svg></span>
           <div>
-            <h3 class="pl-skill-cat">Tools</h3>
-            <span class="pl-skill-cap">working knowledge</span>
+            <h3 class="pl-skill-cat" data-i18n="skills.c4">Tools</h3>
+            <span class="pl-skill-cap" data-i18n="skills.c4cap">working knowledge</span>
           </div>
         </div>
         <ul class="pl-skill-rows">
-          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">Git</span><span class="pl-skill-lvl">working</span></div><div class="pl-skill-meter"><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
-          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">AWS</span><span class="pl-skill-lvl">coursework</span></div><div class="pl-skill-meter"><span class="on"></span><span></span><span></span><span></span></div></li>
-          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">Tableau</span><span class="pl-skill-lvl">basic</span></div><div class="pl-skill-meter"><span class="on"></span><span></span><span></span><span></span></div></li>
+          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">Git</span><span class="pl-skill-lvl" data-i18n="lvl.working">working</span></div><div class="pl-skill-meter"><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div></li>
+          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">AWS</span><span class="pl-skill-lvl" data-i18n="lvl.coursework">coursework</span></div><div class="pl-skill-meter"><span class="on"></span><span></span><span></span><span></span></div></li>
+          <li class="pl-skill-row"><div class="top"><span class="pl-skill-sk">Tableau</span><span class="pl-skill-lvl" data-i18n="lvl.basic">basic</span></div><div class="pl-skill-meter"><span class="on"></span><span></span><span></span><span></span></div></li>
         </ul>
       </article>
 
@@ -536,27 +547,28 @@
   </div>
 
   <footer id="contact" class="lg-contact">
-    <a class="lg-contact-big" href="mailto:andresb@umd.edu">Let&rsquo;s Talk &rarr;</a>
+    <a class="lg-contact-big" href="mailto:andresb@umd.edu" data-i18n="contact.big">Let&rsquo;s Talk &rarr;</a>
     <div class="lg-contact-row">
       <a href="mailto:andresb@umd.edu">andresb@umd.edu</a>
       <a href="https://www.linkedin.com/in/andres-barrientos" target="_blank" rel="noopener">LinkedIn</a>
       <a href="https://github.com/Pandabar8" target="_blank" rel="noopener">GitHub</a>
-      <a href="assets/Jose-Barrientos-Resume.pdf" download="Jose-Barrientos-Resume.pdf">Resume.pdf &#8595;</a>
+      <a href="assets/Jose-Barrientos-Resume.pdf" download="Jose-Barrientos-Resume.pdf" data-i18n="contact.resume">Resume.pdf &#8595;</a>
     </div>
   </footer>
 
   <div class="lg-footer">
     <span>José Andrés Barrientos</span>
     <span>Silver Spring, MD</span>
-    <span>Compiled 07 / 2026</span>
+    <span data-i18n="footer.compiled">Compiled 07 / 2026</span>
   </div>
 
-  <a class="pf-totop" href="#top" aria-label="Back to top">&uarr;</a>
+  <a class="pf-totop" href="#top" data-i18n-aria="a11y.totop" aria-label="Back to top">&uarr;</a>
 
 </div>
 
 <script src="assets/lenis.min.js"></script>
-<script src="assets/main.js?v=12"></script>
+<script src="assets/i18n-es.js?v=1"></script>
+<script src="assets/main.js?v=13"></script>
 <script src="assets/hero-ascii.js?v=3"></script>
 </body>
 </html>

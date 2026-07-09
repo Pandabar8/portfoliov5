@@ -1,13 +1,98 @@
 /* ============================================================
    Portfolio behaviour, dependency-free.
-   Decorative sparklines, count-up, scroll reveals, scrollspy,
-   deck covered-card motion, sticky nav, mobile menu, project
-   accordion, back-to-top.
+   EN/ES language swap, decorative sparklines, count-up, scroll
+   reveals, deck covered-card motion, auto-hide nav, project
+   lightbox, back-to-top.
    ============================================================ */
 (function () {
   "use strict";
 
   var SVG_NS = "http://www.w3.org/2000/svg";
+
+  // setupAboutWindow re-snapshots its typed text here on language change.
+  var aboutResyncFn = null;
+
+  /* Language swap. English is harvested from the markup once at boot, so
+     index.html stays its single source of truth; assets/i18n-es.js carries
+     only the Spanish strings. The inline head script has already resolved
+     <html lang> before first paint; this swaps the actual content. */
+  var I18N = (function () {
+    var es = window.I18N_ES || {};
+    // JS-built strings have no markup to harvest from; they get inline
+    // English defaults and es keys in the dictionary.
+    var en = {
+      "js.loading": "loading dataset",
+      "js.close": "Close",
+    };
+
+    function harvest() {
+      document.querySelectorAll("[data-i18n]").forEach(function (node) {
+        var k = node.getAttribute("data-i18n");
+        if (!(k in en)) en[k] = node.innerHTML;
+      });
+      document.querySelectorAll("[data-i18n-aria]").forEach(function (node) {
+        var k = node.getAttribute("data-i18n-aria");
+        if (!(k in en)) en[k] = node.getAttribute("aria-label") || "";
+      });
+      en["meta.title"] = document.title;
+      var d = document.querySelector('meta[name="description"]');
+      en["meta.desc"] = d ? d.getAttribute("content") : "";
+    }
+
+    function current() {
+      return document.documentElement.lang === "es" ? "es" : "en";
+    }
+
+    // Missing es keys fall back to English rather than going blank.
+    function get(key) {
+      var v = current() === "es" ? es[key] : en[key];
+      return v == null ? en[key] : v;
+    }
+
+    function apply(lang) {
+      document.documentElement.lang = lang;
+      var table = lang === "es" ? es : en;
+      function pick(k) {
+        var v = table[k];
+        return v == null ? en[k] : v;
+      }
+      document.querySelectorAll("[data-i18n]").forEach(function (node) {
+        var v = pick(node.getAttribute("data-i18n"));
+        if (v != null && node.innerHTML !== v) node.innerHTML = v;
+      });
+      document.querySelectorAll("[data-i18n-aria]").forEach(function (node) {
+        var v = pick(node.getAttribute("data-i18n-aria"));
+        if (v != null) node.setAttribute("aria-label", v);
+      });
+      if (pick("meta.title")) document.title = pick("meta.title");
+      var d = document.querySelector('meta[name="description"]');
+      if (d && pick("meta.desc")) d.setAttribute("content", pick("meta.desc"));
+      // the toggle announces the language it switches TO, in that language
+      var btn = document.querySelector(".lang-toggle");
+      if (btn) {
+        btn.setAttribute(
+          "aria-label",
+          lang === "es" ? "Switch to English" : "Cambiar a español",
+        );
+      }
+      if (aboutResyncFn) aboutResyncFn();
+    }
+
+    return { harvest: harvest, apply: apply, get: get, current: current };
+  })();
+
+  function setupLangToggle() {
+    var btn = document.querySelector(".lang-toggle");
+    if (!btn) return;
+    btn.addEventListener("click", function () {
+      var next = I18N.current() === "es" ? "en" : "es";
+      I18N.apply(next);
+      // Persist only explicit choices, same contract as the theme toggle.
+      try {
+        localStorage.setItem("lang", next);
+      } catch (e) {}
+    });
+  }
   var reduceMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
@@ -415,15 +500,20 @@
       return s.querySelector(".pl-win-out");
     });
     if (!outs.length || outs.indexOf(null) !== -1) return;
-    // snapshot the server-rendered output segments (text nodes + <mark>s)
-    // once, so retyping always reproduces the exact markup
-    var segs = outs.map(function (out) {
-      return Array.prototype.map.call(out.childNodes, function (n) {
-        return { mark: n.nodeType === 1, text: n.textContent };
+    // snapshot the rendered output segments (text nodes + <mark>s) so
+    // retyping always reproduces the exact markup; re-harvested whenever
+    // the language swap rewrites the paragraphs
+    function harvestSegs() {
+      return outs.map(function (out) {
+        return Array.prototype.map.call(out.childNodes, function (n) {
+          return { mark: n.nodeType === 1, text: n.textContent };
+        });
       });
-    });
+    }
+    var segs = harvestSegs();
     var timers = [];
     var running = false;
+    var started = false;
     function later(fn, ms) {
       timers.push(setTimeout(fn, ms));
     }
@@ -468,6 +558,7 @@
     function run() {
       stopTimers();
       running = true;
+      started = true;
       win.classList.remove("fill");
       win.classList.add("tw-arm");
       stanzas.forEach(function (s) {
@@ -522,6 +613,14 @@
     win.querySelector(".pl-win-body").addEventListener("click", function () {
       if (running) finish();
     });
+    // Language change: the swap has already rewritten the paragraphs to the
+    // new language, so re-snapshot them. If the session already typed (or is
+    // typing), settle instantly on the full new-language text, never replay.
+    aboutResyncFn = function () {
+      stopTimers();
+      segs = harvestSegs();
+      if (started) finish();
+    };
     var runBtn = win.querySelector(".pl-win-run");
     if (runBtn) runBtn.addEventListener("click", run);
     if ("IntersectionObserver" in window) {
@@ -572,83 +671,22 @@
     return top;
   }
 
-  /* Highlight the nav link for the section in view. Position-based rather
-     than IntersectionObserver: pinned deck cards stay "intersecting" while
-     later cards slide over them, so an observer never re-fires for an
-     earlier card when scrolling back up. */
-  function setupScrollspy() {
-    var links = {};
-    var order = [];
-    document
-      .querySelectorAll(".pl-nav-links a[href^='#']")
-      .forEach(function (a) {
-        var id = a.getAttribute("href").slice(1);
-        var el = id !== "top" && document.getElementById(id);
-        if (!el) return;
-        links[id] = a;
-        order.push(el);
-      });
-    if (!order.length) return;
-
-    function docTop(el) {
-      var top = stackDocTop(el, window.scrollY);
-      return top !== null
-        ? top
-        : el.getBoundingClientRect().top + window.scrollY;
-    }
-
-    var active = null;
-    function spy() {
-      var y = window.scrollY;
-      var line = y + window.innerHeight * 0.4;
-      var atEnd =
-        y + window.innerHeight >= document.documentElement.scrollHeight - 2;
-      var current = null;
-      for (var i = 0; i < order.length; i++) {
-        if (docTop(order[i]) <= line) current = order[i].id;
-      }
-      // the last section may never reach the 40% line on short pages
-      if (atEnd) current = order[order.length - 1].id;
-      if (current === active) return;
-      active = current;
-      Object.keys(links).forEach(function (id) {
-        links[id].classList.toggle("active", id === current);
-      });
-    }
-    var ticking = false;
-    window.addEventListener(
-      "scroll",
-      function () {
-        if (ticking) return;
-        ticking = true;
-        requestAnimationFrame(function () {
-          ticking = false;
-          spy();
-        });
-      },
-      { passive: true },
-    );
-    spy();
-  }
-
   /* Auto-hide nav: the bar is a floating overlay (the deck no longer
      reserves space for it), sliding away on downward scroll and back on
-     any upward intent. It stays put near the top of the page, while the
-     mobile menu is open, and whenever focus is inside it (CSS handles
-     that case). Skipped under reduced motion: the bar simply stays. */
+     any upward intent. It stays put near the top of the page and whenever
+     focus is inside it (CSS handles that case). Skipped under reduced
+     motion: the bar simply stays. */
   function setupAutoHideNav() {
     var header = document.getElementById("site-header");
     if (!header || reduceMotion) return;
-    var toggle = header.querySelector(".pl-nav-toggle");
     var lastY = window.scrollY;
     function update() {
       var y = window.scrollY;
       var dy = y - lastY;
       lastY = y;
-      var menuOpen = toggle && toggle.getAttribute("aria-expanded") === "true";
       // the +-2px dead zone swallows momentum jitter so the bar never
       // flickers at the top of a rubber-band bounce
-      if (y < 120 || dy < -2 || menuOpen) {
+      if (y < 120 || dy < -2) {
         header.classList.remove("nav-hidden");
       } else if (dy > 2 && y > 200) {
         header.classList.add("nav-hidden");
@@ -936,7 +974,7 @@
     pct.appendChild(document.createTextNode("% · "));
     var cap = document.createElement("span");
     cap.className = "cap";
-    cap.textContent = "loading dataset";
+    cap.textContent = I18N.get("js.loading");
     pct.appendChild(cap);
 
     cluster.appendChild(mark);
@@ -1022,26 +1060,6 @@
     }
   }
 
-  /* Mobile nav toggle. */
-  function setupNav() {
-    var toggle = document.querySelector(".pl-nav-toggle");
-    var nav = document.querySelector(".pl-nav-links");
-    if (!toggle || !nav) return;
-    function close() {
-      nav.classList.remove("open");
-      toggle.setAttribute("aria-expanded", "false");
-      toggle.textContent = "≡";
-    }
-    toggle.addEventListener("click", function () {
-      var open = nav.classList.toggle("open");
-      toggle.setAttribute("aria-expanded", open ? "true" : "false");
-      toggle.textContent = open ? "✕" : "≡";
-    });
-    nav.querySelectorAll("a").forEach(function (a) {
-      a.addEventListener("click", close);
-    });
-  }
-
   /* Project cards open a focus-trapped detail lightbox. Each card's detail
      markup (.pl-pcard-detail) lives in the DOM so it is present for no-JS and
      print; here it is lifted into one reusable dialog on demand. */
@@ -1063,7 +1081,9 @@
     var closeBtn = document.createElement("button");
     closeBtn.type = "button";
     closeBtn.className = "pl-lightbox-close";
-    closeBtn.setAttribute("aria-label", "Close");
+    // keyed so later language toggles re-label it along with the page
+    closeBtn.setAttribute("data-i18n-aria", "js.close");
+    closeBtn.setAttribute("aria-label", I18N.get("js.close"));
     closeBtn.innerHTML = "&times;";
     var content = document.createElement("div");
     panel.appendChild(closeBtn);
@@ -1271,6 +1291,11 @@
   }
 
   function init() {
+    // Language first: the About window snapshots its text and the intro
+    // builds its caption from whatever is in the DOM when they set up.
+    I18N.harvest();
+    if (I18N.current() === "es") I18N.apply("es");
+    setupLangToggle();
     setupDeckFit();
     setupDeckMotion();
     setupLenis();
@@ -1280,10 +1305,8 @@
     buildMarquee();
     setupReveals();
     setupAboutWindow();
-    setupScrollspy();
     setupScrollChrome();
     setupAutoHideNav();
-    setupNav();
     setupProjects();
     setupSkillSpotlight();
     onIntroDone(revealHero);
