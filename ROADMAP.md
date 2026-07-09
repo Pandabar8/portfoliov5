@@ -5,6 +5,46 @@ build plan below. Newest work first.
 
 ---
 
+## 2026-07, Scroll feel + section identity: tighter deck, icons, console About, overlay nav
+
+### In plain language
+
+1. **Scrolling tracks the wheel.** The smooth-scroll glide is much tighter
+   (Lenis duration 0.75, was 1.2), so the page stops floating past where you
+   pointed it.
+2. **Sections get room to breathe.** Each deck card now holds fully composed
+   for half a screen of scrolling before the next card starts sliding over it
+   (a 50vh gap between cards; the pinned card hides the gap itself).
+3. **Covered cards recede.** While the next card slides over, the covered one
+   dims, scales down slightly and drifts up, so the hand-off reads as depth
+   instead of a hard freeze.
+4. **Icons everywhere.** A hand-set stroke-icon sprite (same language as the
+   Skills cards) adds accent chips to every section head, per-project glyphs
+   with faint corner watermarks, role chips in Experience, degree chips in
+   Education, and small glyphs on the About facts.
+5. **About is a console.** The bio now lives in a dark editor window
+   (`~/profile/about_me.py`) that types itself out the first time it scrolls
+   into view, ending with three personality meters. Click finishes it
+   instantly, a "run" control replays it, and the full text always ships in
+   the page, so no-JS, reduced-motion and print read everything.
+6. **The nav gets out of the way.** The header auto-hides on downward scroll
+   and returns on any upward intent (or keyboard focus); deck cards now pin
+   at the very top of the screen and own the full viewport.
+
+### Design notes
+
+- Covered-card motion: main.js drives one `--covered` custom property per
+  card; CSS maps it to the veil, scale and drift. Flow tops sum sibling
+  heights AND margins (the dwell lives in `margin-top`), in both
+  `stackDocTop()` and `setupDeckMotion()`.
+- The About window keeps a literal dark palette in both themes; emphasized
+  phrases are green syntax-colored text, not highlight pills.
+- Nav overlay: the deck no longer reserves header space (`--header-h`
+  removed); the bar slides via transform and keeps its layout slot, so
+  nothing shifts when it hides.
+
+---
+
 ## 2026-07, Projects revamp: fourth project, card grid, uniform deck
 
 ### In plain language

@@ -391,7 +391,9 @@ html[data-theme="light"] .sr {
 }
 .pl-sec-head {
   display: flex;
-  align-items: baseline;
+  /* center, not baseline: the icon chip in .pl-sec-lead has no text
+     baseline, which would drag the fig caption to the chip's bottom edge */
+  align-items: center;
   justify-content: space-between;
   margin-bottom: calc(38px * var(--sp));
 }
@@ -413,6 +415,127 @@ html[data-theme="light"] .sr {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--muted);
+}
+
+/* ============================================================
+   SECTION ICONS
+   Stroke glyphs from the #pi-* sprite in index.html, presented in
+   accent chips that mirror .pl-skill-ico. Everything renders in
+   currentColor, so the per-section --accent/--ca overrides recolor
+   the chips with no per-icon rules.
+   ============================================================ */
+.pl-sec-lead {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.pl-sec-ico {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 15%, transparent);
+  box-shadow: inset 0 0 0 1px
+    color-mix(in oklab, var(--accent) 28%, transparent);
+}
+.pl-sec-ico svg {
+  width: 21px;
+  height: 21px;
+}
+/* small inline glyph inside the About fact labels */
+.pl-k-ico {
+  width: 13px;
+  height: 13px;
+  vertical-align: -2.5px;
+  margin-right: 7px;
+}
+/* project title row: chip + title on one line */
+.pl-pcard-trow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.pl-pcard-ico {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  color: var(--ca);
+  background: color-mix(in oklab, var(--ca) 15%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--ca) 28%, transparent);
+}
+.pl-pcard-ico svg {
+  width: 18px;
+  height: 18px;
+}
+/* oversized corner watermark, clipped by the card's overflow: hidden.
+   Sits above the hover spotlight (later in DOM, same z) but below the
+   content (z 1). The light theme needs a touch more ink to stay
+   perceptible against the near-white card. */
+.pl-pcard-wm {
+  position: absolute;
+  right: -16px;
+  bottom: -20px;
+  width: 130px;
+  height: 130px;
+  color: var(--ca);
+  opacity: 0.045;
+  pointer-events: none;
+  z-index: 0;
+}
+.pl-pcard-wm svg {
+  width: 100%;
+  height: 100%;
+}
+html[data-theme="light"] .pl-pcard-wm {
+  opacity: 0.06;
+}
+/* experience role chips: the role then takes the leftover width so the
+   date keeps hugging the right edge */
+.pl-xp-ico {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 15%, transparent);
+  box-shadow: inset 0 0 0 1px
+    color-mix(in oklab, var(--accent) 28%, transparent);
+}
+.pl-xp-ico svg {
+  width: 18px;
+  height: 18px;
+}
+.pl-xp-item .pl-xp-top {
+  align-items: center;
+  gap: 16px;
+}
+.pl-xp-top .pl-xp-role {
+  flex: 1 1 auto;
+}
+.pl-edu-ico {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 auto;
+  margin-top: 2px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 15%, transparent);
+  box-shadow: inset 0 0 0 1px
+    color-mix(in oklab, var(--accent) 28%, transparent);
+}
+.pl-edu-ico svg {
+  width: 19px;
+  height: 19px;
 }
 
 /* ============================================================
@@ -492,6 +615,286 @@ html[data-theme="light"] .sr {
   color: var(--accent-text);
   display: block;
   margin-bottom: 4px;
+}
+
+/* ============================================================
+   ABOUT CONSOLE WINDOW
+   The bio presented as a Python session. The window keeps its own
+   dark palette in BOTH themes - terminals are dark - so every color
+   here is a literal, not a theme token. The complete prose ships in
+   the HTML; main.js (setupAboutWindow) clears and retypes it on
+   first view, so no-JS, reduced-motion and print always read the
+   full text. .tw-arm gates stanza visibility only while typing.
+   ============================================================ */
+.pl-win {
+  --w-ink: #e8edf6;
+  --w-mut: #8b95a8;
+  --w-line: rgba(232, 237, 246, 0.1);
+  --w-blue: #60a5fa;
+  --w-green: #34d399;
+  --w-amber: #fbbf24;
+  --w-orchid: #c084fc;
+  color: var(--w-ink);
+  border-radius: 14px;
+  background: #070b13;
+  border: 1px solid rgba(96, 165, 250, 0.2);
+  box-shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+}
+.pl-win-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(232, 237, 246, 0.04);
+  border-bottom: 1px solid var(--w-line);
+}
+.pl-win-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+.pl-win-dot.r {
+  background: #f5655b;
+}
+.pl-win-dot.y {
+  background: #f6bd3b;
+}
+.pl-win-dot.g {
+  background: #43c645;
+}
+.pl-win-title {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--w-mut);
+  margin-left: 8px;
+  flex: 1;
+}
+.pl-win-run {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--w-mut);
+  background: none;
+  border: 1px solid var(--w-line);
+  border-radius: 7px;
+  padding: 3px 9px;
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+}
+.pl-win-run svg {
+  width: 10px;
+  height: 10px;
+}
+.pl-win-run:hover {
+  color: var(--w-ink);
+  border-color: var(--w-blue);
+}
+.pl-win-run:focus-visible {
+  outline: 2px solid var(--w-blue);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pl-win-run {
+    display: none;
+  }
+}
+.pl-win-body {
+  padding: 18px 22px 20px;
+}
+.pl-win-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--w-green);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  background: rgba(52, 211, 153, 0.1);
+  border-radius: 999px;
+  padding: 4px 11px;
+  margin-bottom: 14px;
+}
+.pl-win-pill i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--w-green);
+}
+.pl-win-code {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.75;
+  border-left: 2px solid rgba(96, 165, 250, 0.4);
+  padding-left: 16px;
+}
+.pl-win-code .ln {
+  color: var(--w-ink);
+}
+.pl-win-code .cm {
+  color: var(--w-mut);
+}
+.pl-win-code .kw {
+  color: var(--w-orchid);
+}
+.pl-win-code .fn {
+  color: var(--w-amber);
+}
+.pl-win-stanza {
+  margin-top: 12px;
+}
+/* the outputs override .pl-about-text's paragraph styling (they are
+   <p>s inside it), hence the .pl-win prefix for specificity */
+.pl-win .pl-win-out {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: #ccd4e2;
+  max-width: 62ch;
+  margin: 4px 0 0;
+  min-height: 1.65em;
+}
+/* emphasized phrases as colored text, not highlight pills: they take
+   the string-literal slot in the window's syntax scheme (keywords are
+   orchid, methods amber, the facts that matter read green) */
+.pl-win .pl-win-out mark {
+  background: none;
+  color: var(--w-green);
+  font-weight: 600;
+  border-bottom: none;
+  padding: 0;
+  border-radius: 0;
+}
+.pl-win .pl-win-out.typing::after {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 1.05em;
+  vertical-align: -0.18em;
+  margin-left: 2px;
+  background: var(--w-green);
+  animation: plCaret 0.85s steps(1) infinite;
+}
+@keyframes plCaret {
+  50% {
+    opacity: 0;
+  }
+}
+.pl-win.tw-arm .pl-win-stanza {
+  visibility: hidden;
+}
+.pl-win.tw-arm .pl-win-stanza.on {
+  visibility: visible;
+}
+.pl-win-traits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 36px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--w-line);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.09em;
+}
+.pl-win-traits .t {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+.pl-win-traits svg {
+  width: 14px;
+  height: 14px;
+}
+.pl-win-traits .lbl {
+  color: var(--w-mut);
+}
+.pl-win-traits .val {
+  color: var(--w-ink);
+  font-weight: 600;
+}
+.pl-win-traits .m {
+  display: flex;
+  gap: 3px;
+}
+.pl-win-traits .m span {
+  width: 13px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(232, 237, 246, 0.12);
+}
+.pl-win-traits .m span.on {
+  background: var(--tc);
+  transform-origin: left center;
+}
+.pl-win-traits .t1 {
+  --tc: var(--w-green);
+  color: var(--w-green);
+}
+.pl-win-traits .t2 {
+  --tc: var(--w-blue);
+  color: var(--w-blue);
+}
+.pl-win-traits .t3 {
+  --tc: var(--w-amber);
+  color: var(--w-amber);
+}
+/* meters hold empty while the session types, then fill with a stagger
+   (--d set per segment by main.js) once it completes */
+.pl-win.tw-arm .m span.on {
+  transform: scaleX(0);
+}
+.pl-win.fill .m span.on {
+  animation: plSegFill 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: var(--d, 0s);
+}
+@keyframes plSegFill {
+  from {
+    transform: scaleX(0);
+  }
+}
+/* faint blueprint grid behind the window, fading toward the card
+   edges; sits behind all content, above the card background */
+#about.pl-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--ca) 40%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--ca) 40%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 56px 56px;
+  opacity: 0.045;
+  pointer-events: none;
+  mask-image: radial-gradient(120% 90% at 50% 30%, black, transparent 75%);
+  -webkit-mask-image: radial-gradient(
+    120% 90% at 50% 30%,
+    black,
+    transparent 75%
+  );
+}
+@media (max-width: 640px) {
+  .pl-win-body {
+    padding: 16px 16px 18px;
+  }
+  .pl-win-code {
+    font-size: 12px;
+  }
 }
 
 /* ============================================================
@@ -930,6 +1333,11 @@ html.lightbox-open body {
   gap: 56px;
 }
 .pl-edu-cell {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.pl-edu-body {
   display: grid;
   gap: 7px;
   align-content: start;
@@ -1202,7 +1610,18 @@ html:not(.js) .lg-marquee {
   transition:
     background 0.3s,
     box-shadow 0.3s,
-    border-color 0.3s;
+    border-color 0.3s,
+    transform 0.32s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+/* auto-hide: main.js toggles .nav-hidden by scroll direction. The bar
+   slides out of view but keeps its layout slot (it stays sticky), so
+   nothing below ever shifts. Keyboard focus inside always brings it
+   back regardless of scroll state. */
+.pf-final .pl-header.nav-hidden {
+  transform: translateY(-100%);
+}
+.pf-final .pl-header.nav-hidden:focus-within {
+  transform: none;
 }
 .pf-final .pl-nav-links {
   display: flex;
@@ -1868,19 +2287,20 @@ html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
 }
 
 /* Full-screen pinned deck: desktop + motion allowed, and only once JS has
-   measured the cards (html.deck-ready). Cards fill the viewport below the
-   sticky header (--header-h, JS-measured) and pin at its bottom edge, so a
-   covered card's top stays visible; cards taller than that grow to their
-   content and main.js pins them lower so the bottom scrolls into view
-   before the next card slides over. Without JS the deck stays flat and
-   fully readable. */
+   measured the cards (html.deck-ready). Cards fill the full viewport and
+   pin at its very top - the nav is a floating overlay (auto-hidden by
+   setupAutoHideNav) and no longer reserves deck space; the 92px top
+   padding keeps card content clear of the glass bar when it is shown.
+   Cards taller than the viewport pin higher (negative --deck-top from
+   main.js) so their bottom scrolls into view before the next card
+   slides over. Without JS the deck stays flat and fully readable. */
 @media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
   html.deck-ready .pl-stack > .pl-card {
     position: sticky;
     top: var(--deck-top, 0px);
     /* fallback for browsers without svh */
-    min-height: calc(100vh - var(--header-h, 0px));
-    min-height: calc(100svh - var(--header-h, 0px));
+    min-height: 100vh;
+    min-height: 100svh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -1891,6 +2311,37 @@ html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
     box-shadow:
       0 -34px 70px -28px rgba(0, 0, 0, 0.6),
       inset 0 1px 0 0 color-mix(in oklab, var(--ca) 32%, var(--line-soft));
+    /* main.js drives --covered 0 -> 1 while the next card slides over: the
+       covered card recedes and drifts up so the pin never reads as a hard
+       freeze. The drift stays on the card itself, not its children - the
+       reveal system owns child transforms. will-change keeps each card's
+       gradient + shadow surface on the compositor during the slide. */
+    will-change: transform;
+    transform-origin: 50% 0;
+    transform: translateY(calc(var(--covered, 0) * -12px))
+      scale(calc(1 - 0.035 * var(--covered, 0)));
+  }
+  /* Dwell between cards: without this gap the next card starts sliding in
+     at the exact scroll position where the previous one finishes pinning,
+     so a section never sits complete before it starts being covered. The
+     margin is pure scroll runway - the pinned card holds fully visible
+     while it passes (the gap itself scrolls hidden behind the pinned
+     card). stackDocTop() and setupDeckMotion() include these margins when
+     resolving flow positions. */
+  html.deck-ready .pl-stack > .pl-card + .pl-card {
+    margin-top: 50vh;
+  }
+  /* dim veil over a covered card, same --covered variable: fading toward
+     the page background works in both themes (shade in dark, atmospheric
+     fade in light). Above the card's content, never intercepts clicks. */
+  html.deck-ready .pl-stack > .pl-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 40;
+    background: var(--bg);
+    opacity: calc(var(--covered, 0) * 0.5);
+    pointer-events: none;
   }
   /* trim section-head gap so centered content has more room */
   .pl-stack > .pl-card .pl-sec-head {
@@ -2150,6 +2601,11 @@ html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
     overflow: visible !important;
     box-shadow: none !important;
     display: block !important;
+    transform: none !important;
+    margin-top: 0 !important;
+  }
+  .pl-stack > .pl-card::after {
+    content: none !important;
   }
   /* print the projects in one column with each card's detail visible */
   .pf-final .pl-proj-grid {
@@ -2159,6 +2615,35 @@ html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
     display: block !important;
   }
 
+  /* the about window prints as plain prose on white: window chrome,
+     pill and trait meters are screen theater; the code lines keep the
+     stanza structure in subdued ink */
+  .pl-win {
+    background: #ffffff !important;
+    border-color: #c5ccd6 !important;
+    box-shadow: none !important;
+  }
+  .pl-win-code {
+    border-left-color: #c5ccd6 !important;
+  }
+  .pl-win-code .ln,
+  .pl-win-code .cm,
+  .pl-win-code .kw,
+  .pl-win-code .fn {
+    color: #374151 !important;
+  }
+  .pl-win .pl-win-out {
+    color: #000000 !important;
+  }
+  .pl-win .pl-win-out mark {
+    background: none !important;
+    color: #000000 !important;
+    border-bottom: 2px solid #9db4e8 !important;
+  }
+  #about.pl-card::before {
+    content: none !important;
+  }
+
   /* screen-only chrome */
   .lg-marquee,
   .pl-hero-ascii,
@@ -2166,6 +2651,10 @@ html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
   .theme-toggle,
   .pl-nav-toggle,
   .pl-nav-links,
+  .pl-pcard-wm,
+  .pl-win-bar,
+  .pl-win-pill,
+  .pl-win-traits,
   .sr .intro {
     display: none !important;
   }

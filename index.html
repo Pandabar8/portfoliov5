@@ -96,10 +96,36 @@
   })();
 </script>
 
-<link rel="stylesheet" href="assets/styles.css?v=15">
+<link rel="stylesheet" href="assets/styles.css?v=21">
 </head>
 
 <body>
+
+<!-- Icon sprite: hand-set stroke glyphs matching the skills-card icon
+     language (24px viewBox, 1.8 stroke, round caps, no fills). Referenced
+     via <use href="#pi-*">; they render in currentColor so each section's
+     accent carries through without per-icon styling. -->
+<svg style="display:none" aria-hidden="true">
+  <symbol id="pi-user" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"></circle><path d="M5.2 19.6c1.3-3.3 3.8-5 6.8-5s5.5 1.7 6.8 5"></path></g></symbol>
+  <symbol id="pi-modules" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="6.6" height="6.6" rx="1.4"></rect><rect x="13.4" y="4" width="6.6" height="6.6" rx="1.4"></rect><rect x="4" y="13.4" width="6.6" height="6.6" rx="1.4"></rect><rect x="13.4" y="13.4" width="6.6" height="6.6" rx="1.4"></rect></g></symbol>
+  <symbol id="pi-briefcase" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="8" width="17" height="11" rx="2"></rect><path d="M9 8V6.3a1.8 1.8 0 0 1 1.8-1.8h2.4A1.8 1.8 0 0 1 15 6.3V8"></path><path d="M3.5 12.7h17"></path></g></symbol>
+  <symbol id="pi-gradcap" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5 2.8 9.6 12 14.2l9.2-4.6z"></path><path d="M6.6 11.6v4.5c0 1.3 2.4 2.6 5.4 2.6s5.4-1.3 5.4-2.6v-4.5"></path><path d="M21.2 9.6v5.2"></path></g></symbol>
+  <symbol id="pi-layers" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3.5 8.5 4.7L12 12.9 3.5 8.2z"></path><path d="m4.6 12.4 7.4 4.1 7.4-4.1"></path><path d="m4.6 16.3 7.4 4.1 7.4-4.1"></path></g></symbol>
+  <symbol id="pi-chart" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 3.5v17h17"></path><rect x="7" y="11.5" width="3" height="5.5"></rect><rect x="12" y="7.5" width="3" height="9.5"></rect><path d="m7.5 6.5 4-2.4 4.5 1.6 4-2.7"></path></g></symbol>
+  <symbol id="pi-road" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.8 4 4.2 20"></path><path d="M16.2 4l3.6 16"></path><path d="M12 4.8v2.7M12 10.6v2.7M12 16.4v2.8"></path></g></symbol>
+  <symbol id="pi-grid" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v16M15 4v16M4 9h16M4 15h16"></path><circle cx="6.4" cy="6.4" r="1.5"></circle><path d="m16.4 16.4 2.4 2.4m0-2.4-2.4 2.4"></path></g></symbol>
+  <symbol id="pi-rings" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9.3" cy="13.8" r="5.1"></circle><circle cx="14.7" cy="13.8" r="5.1"></circle><path d="m12 2.8.8 1.7 1.7.8-1.7.8-.8 1.7-.8-1.7-1.7-.8 1.7-.8z"></path></g></symbol>
+  <symbol id="pi-truck" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.8 6.5h10.7v9.5H2.8z"></path><path d="M13.5 9.5h3.9l3.3 3.2v3.3h-7.2"></path><circle cx="6.5" cy="18.2" r="1.9"></circle><circle cx="16.8" cy="18.2" r="1.9"></circle></g></symbol>
+  <symbol id="pi-clipboard" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4.5" width="14" height="16" rx="2"></rect><path d="M9.2 4.5V4a1.5 1.5 0 0 1 1.5-1.5h2.6A1.5 1.5 0 0 1 14.8 4v.5"></path><path d="m9 13.5 2.2 2.2 4-4.6"></path></g></symbol>
+  <symbol id="pi-headset" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 13.5a7.5 7.5 0 0 1 15 0"></path><rect x="3.3" y="13" width="3.6" height="5.4" rx="1.6"></rect><rect x="17.1" y="13" width="3.6" height="5.4" rx="1.6"></rect><path d="M18.9 18.4v.8a2.3 2.3 0 0 1-2.3 2.3h-2.8"></path></g></symbol>
+  <symbol id="pi-compass" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.9" r="1.8"></circle><path d="M11.1 6.5 6.8 19.6M12.9 6.5l4.3 13.1"></path><path d="M7.9 16.4a9.2 9.2 0 0 0 8.2 0"></path></g></symbol>
+  <symbol id="pi-pin" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-3.4-3-6.5-6.4-6.5-10a6.5 6.5 0 0 1 13 0c0 3.6-3.1 7-6.5 10z"></path><circle cx="12" cy="10.8" r="2.3"></circle></g></symbol>
+  <symbol id="pi-cpu" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="1.6"></rect><path d="M9.5 2.8v2.4M14.5 2.8v2.4M9.5 18.8v2.4M14.5 18.8v2.4M2.8 9.5h2.4M2.8 14.5h2.4M18.8 9.5h2.4M18.8 14.5h2.4"></path></g></symbol>
+  <symbol id="pi-nodes" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5.5" r="2.2"></circle><circle cx="5.5" cy="18" r="2.2"></circle><circle cx="18.5" cy="18" r="2.2"></circle><path d="M10.8 7.4 6.6 16M13.2 7.4l4.2 8.6M7.7 18h8.6"></path></g></symbol>
+  <symbol id="pi-bolt" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3 5.5 13.5h5L11 21l7.5-10.5h-5z"></path></g></symbol>
+  <symbol id="pi-play" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4.5 19 12 7 19.5z"></path></g></symbol>
+</svg>
+
 <div class="sr pf-final" data-skin="final" data-mode="dark" data-density="comfortable" data-hoverfx="lift">
 
   <!-- ============================= HEADER / NAV ============================= -->
@@ -177,7 +203,10 @@
   <!-- ============================= ABOUT ============================= -->
   <section id="about" class="pl-section pl-card pl-pad">
     <div class="pl-sec-head reveal">
-      <h2 class="pl-sec-title">about</h2>
+      <div class="pl-sec-lead">
+        <span class="pl-sec-ico" aria-hidden="true"><svg><use href="#pi-user"></use></svg></span>
+        <h2 class="pl-sec-title">about</h2>
+      </div>
       <span class="pl-sec-fig">fig. 01: the analyst</span>
     </div>
     <div class="pl-about reveal">
@@ -188,14 +217,47 @@
         <figcaption class="pl-fig-cap"><b>fig. 01</b> Silver Spring, MD</figcaption>
       </figure>
       <div class="pl-about-text">
-        <p>I spent four years at Intradeco building the analytics layer for B2C drop-ship operations across Walmart, Target and Amazon. I built <mark>Power BI dashboards on SAP data</mark> that gave managers real-time visibility into delivery, inventory and SKU-level performance.</p>
-        <p>Along the way I found that the most valuable problems sat between systems: I traced a <mark>data-transmission discrepancy between FedEx, Intradeco and Walmart</mark> that, once fixed, eliminated a recurring reconciliation error and its associated costs.</p>
-        <p>Self-taught in Python and SQL, I&rsquo;m now formalizing that foundation with a Master&rsquo;s in Software Engineering at UMD, focused on <mark>machine learning, algorithms and distributed systems</mark>.</p>
+        <!-- Bio as a Python session. The complete prose ships here so a
+             page without JS, print and reduced motion always read the full
+             text; main.js (setupAboutWindow) retypes it on first view. -->
+        <div class="pl-win">
+          <div class="pl-win-bar">
+            <span class="pl-win-dot r"></span><span class="pl-win-dot y"></span><span class="pl-win-dot g"></span>
+            <span class="pl-win-title">~/profile/about_me.py</span>
+            <button type="button" class="pl-win-run" aria-label="Replay the typing animation"><svg aria-hidden="true"><use href="#pi-play"></use></svg>run</button>
+          </div>
+          <div class="pl-win-body">
+            <span class="pl-win-pill"><i></i>PROFILE LOADED</span>
+            <div class="pl-win-code">
+              <div class="ln"><span class="kw">from</span> career <span class="kw">import</span> analyst</div>
+              <div class="pl-win-stanza">
+                <div class="ln cm"># what I built</div>
+                <div class="ln">analyst.<span class="fn">built</span>()</div>
+                <p class="pl-win-out">I spent four years at Intradeco building the analytics layer for B2C drop-ship operations across Walmart, Target and Amazon. I built <mark>Power BI dashboards on SAP data</mark> that gave managers real-time visibility into delivery, inventory and SKU-level performance.</p>
+              </div>
+              <div class="pl-win-stanza">
+                <div class="ln cm"># what I found</div>
+                <div class="ln">analyst.<span class="fn">found</span>()</div>
+                <p class="pl-win-out">Along the way I found that the most valuable problems sat between systems: I traced a <mark>data-transmission discrepancy between FedEx, Intradeco and Walmart</mark> that, once fixed, eliminated a recurring reconciliation error and its associated costs.</p>
+              </div>
+              <div class="pl-win-stanza">
+                <div class="ln cm"># where I'm headed</div>
+                <div class="ln">analyst.<span class="fn">next</span>()</div>
+                <p class="pl-win-out">Self-taught in Python and SQL, I&rsquo;m now formalizing that foundation with a Master&rsquo;s in Software Engineering at UMD, focused on <mark>machine learning, algorithms and distributed systems</mark>.</p>
+              </div>
+            </div>
+            <div class="pl-win-traits">
+              <span class="t t1"><svg aria-hidden="true"><use href="#pi-cpu"></use></svg><span class="lbl">CURIOSITY:</span><span class="val">100%</span><span class="m"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></span></span>
+              <span class="t t2"><svg aria-hidden="true"><use href="#pi-nodes"></use></svg><span class="lbl">TEAMWORK:</span><span class="val">ACTIVE</span><span class="m"><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span></span>
+              <span class="t t3"><svg aria-hidden="true"><use href="#pi-bolt"></use></svg><span class="lbl">RIGOR:</span><span class="val">HIGH</span><span class="m"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></span></span>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="pl-about-facts">
-        <div class="f"><span class="k">Now</span>M.Eng SWE @ UMD, College Park</div>
-        <div class="f"><span class="k">Previously</span>Data Analyst @ Intradeco</div>
-        <div class="f"><span class="k">Based in</span>Silver Spring, MD</div>
+        <div class="f"><span class="k"><svg class="pl-k-ico" aria-hidden="true"><use href="#pi-gradcap"></use></svg>Now</span>M.Eng SWE @ UMD, College Park</div>
+        <div class="f"><span class="k"><svg class="pl-k-ico" aria-hidden="true"><use href="#pi-briefcase"></use></svg>Previously</span>Data Analyst @ Intradeco</div>
+        <div class="f"><span class="k"><svg class="pl-k-ico" aria-hidden="true"><use href="#pi-pin"></use></svg>Based in</span>Silver Spring, MD</div>
       </div>
     </div>
   </section>
@@ -203,7 +265,10 @@
   <!-- ============================= PROJECTS ============================= -->
   <section id="projects" class="pl-section pl-card pl-pad">
     <div class="pl-sec-head reveal">
-      <h2 class="pl-sec-title">projects</h2>
+      <div class="pl-sec-lead">
+        <span class="pl-sec-ico" aria-hidden="true"><svg><use href="#pi-modules"></use></svg></span>
+        <h2 class="pl-sec-title">projects</h2>
+      </div>
       <span class="pl-sec-fig">figs. 02-05: selected work</span>
     </div>
     <div class="pl-proj-grid">
@@ -214,7 +279,7 @@
             <span class="pl-proj-fig"><b>fig. 02</b>University of Maryland</span>
             <span class="pl-proj-stat"><span class="v">80%</span><span class="k">priority-classification accuracy</span></span>
           </span>
-          <span class="pl-pcard-title">GitHub Issues Analytics Platform</span>
+          <span class="pl-pcard-trow"><span class="pl-pcard-ico" aria-hidden="true"><svg><use href="#pi-chart"></use></svg></span><span class="pl-pcard-title">GitHub Issues Analytics Platform</span></span>
           <span class="pl-pcard-tag">Analytics pipeline turning 5,200+ raw GitHub issues into prioritization signals.</span>
           <span class="pl-proj-stack"><b>stack:</b> <span class="t">Python</span><span class="t">Scikit-learn</span><span class="t">Pandas</span><span class="t">Plotly</span><span class="t">pytest</span></span>
         </button>
@@ -228,6 +293,7 @@
             <li>Created 7 interactive Plotly visualizations, including contributor lifecycle analysis and engagement heatmaps.</li>
           </ul>
         </div>
+        <span class="pl-pcard-wm" aria-hidden="true"><svg><use href="#pi-chart"></use></svg></span>
       </article>
 
       <article class="pl-pcard reveal" style="--i:1" data-pid="road-damage">
@@ -236,7 +302,7 @@
             <span class="pl-proj-fig"><b>fig. 03</b>University of Maryland</span>
             <span class="pl-proj-stat"><span class="v">44%</span><span class="k">training-time reduction</span></span>
           </span>
-          <span class="pl-pcard-title">Road Damage Detection with Deep Learning</span>
+          <span class="pl-pcard-trow"><span class="pl-pcard-ico" aria-hidden="true"><svg><use href="#pi-road"></use></svg></span><span class="pl-pcard-title">Road Damage Detection with Deep Learning</span></span>
           <span class="pl-pcard-tag">Transfer-learning image classifier benchmarked across four architectures.</span>
           <span class="pl-proj-stack"><b>stack:</b> <span class="t">Python</span><span class="t">PyTorch</span><span class="t">TensorFlow</span><span class="t">Google Colab</span></span>
         </button>
@@ -249,6 +315,7 @@
             <li>Benchmarked 4 architectures (ResNet-18, MobileNetV3, EfficientNet-B0, ViT-Tiny) and reduced training time by 44%.</li>
           </ul>
         </div>
+        <span class="pl-pcard-wm" aria-hidden="true"><svg><use href="#pi-road"></use></svg></span>
       </article>
 
       <article class="pl-pcard reveal" style="--i:2" data-pid="minimax">
@@ -257,7 +324,7 @@
             <span class="pl-proj-fig"><b>fig. 04</b>University of Maryland</span>
             <span class="pl-proj-stat"><span class="v">90%+</span><span class="k">win/draw rate at depth 6</span></span>
           </span>
-          <span class="pl-pcard-title">AI Game Engine with Minimax</span>
+          <span class="pl-pcard-trow"><span class="pl-pcard-ico" aria-hidden="true"><svg><use href="#pi-grid"></use></svg></span><span class="pl-pcard-title">AI Game Engine with Minimax</span></span>
           <span class="pl-pcard-tag">Adversarial search engine with alpha-beta pruning and heuristic evaluation.</span>
           <span class="pl-proj-stack"><b>stack:</b> <span class="t">Python</span><span class="t">Algorithm design</span></span>
         </button>
@@ -270,6 +337,7 @@
             <li>Developed a heuristic evaluation function; the AI achieves a 90%+ win/draw rate at search depth 6.</li>
           </ul>
         </div>
+        <span class="pl-pcard-wm" aria-hidden="true"><svg><use href="#pi-grid"></use></svg></span>
       </article>
 
       <article class="pl-pcard reveal" style="--i:3" data-pid="margaux-arden">
@@ -278,7 +346,7 @@
             <span class="pl-proj-fig"><b>fig. 05</b>Freelance</span>
             <span class="pl-proj-stat"><span class="v">0</span><span class="k">runtime dependencies</span></span>
           </span>
-          <span class="pl-pcard-title">Margaux &amp; Arden</span>
+          <span class="pl-pcard-trow"><span class="pl-pcard-ico" aria-hidden="true"><svg><use href="#pi-rings"></use></svg></span><span class="pl-pcard-title">Margaux &amp; Arden</span></span>
           <span class="pl-pcard-tag">One-page demo site for a fictional luxury wedding studio in San Salvador, no build step, no libraries.</span>
           <span class="pl-proj-stack"><b>stack:</b> <span class="t">HTML</span><span class="t">CSS</span><span class="t">JavaScript (ES modules)</span></span>
         </button>
@@ -294,6 +362,7 @@
             <li>Wrote the copy in Spanish, localized for the Salvadoran market.</li>
           </ul>
         </div>
+        <span class="pl-pcard-wm" aria-hidden="true"><svg><use href="#pi-rings"></use></svg></span>
       </article>
 
     </div>
@@ -302,12 +371,16 @@
   <!-- ============================= EXPERIENCE ============================= -->
   <section id="experience" class="pl-section pl-card pl-pad">
     <div class="pl-sec-head reveal">
-      <h2 class="pl-sec-title">experience</h2>
+      <div class="pl-sec-lead">
+        <span class="pl-sec-ico" aria-hidden="true"><svg><use href="#pi-briefcase"></use></svg></span>
+        <h2 class="pl-sec-title">experience</h2>
+      </div>
       <span class="pl-sec-fig">2020-2025</span>
     </div>
     <div class="pl-xp">
       <div class="pl-xp-item reveal from-left" style="--i:0">
         <div class="pl-xp-top">
+          <span class="pl-xp-ico" aria-hidden="true"><svg><use href="#pi-truck"></use></svg></span>
           <span class="pl-xp-role">Data Analyst</span>
           <span class="pl-xp-when">Sep 2021 to Aug 2025</span>
         </div>
@@ -321,6 +394,7 @@
       </div>
       <div class="pl-xp-item reveal from-right" style="--i:1">
         <div class="pl-xp-top">
+          <span class="pl-xp-ico" aria-hidden="true"><svg><use href="#pi-clipboard"></use></svg></span>
           <span class="pl-xp-role">Quality Assurance Coordinator</span>
           <span class="pl-xp-when">Jan to Jun 2021</span>
         </div>
@@ -332,6 +406,7 @@
       </div>
       <div class="pl-xp-item reveal from-left" style="--i:2">
         <div class="pl-xp-top">
+          <span class="pl-xp-ico" aria-hidden="true"><svg><use href="#pi-headset"></use></svg></span>
           <span class="pl-xp-role">Customer Service Representative</span>
           <span class="pl-xp-when">Jun to Dec 2020</span>
         </div>
@@ -347,21 +422,30 @@
   <!-- ============================= EDUCATION ============================= -->
   <section id="education" class="pl-section pl-card pl-pad">
     <div class="pl-sec-head reveal">
-      <h2 class="pl-sec-title">education</h2>
+      <div class="pl-sec-lead">
+        <span class="pl-sec-ico" aria-hidden="true"><svg><use href="#pi-gradcap"></use></svg></span>
+        <h2 class="pl-sec-title">education</h2>
+      </div>
       <span class="pl-sec-fig">College Park · San Salvador</span>
     </div>
     <div class="pl-edu reveal">
       <div class="pl-edu-cell">
-        <div class="pl-edu-dates">Expected May 2027</div>
-        <div class="pl-edu-degree">Master of Engineering, Software Engineering</div>
-        <div class="pl-edu-school">University of Maryland, College Park</div>
-        <div class="pl-edu-detail">Coursework: Machine Learning &middot; Algorithms &middot; Data Structures &middot; Distributed Systems</div>
+        <span class="pl-edu-ico" aria-hidden="true"><svg><use href="#pi-gradcap"></use></svg></span>
+        <div class="pl-edu-body">
+          <div class="pl-edu-dates">Expected May 2027</div>
+          <div class="pl-edu-degree">Master of Engineering, Software Engineering</div>
+          <div class="pl-edu-school">University of Maryland, College Park</div>
+          <div class="pl-edu-detail">Coursework: Machine Learning &middot; Algorithms &middot; Data Structures &middot; Distributed Systems</div>
+        </div>
       </div>
       <div class="pl-edu-cell">
-        <div class="pl-edu-dates">December 2019</div>
-        <div class="pl-edu-degree">B.S. Industrial Engineering</div>
-        <div class="pl-edu-school">Universidad Dr. José Matías Delgado</div>
-        <div class="pl-edu-detail">San Salvador, El Salvador</div>
+        <span class="pl-edu-ico" aria-hidden="true"><svg><use href="#pi-compass"></use></svg></span>
+        <div class="pl-edu-body">
+          <div class="pl-edu-dates">December 2019</div>
+          <div class="pl-edu-degree">B.S. Industrial Engineering</div>
+          <div class="pl-edu-school">Universidad Dr. José Matías Delgado</div>
+          <div class="pl-edu-detail">San Salvador, El Salvador</div>
+        </div>
       </div>
     </div>
   </section>
@@ -369,7 +453,10 @@
   <!-- ============================= SKILLS ============================= -->
   <section id="skills" class="pl-section pl-card pl-pad">
     <div class="pl-sec-head reveal">
-      <h2 class="pl-sec-title">skills</h2>
+      <div class="pl-sec-lead">
+        <span class="pl-sec-ico" aria-hidden="true"><svg><use href="#pi-layers"></use></svg></span>
+        <h2 class="pl-sec-title">skills</h2>
+      </div>
       <span class="pl-sec-fig"></span>
     </div>
     <div class="pl-skills reveal-group">
@@ -469,7 +556,7 @@
 </div>
 
 <script src="assets/lenis.min.js"></script>
-<script src="assets/main.js?v=8"></script>
+<script src="assets/main.js?v=12"></script>
 <script src="assets/hero-ascii.js?v=3"></script>
 </body>
 </html>

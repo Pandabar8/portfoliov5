@@ -1,7 +1,8 @@
 /* ============================================================
    Portfolio behaviour, dependency-free.
    Decorative sparklines, count-up, scroll reveals, scrollspy,
-   sticky nav, mobile menu, project accordion, back-to-top.
+   deck covered-card motion, sticky nav, mobile menu, project
+   accordion, back-to-top.
    ============================================================ */
 (function () {
   "use strict";
@@ -399,6 +400,146 @@
     });
   }
 
+  /* About console window: the full bio ships in the HTML; on first view
+     the window clears it and "runs" the session, typing each stanza's
+     output, then the trait meters fill. Clicking the body finishes
+     instantly; the run control in the title bar replays. Skipped under
+     reduced motion, where the static text simply stands. */
+  function setupAboutWindow() {
+    var win = document.querySelector(".pl-win");
+    if (!win || reduceMotion) return;
+    var stanzas = Array.prototype.slice.call(
+      win.querySelectorAll(".pl-win-stanza"),
+    );
+    var outs = stanzas.map(function (s) {
+      return s.querySelector(".pl-win-out");
+    });
+    if (!outs.length || outs.indexOf(null) !== -1) return;
+    // snapshot the server-rendered output segments (text nodes + <mark>s)
+    // once, so retyping always reproduces the exact markup
+    var segs = outs.map(function (out) {
+      return Array.prototype.map.call(out.childNodes, function (n) {
+        return { mark: n.nodeType === 1, text: n.textContent };
+      });
+    });
+    var timers = [];
+    var running = false;
+    function later(fn, ms) {
+      timers.push(setTimeout(fn, ms));
+    }
+    function stopTimers() {
+      timers.forEach(clearTimeout);
+      timers = [];
+    }
+    function renderFull(i) {
+      var out = outs[i];
+      out.innerHTML = "";
+      segs[i].forEach(function (seg) {
+        if (seg.mark) {
+          var m = document.createElement("mark");
+          m.textContent = seg.text;
+          out.appendChild(m);
+        } else {
+          out.appendChild(document.createTextNode(seg.text));
+        }
+      });
+      out.classList.remove("typing");
+    }
+    function fillMeters() {
+      var i = 0;
+      win.querySelectorAll(".pl-win-traits .m .on").forEach(function (s) {
+        s.style.setProperty("--d", (i * 0.07).toFixed(2) + "s");
+        i++;
+      });
+      win.classList.add("fill");
+    }
+    function finish() {
+      stopTimers();
+      running = false;
+      stanzas.forEach(function (s) {
+        s.classList.add("on");
+      });
+      outs.forEach(function (o, i) {
+        renderFull(i);
+      });
+      win.classList.remove("tw-arm");
+      fillMeters();
+    }
+    function run() {
+      stopTimers();
+      running = true;
+      win.classList.remove("fill");
+      win.classList.add("tw-arm");
+      stanzas.forEach(function (s) {
+        s.classList.remove("on");
+      });
+      outs.forEach(function (o) {
+        o.innerHTML = "";
+      });
+      function typeStanza(i, delay) {
+        if (i >= stanzas.length) {
+          later(function () {
+            running = false;
+            win.classList.remove("tw-arm");
+            fillMeters();
+          }, delay);
+          return;
+        }
+        later(function () {
+          stanzas[i].classList.add("on");
+          var out = outs[i];
+          out.classList.add("typing");
+          var si = 0;
+          var ci = 0;
+          var node = null;
+          function step() {
+            if (si >= segs[i].length) {
+              out.classList.remove("typing");
+              typeStanza(i + 1, 220);
+              return;
+            }
+            if (!node) {
+              node = segs[i][si].mark
+                ? out.appendChild(document.createElement("mark"))
+                : out.appendChild(document.createTextNode(""));
+            }
+            ci++;
+            var t = segs[i][si].text.slice(0, ci);
+            if (node.nodeType === 3) node.nodeValue = t;
+            else node.textContent = t;
+            if (ci >= segs[i][si].text.length) {
+              si++;
+              ci = 0;
+              node = null;
+            }
+            later(step, 6);
+          }
+          step();
+        }, delay);
+      }
+      typeStanza(0, 350);
+    }
+    win.querySelector(".pl-win-body").addEventListener("click", function () {
+      if (running) finish();
+    });
+    var runBtn = win.querySelector(".pl-win-run");
+    if (runBtn) runBtn.addEventListener("click", run);
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (en) {
+            if (en.isIntersecting) {
+              io.disconnect();
+              run();
+            }
+          });
+        },
+        { threshold: 0.35 },
+      );
+      io.observe(win);
+    }
+  }
+
   /* Debounced trailing-edge callback for settle-sensitive listeners. */
   function debounce(fn, ms) {
     var t;
@@ -411,8 +552,10 @@
   /* Document-space top of a pinned deck card. Stuck sticky cards report
      their pinned rect (top 0), which breaks any geometry that reads it, so
      cards resolve via the stack container (never sticky) plus the preceding
-     siblings' layout heights. Returns null when the element is not a pinned
-     deck card so callers fall back to rect math or native behavior. */
+     siblings' layout heights and margins (the deck's dwell gaps live in
+     margin-top, which offsetHeight does not include). Returns null when the
+     element is not a pinned deck card so callers fall back to rect math or
+     native behavior. */
   function stackDocTop(el, scroll) {
     var card = el.closest(".pl-stack > .pl-card");
     if (!card || getComputedStyle(card).position !== "sticky") return null;
@@ -422,8 +565,10 @@
       sib && sib !== card;
       sib = sib.nextElementSibling
     ) {
-      top += sib.offsetHeight;
+      top +=
+        sib.offsetHeight + (parseFloat(getComputedStyle(sib).marginTop) || 0);
     }
+    top += parseFloat(getComputedStyle(card).marginTop) || 0;
     return top;
   }
 
@@ -486,6 +631,44 @@
     spy();
   }
 
+  /* Auto-hide nav: the bar is a floating overlay (the deck no longer
+     reserves space for it), sliding away on downward scroll and back on
+     any upward intent. It stays put near the top of the page, while the
+     mobile menu is open, and whenever focus is inside it (CSS handles
+     that case). Skipped under reduced motion: the bar simply stays. */
+  function setupAutoHideNav() {
+    var header = document.getElementById("site-header");
+    if (!header || reduceMotion) return;
+    var toggle = header.querySelector(".pl-nav-toggle");
+    var lastY = window.scrollY;
+    function update() {
+      var y = window.scrollY;
+      var dy = y - lastY;
+      lastY = y;
+      var menuOpen = toggle && toggle.getAttribute("aria-expanded") === "true";
+      // the +-2px dead zone swallows momentum jitter so the bar never
+      // flickers at the top of a rubber-band bounce
+      if (y < 120 || dy < -2 || menuOpen) {
+        header.classList.remove("nav-hidden");
+      } else if (dy > 2 && y > 200) {
+        header.classList.add("nav-hidden");
+      }
+    }
+    var ticking = false;
+    window.addEventListener(
+      "scroll",
+      function () {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function () {
+          ticking = false;
+          update();
+        });
+      },
+      { passive: true },
+    );
+  }
+
   /* Sticky header shadow + back-to-top visibility. */
   function setupScrollChrome() {
     var header = document.getElementById("site-header");
@@ -499,29 +682,26 @@
     window.addEventListener("scroll", onScroll, { passive: true });
   }
 
-  /* Stacking deck: cards pin just below the sticky header so a covered
-     card's top edge stays visible while the next slides over it. Cards
-     taller than the remaining viewport pin lower so their bottom scrolls
-     into view before the next card arrives. Sticky mode only engages after
-     the first measurement (html.deck-ready), so a JS failure leaves the
-     flat, fully readable layout. */
+  /* Stacking deck: cards pin at the very top of the viewport - the nav
+     is a floating overlay (setupAutoHideNav) and takes no deck space.
+     Cards taller than the viewport pin higher so their bottom scrolls
+     into view before the next card arrives. Sticky mode only engages
+     after the first measurement (html.deck-ready), so a JS failure
+     leaves the flat, fully readable layout. */
   function setupDeckFit() {
     var cards = Array.prototype.slice.call(
       document.querySelectorAll(".pl-stack > .pl-card"),
     );
     if (!cards.length) return;
-    var header = document.getElementById("site-header");
     function fit() {
-      var headerH = header ? header.offsetHeight : 0;
-      document.documentElement.style.setProperty("--header-h", headerH + "px");
       // read every height before writing: interleaving reads with the
       // --deck-top writes forces a layout per card while the accordion
       // transition has the observer refitting every frame
       var overs = cards.map(function (card) {
-        return card.offsetHeight - (window.innerHeight - headerH);
+        return card.offsetHeight - window.innerHeight;
       });
       cards.forEach(function (card, i) {
-        var top = headerH - Math.max(0, overs[i]) + "px";
+        var top = -Math.max(0, overs[i]) + "px";
         if (card.style.getPropertyValue("--deck-top") !== top) {
           card.style.setProperty("--deck-top", top);
         }
@@ -541,11 +721,75 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
   }
 
+  /* Covered-card motion: as the next card slides over a pinned card, drive
+     --covered from 0 (next card's top enters the viewport) to 1 (next card
+     pins at its own --deck-top). styles.css maps it to the visible effects:
+     the covered card recedes, drifts up and dims, so the pin reads as depth
+     instead of a hard freeze. Flow tops come from summing sibling heights,
+     same reason as stackDocTop: a stuck card's rect lies about its position.
+     Skipped whenever the deck is flat (mobile, reduced motion, no-JS
+     fallback), where --covered has no CSS consumer anyway. */
+  function setupDeckMotion() {
+    if (reduceMotion) return;
+    var cards = Array.prototype.slice.call(
+      document.querySelectorAll(".pl-stack > .pl-card"),
+    );
+    if (cards.length < 2) return;
+    var stack = cards[0].parentElement;
+    var applied = cards.map(function () {
+      return "";
+    });
+    function frame() {
+      if (getComputedStyle(cards[0]).position !== "sticky") return;
+      var scroll = window.scrollY;
+      var vh = window.innerHeight;
+      // read everything before the style writes, one layout per frame
+      var stackTop = stack.getBoundingClientRect().top + scroll;
+      var heights = cards.map(function (card) {
+        return card.offsetHeight;
+      });
+      var margins = cards.map(function (card) {
+        return parseFloat(getComputedStyle(card).marginTop) || 0;
+      });
+      var deckTops = cards.map(function (card) {
+        return parseFloat(card.style.getPropertyValue("--deck-top")) || 0;
+      });
+      var flowTop = stackTop + margins[0];
+      for (var i = 0; i < cards.length - 1; i++) {
+        var nextTop = flowTop + heights[i] + margins[i + 1];
+        var span = vh - deckTops[i + 1];
+        var p = span > 0 ? (scroll - (nextTop - vh)) / span : 0;
+        p = Math.max(0, Math.min(1, p));
+        var v = p.toFixed(3);
+        if (applied[i] !== v) {
+          applied[i] = v;
+          cards[i].style.setProperty("--covered", v);
+        }
+        flowTop = nextTop;
+      }
+    }
+    var ticking = false;
+    window.addEventListener(
+      "scroll",
+      function () {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function () {
+          ticking = false;
+          frame();
+        });
+      },
+      { passive: true },
+    );
+    window.addEventListener("resize", debounce(frame, 150), { passive: true });
+    frame();
+  }
+
   /* Smooth scroll via Lenis; native scroll when motion is reduced. */
   function setupLenis() {
     if (reduceMotion || !window.Lenis) return;
     var lenis = new Lenis({
-      duration: 1.2,
+      duration: 0.75,
       easing: function (t) {
         return Math.min(1, 1.001 - Math.pow(2, -10 * t));
       },
@@ -1028,14 +1272,17 @@
 
   function init() {
     setupDeckFit();
+    setupDeckMotion();
     setupLenis();
     setupAnchorNav();
     setupThemeToggle();
     buildCharts();
     buildMarquee();
     setupReveals();
+    setupAboutWindow();
     setupScrollspy();
     setupScrollChrome();
+    setupAutoHideNav();
     setupNav();
     setupProjects();
     setupSkillSpotlight();
