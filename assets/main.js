@@ -673,8 +673,8 @@
 
   /* Auto-hide nav: the bar is a floating overlay (the deck no longer
      reserves space for it), sliding away on downward scroll and back on
-     any upward intent. It stays put near the top of the page and whenever
-     focus is inside it (CSS handles that case). Skipped under reduced
+     any upward intent. It stays put near the top of the page and while
+     keyboard focus is inside it (CSS handles that case). Skipped under reduced
      motion: the bar simply stays. */
   function setupAutoHideNav() {
     var header = document.getElementById("site-header");

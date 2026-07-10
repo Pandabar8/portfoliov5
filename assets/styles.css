@@ -1616,11 +1616,13 @@ html:not(.js) .lg-marquee {
 /* auto-hide: main.js toggles .nav-hidden by scroll direction. The bar
    slides out of view but keeps its layout slot (it stays sticky), so
    nothing below ever shifts. Keyboard focus inside always brings it
-   back regardless of scroll state. */
+   back regardless of scroll state: :focus-visible, not :focus-within,
+   because a mouse click parks lasting :focus on the pressed control
+   and would pin the bar open for the rest of the visit. */
 .pf-final .pl-header.nav-hidden {
   transform: translateY(-100%);
 }
-.pf-final .pl-header.nav-hidden:focus-within {
+.pf-final .pl-header.nav-hidden:has(:focus-visible) {
   transform: none;
 }
 /* header right-side controls: resume, GitHub/LinkedIn, language, theme */
