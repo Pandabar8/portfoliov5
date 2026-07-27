@@ -2242,6 +2242,25 @@ html.intro-arming .sr::before {
     0 -18px 44px -28px rgba(0, 0, 0, 0.55),
     inset 0 1px 0 0 color-mix(in oklab, var(--ca) 26%, var(--line-soft));
 }
+/* Ambient ASCII corner field, one canvas per card (card-ascii.js). The
+   canvas paints above the card surface; lifting every other direct child
+   keeps glyphs under the content even where the fade reaches text. The
+   flat <=900px deck goes without it (the JS stops its loop there too). */
+.pl-card-ascii {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.pl-stack > .pl-card > :not(.pl-card-ascii) {
+  position: relative;
+  z-index: 1;
+}
+@media (max-width: 900px) {
+  .pl-card-ascii {
+    display: none;
+  }
+}
 /* Per-section color: the card tint AND its content accents share one hue, so
    each section reads as its own coherent surface. About (1) and Skills (5) keep
    the site blue (Skills' sub-cards set their own per-category --ca). Projects,
@@ -2640,6 +2659,7 @@ html[data-theme="light"] .pl-stack > .pl-card:nth-child(4) {
   /* screen-only chrome */
   .lg-marquee,
   .pl-hero-ascii,
+  .pl-card-ascii,
   .pf-totop,
   .pl-header-actions,
   .pl-pcard-wm,

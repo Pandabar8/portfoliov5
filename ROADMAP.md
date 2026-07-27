@@ -5,6 +5,35 @@ build plan below. Newest work first.
 
 ---
 
+## 2026-07, Ambient card texture: the hero's ASCII field reaches the deck
+
+### In plain language
+
+1. **Every deck card has a live corner texture.** A faint field of drifting
+   ASCII characters sits in each card's upper-right, colored by that
+   section's own accent (emerald on Projects, cream on Experience, orchid on
+   Education, the site blue on About and Skills). It uses the same character
+   language and motion as the hero's ripple field, so hero and deck read as
+   one system.
+2. **Restraint is the point.** 7.5% intensity, picked against rendered
+   side-by-side mocks of three candidate treatments; the field fades out
+   well before it reaches body text, and text always paints above it.
+3. **It disappears politely.** Only cards on screen draw (at ~30fps), cards
+   fully covered by the next card sleep, reduced motion gets one static
+   frame, and the flat mobile deck and print get nothing.
+
+### Design notes
+
+- `assets/card-ascii.js` mirrors `hero-ascii.js` (same ambient coefficients,
+  no pointer term): one canvas per card at 1x, accent read from the card's
+  live `--ca`, recolored by the same `data-theme` observer pattern.
+- The corner fade is computed per cell (equivalent to a CSS corner mask), so
+  cells outside it skip the trig entirely.
+- Stacking: the canvas sits at `z-index: 0` and every other card child lifts
+  to `z-index: 1`, so glyphs never cross text.
+
+---
+
 ## 2026-07, Bilingual site + a leaner header
 
 ### In plain language
