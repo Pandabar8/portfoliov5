@@ -1032,6 +1032,21 @@ html[data-theme="light"] .pl-pcard-live {
 .pl-pcard-live:hover {
   filter: brightness(1.08);
 }
+/* featured card: the flagship project spans both grid columns */
+.pl-pcard-feat {
+  grid-column: 1 / -1;
+}
+.pl-pcard-feat .pl-pcard-tag {
+  max-width: 62ch;
+}
+/* non-link status chip for projects without a public URL; dashed border
+   signals "not clickable" next to the solid link chips */
+.pl-pcard-status {
+  padding: 8px 14px;
+  border-radius: 9px;
+  border: 1px dashed var(--line);
+  color: var(--muted);
+}
 /* detail stays in the DOM for no-JS and print; JS hides it and the lightbox
    presents it on demand */
 .pl-pcard-detail {

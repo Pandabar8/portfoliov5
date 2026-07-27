@@ -61,6 +61,20 @@ window.I18N_ES = {
   /* projects */
   "proj.src": "Código ↗",
   "proj.visit": "Visitar ↗",
+  "proj.fineas.aria": "Abrir detalles de Fineas",
+  "proj.fineas.fig": "Cofundador · pre-lanzamiento",
+  "proj.fineas.statk": "pruebas automatizadas",
+  "proj.fineas.status": "En desarrollo · aún sin enlace público",
+  "proj.fineas.tag":
+    "Hub de finanzas personales para salvadoreños: diagnóstico financiero, tracker de gastos de 3 taps y asesoría, en español, en web y móvil.",
+  "proj.fineas.d1":
+    "Cofundando un hub de finanzas personales para salvadoreños: diagnóstico financiero, tracker de gastos de 3 taps con rachas y reserva de asesores, todo en español.",
+  "proj.fineas.d2":
+    "App web en Next.js 14 y apps nativas de iOS y Android en Expo, compartiendo un monorepo TypeScript.",
+  "proj.fineas.d3":
+    "Backend en Supabase endurecido con row-level security, cifrado AES-256 y rate limiting; la Claude API del lado del servidor genera el análisis personalizado.",
+  "proj.fineas.d4":
+    "3,400+ pruebas automatizadas y 49 migraciones versionadas de base de datos mantienen la plataforma lista para el lanzamiento público.",
   "proj.gh.aria":
     "Abrir detalles de la Plataforma de Analítica de Issues de GitHub",
   "proj.gh.title": "Plataforma de Analítica de Issues de GitHub",
@@ -134,7 +148,7 @@ window.I18N_ES = {
   "edu.1.dates": "Prevista para mayo de 2027",
   "edu.1.degree": "Maestría en Ingeniería de Software (M.Eng)",
   "edu.1.detail":
-    "Cursos: Machine Learning · Algoritmos · Estructuras de Datos · Sistemas Distribuidos",
+    "Cursos: Machine Learning · Algoritmos · Estructuras de Datos · Sistemas Distribuidos · Bases de Datos · Ingeniería de Software",
   "edu.2.dates": "Diciembre de 2019",
   "edu.2.degree": "Ingeniería Industrial",
 

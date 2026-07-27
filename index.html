@@ -136,6 +136,7 @@
   <symbol id="pi-compass" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.9" r="1.8"></circle><path d="M11.1 6.5 6.8 19.6M12.9 6.5l4.3 13.1"></path><path d="M7.9 16.4a9.2 9.2 0 0 0 8.2 0"></path></g></symbol>
   <symbol id="pi-pin" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-3.4-3-6.5-6.4-6.5-10a6.5 6.5 0 0 1 13 0c0 3.6-3.1 7-6.5 10z"></path><circle cx="12" cy="10.8" r="2.3"></circle></g></symbol>
   <symbol id="pi-cpu" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="1.6"></rect><path d="M9.5 2.8v2.4M14.5 2.8v2.4M9.5 18.8v2.4M14.5 18.8v2.4M2.8 9.5h2.4M2.8 14.5h2.4M18.8 9.5h2.4M18.8 14.5h2.4"></path></g></symbol>
+  <symbol id="pi-wallet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.2"></rect><path d="M3 9.8h18"></path><path d="M21 13h-4.2a2.1 2.1 0 0 0 0 4.2H21"></path></g></symbol>
   <symbol id="pi-nodes" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5.5" r="2.2"></circle><circle cx="5.5" cy="18" r="2.2"></circle><circle cx="18.5" cy="18" r="2.2"></circle><path d="M10.8 7.4 6.6 16M13.2 7.4l4.2 8.6M7.7 18h8.6"></path></g></symbol>
   <symbol id="pi-bolt" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3 5.5 13.5h5L11 21l7.5-10.5h-5z"></path></g></symbol>
   <symbol id="pi-play" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4.5 19 12 7 19.5z"></path></g></symbol>
@@ -280,81 +281,38 @@
         <span class="pl-sec-ico" aria-hidden="true"><svg><use href="#pi-modules"></use></svg></span>
         <h2 class="pl-sec-title" data-i18n="sec.projects">projects</h2>
       </div>
-      <span class="pl-sec-fig">figs. 02-05: selected work</span>
+      <span class="pl-sec-fig">figs. 02-06: selected work</span>
     </div>
     <div class="pl-proj-grid">
 
-      <article class="pl-pcard reveal" style="--i:0" data-pid="gh-issues">
-        <button type="button" class="pl-pcard-main" aria-haspopup="dialog" data-i18n-aria="proj.gh.aria" aria-label="Open details for GitHub Issues Analytics Platform">
+      <article class="pl-pcard pl-pcard-feat reveal" style="--i:0" data-pid="fineas">
+        <button type="button" class="pl-pcard-main" aria-haspopup="dialog" data-i18n-aria="proj.fineas.aria" aria-label="Open details for Fineas">
           <span class="pl-pcard-top">
-            <span class="pl-proj-fig"><b>fig. 02</b>University of Maryland</span>
-            <span class="pl-proj-stat"><span class="v">80%</span><span class="k" data-i18n="proj.gh.statk">priority-classification accuracy</span></span>
+            <span class="pl-proj-fig"><b>fig. 02</b><span data-i18n="proj.fineas.fig">Co-founder &middot; pre-launch</span></span>
+            <span class="pl-proj-stat"><span class="v">3,400+</span><span class="k" data-i18n="proj.fineas.statk">automated tests</span></span>
           </span>
-          <span class="pl-pcard-trow"><span class="pl-pcard-ico" aria-hidden="true"><svg><use href="#pi-chart"></use></svg></span><span class="pl-pcard-title" data-i18n="proj.gh.title">GitHub Issues Analytics Platform</span></span>
-          <span class="pl-pcard-tag" data-i18n="proj.gh.tag">Analytics pipeline turning 5,200+ raw GitHub issues into prioritization signals.</span>
-          <span class="pl-proj-stack"><b>stack:</b> <span class="t">Python</span><span class="t">Scikit-learn</span><span class="t">Pandas</span><span class="t">Plotly</span><span class="t">pytest</span></span>
+          <span class="pl-pcard-trow"><span class="pl-pcard-ico" aria-hidden="true"><svg><use href="#pi-wallet"></use></svg></span><span class="pl-pcard-title">Fineas</span></span>
+          <span class="pl-pcard-tag" data-i18n="proj.fineas.tag">Personal finance hub for Salvadorans: financial diagnostic, 3-tap expense tracker and advisor booking, in Spanish, on web and mobile.</span>
+          <span class="pl-proj-stack"><b>stack:</b> <span class="t">Next.js</span><span class="t">Expo</span><span class="t">TypeScript</span><span class="t">Supabase</span><span class="t">Claude API</span></span>
         </button>
         <div class="pl-pcard-acts">
-          <a class="pl-pcard-src" data-i18n="proj.src" href="https://github.com/javrobs/ENPM611-application-test" target="_blank" rel="noopener">Source &#8599;</a>
+          <span class="pl-pcard-status" data-i18n="proj.fineas.status">In development &middot; no public link yet</span>
         </div>
         <div class="pl-pcard-detail">
           <ul>
-            <li data-i18n="proj.gh.d1">Built a data analytics pipeline processing 5,200+ GitHub issues with 90% test coverage using pytest.</li>
-            <li data-i18n="proj.gh.d2">Developed Random Forest and Gradient Boosting classifiers achieving 80% accuracy for issue priority classification.</li>
-            <li data-i18n="proj.gh.d3">Created 7 interactive Plotly visualizations, including contributor lifecycle analysis and engagement heatmaps.</li>
+            <li data-i18n="proj.fineas.d1">Co-founding a personal finance hub for Salvadorans: financial diagnostic, 3-tap expense tracker with streaks, and advisor booking, all in Spanish.</li>
+            <li data-i18n="proj.fineas.d2">Web app in Next.js 14 plus native iOS and Android apps in Expo, sharing one TypeScript monorepo.</li>
+            <li data-i18n="proj.fineas.d3">Supabase backend hardened with row-level security, AES-256 encryption and rate limiting; server-side Claude API powers personalized analysis.</li>
+            <li data-i18n="proj.fineas.d4">3,400+ automated tests and 49 versioned database migrations keep the platform release-ready ahead of public launch.</li>
           </ul>
         </div>
-        <span class="pl-pcard-wm" aria-hidden="true"><svg><use href="#pi-chart"></use></svg></span>
+        <span class="pl-pcard-wm" aria-hidden="true"><svg><use href="#pi-wallet"></use></svg></span>
       </article>
 
-      <article class="pl-pcard reveal" style="--i:1" data-pid="road-damage">
-        <button type="button" class="pl-pcard-main" aria-haspopup="dialog" data-i18n-aria="proj.rd.aria" aria-label="Open details for Road Damage Detection with Deep Learning">
-          <span class="pl-pcard-top">
-            <span class="pl-proj-fig"><b>fig. 03</b>University of Maryland</span>
-            <span class="pl-proj-stat"><span class="v">44%</span><span class="k" data-i18n="proj.rd.statk">training-time reduction</span></span>
-          </span>
-          <span class="pl-pcard-trow"><span class="pl-pcard-ico" aria-hidden="true"><svg><use href="#pi-road"></use></svg></span><span class="pl-pcard-title" data-i18n="proj.rd.title">Road Damage Detection with Deep Learning</span></span>
-          <span class="pl-pcard-tag" data-i18n="proj.rd.tag">Transfer-learning image classifier benchmarked across four architectures.</span>
-          <span class="pl-proj-stack"><b>stack:</b> <span class="t">Python</span><span class="t">PyTorch</span><span class="t">TensorFlow</span><span class="t">Google Colab</span></span>
-        </button>
-        <div class="pl-pcard-acts">
-          <a class="pl-pcard-src" data-i18n="proj.src" href="https://github.com/Pandabar8/road_damage_project" target="_blank" rel="noopener">Source &#8599;</a>
-        </div>
-        <div class="pl-pcard-detail">
-          <ul>
-            <li data-i18n="proj.rd.d1">Built an image-classification pipeline for 907 images using transfer learning and data augmentation in PyTorch.</li>
-            <li data-i18n="proj.rd.d2">Benchmarked 4 architectures (ResNet-18, MobileNetV3, EfficientNet-B0, ViT-Tiny) and reduced training time by 44%.</li>
-          </ul>
-        </div>
-        <span class="pl-pcard-wm" aria-hidden="true"><svg><use href="#pi-road"></use></svg></span>
-      </article>
-
-      <article class="pl-pcard reveal" style="--i:2" data-pid="minimax">
-        <button type="button" class="pl-pcard-main" aria-haspopup="dialog" data-i18n-aria="proj.mm.aria" aria-label="Open details for AI Game Engine with Minimax">
-          <span class="pl-pcard-top">
-            <span class="pl-proj-fig"><b>fig. 04</b>University of Maryland</span>
-            <span class="pl-proj-stat"><span class="v">90%+</span><span class="k" data-i18n="proj.mm.statk">win/draw rate at depth 6</span></span>
-          </span>
-          <span class="pl-pcard-trow"><span class="pl-pcard-ico" aria-hidden="true"><svg><use href="#pi-grid"></use></svg></span><span class="pl-pcard-title" data-i18n="proj.mm.title">AI Game Engine with Minimax</span></span>
-          <span class="pl-pcard-tag" data-i18n="proj.mm.tag">Adversarial search engine with alpha-beta pruning and heuristic evaluation.</span>
-          <span class="pl-proj-stack"><b>stack:</b> <span class="t">Python</span><span class="t">Algorithm design</span></span>
-        </button>
-        <div class="pl-pcard-acts">
-          <a class="pl-pcard-src" data-i18n="proj.src" href="https://github.com/Pandabar8/tictactoe-minimax" target="_blank" rel="noopener">Source &#8599;</a>
-        </div>
-        <div class="pl-pcard-detail">
-          <ul>
-            <li data-i18n="proj.mm.d1">Implemented minimax with alpha-beta pruning, achieving a 40-60% reduction in search-space complexity.</li>
-            <li data-i18n="proj.mm.d2">Developed a heuristic evaluation function; the AI achieves a 90%+ win/draw rate at search depth 6.</li>
-          </ul>
-        </div>
-        <span class="pl-pcard-wm" aria-hidden="true"><svg><use href="#pi-grid"></use></svg></span>
-      </article>
-
-      <article class="pl-pcard reveal" style="--i:3" data-pid="margaux-arden">
+      <article class="pl-pcard reveal" style="--i:1" data-pid="margaux-arden">
         <button type="button" class="pl-pcard-main" aria-haspopup="dialog" data-i18n-aria="proj.ma.aria" aria-label="Open details for Margaux and Arden">
           <span class="pl-pcard-top">
-            <span class="pl-proj-fig"><b>fig. 05</b><span data-i18n="proj.ma.fig">Freelance</span></span>
+            <span class="pl-proj-fig"><b>fig. 03</b><span data-i18n="proj.ma.fig">Freelance</span></span>
             <span class="pl-proj-stat"><span class="v">0</span><span class="k" data-i18n="proj.ma.statk">runtime dependencies</span></span>
           </span>
           <span class="pl-pcard-trow"><span class="pl-pcard-ico" aria-hidden="true"><svg><use href="#pi-rings"></use></svg></span><span class="pl-pcard-title">Margaux &amp; Arden</span></span>
@@ -374,6 +332,73 @@
           </ul>
         </div>
         <span class="pl-pcard-wm" aria-hidden="true"><svg><use href="#pi-rings"></use></svg></span>
+      </article>
+
+      <article class="pl-pcard reveal" style="--i:2" data-pid="gh-issues">
+        <button type="button" class="pl-pcard-main" aria-haspopup="dialog" data-i18n-aria="proj.gh.aria" aria-label="Open details for GitHub Issues Analytics Platform">
+          <span class="pl-pcard-top">
+            <span class="pl-proj-fig"><b>fig. 04</b>University of Maryland</span>
+            <span class="pl-proj-stat"><span class="v">80%</span><span class="k" data-i18n="proj.gh.statk">priority-classification accuracy</span></span>
+          </span>
+          <span class="pl-pcard-trow"><span class="pl-pcard-ico" aria-hidden="true"><svg><use href="#pi-chart"></use></svg></span><span class="pl-pcard-title" data-i18n="proj.gh.title">GitHub Issues Analytics Platform</span></span>
+          <span class="pl-pcard-tag" data-i18n="proj.gh.tag">Analytics pipeline turning 5,200+ raw GitHub issues into prioritization signals.</span>
+          <span class="pl-proj-stack"><b>stack:</b> <span class="t">Python</span><span class="t">Scikit-learn</span><span class="t">Pandas</span><span class="t">Plotly</span><span class="t">pytest</span></span>
+        </button>
+        <div class="pl-pcard-acts">
+          <a class="pl-pcard-src" data-i18n="proj.src" href="https://github.com/javrobs/ENPM611-application-test" target="_blank" rel="noopener">Source &#8599;</a>
+        </div>
+        <div class="pl-pcard-detail">
+          <ul>
+            <li data-i18n="proj.gh.d1">Built a data analytics pipeline processing 5,200+ GitHub issues with 90% test coverage using pytest.</li>
+            <li data-i18n="proj.gh.d2">Developed Random Forest and Gradient Boosting classifiers achieving 80% accuracy for issue priority classification.</li>
+            <li data-i18n="proj.gh.d3">Created 7 interactive Plotly visualizations, including contributor lifecycle analysis and engagement heatmaps.</li>
+          </ul>
+        </div>
+        <span class="pl-pcard-wm" aria-hidden="true"><svg><use href="#pi-chart"></use></svg></span>
+      </article>
+
+      <article class="pl-pcard reveal" style="--i:3" data-pid="road-damage">
+        <button type="button" class="pl-pcard-main" aria-haspopup="dialog" data-i18n-aria="proj.rd.aria" aria-label="Open details for Road Damage Detection with Deep Learning">
+          <span class="pl-pcard-top">
+            <span class="pl-proj-fig"><b>fig. 05</b>University of Maryland</span>
+            <span class="pl-proj-stat"><span class="v">44%</span><span class="k" data-i18n="proj.rd.statk">training-time reduction</span></span>
+          </span>
+          <span class="pl-pcard-trow"><span class="pl-pcard-ico" aria-hidden="true"><svg><use href="#pi-road"></use></svg></span><span class="pl-pcard-title" data-i18n="proj.rd.title">Road Damage Detection with Deep Learning</span></span>
+          <span class="pl-pcard-tag" data-i18n="proj.rd.tag">Transfer-learning image classifier benchmarked across four architectures.</span>
+          <span class="pl-proj-stack"><b>stack:</b> <span class="t">Python</span><span class="t">PyTorch</span><span class="t">TensorFlow</span><span class="t">Google Colab</span></span>
+        </button>
+        <div class="pl-pcard-acts">
+          <a class="pl-pcard-src" data-i18n="proj.src" href="https://github.com/Pandabar8/road_damage_project" target="_blank" rel="noopener">Source &#8599;</a>
+        </div>
+        <div class="pl-pcard-detail">
+          <ul>
+            <li data-i18n="proj.rd.d1">Built an image-classification pipeline for 907 images using transfer learning and data augmentation in PyTorch.</li>
+            <li data-i18n="proj.rd.d2">Benchmarked 4 architectures (ResNet-18, MobileNetV3, EfficientNet-B0, ViT-Tiny) and reduced training time by 44%.</li>
+          </ul>
+        </div>
+        <span class="pl-pcard-wm" aria-hidden="true"><svg><use href="#pi-road"></use></svg></span>
+      </article>
+
+      <article class="pl-pcard reveal" style="--i:4" data-pid="minimax">
+        <button type="button" class="pl-pcard-main" aria-haspopup="dialog" data-i18n-aria="proj.mm.aria" aria-label="Open details for AI Game Engine with Minimax">
+          <span class="pl-pcard-top">
+            <span class="pl-proj-fig"><b>fig. 06</b>University of Maryland</span>
+            <span class="pl-proj-stat"><span class="v">90%+</span><span class="k" data-i18n="proj.mm.statk">win/draw rate at depth 6</span></span>
+          </span>
+          <span class="pl-pcard-trow"><span class="pl-pcard-ico" aria-hidden="true"><svg><use href="#pi-grid"></use></svg></span><span class="pl-pcard-title" data-i18n="proj.mm.title">AI Game Engine with Minimax</span></span>
+          <span class="pl-pcard-tag" data-i18n="proj.mm.tag">Adversarial search engine with alpha-beta pruning and heuristic evaluation.</span>
+          <span class="pl-proj-stack"><b>stack:</b> <span class="t">Python</span><span class="t">Algorithm design</span></span>
+        </button>
+        <div class="pl-pcard-acts">
+          <a class="pl-pcard-src" data-i18n="proj.src" href="https://github.com/Pandabar8/tictactoe-minimax" target="_blank" rel="noopener">Source &#8599;</a>
+        </div>
+        <div class="pl-pcard-detail">
+          <ul>
+            <li data-i18n="proj.mm.d1">Implemented minimax with alpha-beta pruning, achieving a 40-60% reduction in search-space complexity.</li>
+            <li data-i18n="proj.mm.d2">Developed a heuristic evaluation function; the AI achieves a 90%+ win/draw rate at search depth 6.</li>
+          </ul>
+        </div>
+        <span class="pl-pcard-wm" aria-hidden="true"><svg><use href="#pi-grid"></use></svg></span>
       </article>
 
     </div>
@@ -446,7 +471,7 @@
           <div class="pl-edu-dates" data-i18n="edu.1.dates">Expected May 2027</div>
           <div class="pl-edu-degree" data-i18n="edu.1.degree">Master of Engineering, Software Engineering</div>
           <div class="pl-edu-school">University of Maryland, College Park</div>
-          <div class="pl-edu-detail" data-i18n="edu.1.detail">Coursework: Machine Learning &middot; Algorithms &middot; Data Structures &middot; Distributed Systems</div>
+          <div class="pl-edu-detail" data-i18n="edu.1.detail">Coursework: Machine Learning &middot; Algorithms &middot; Data Structures &middot; Distributed Systems &middot; Database Systems &middot; Software Engineering</div>
         </div>
       </div>
       <div class="pl-edu-cell">

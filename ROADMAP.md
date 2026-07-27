@@ -5,6 +5,45 @@ build plan below. Newest work first.
 
 ---
 
+## 2026-07, Content parity: Fineas joins the portfolio, the resume matches the site
+
+### In plain language
+
+1. **Fineas is on the site.** The pre-launch personal-finance hub (co-founded)
+   leads the projects grid as a full-width featured card: fig. 02, a wallet
+   glyph, 3,400+ automated tests as the headline stat, and a dashed "in
+   development, no public link yet" chip standing in for the Visit and Source
+   buttons. The four existing cards renumber to figs. 03-06, with Margaux &
+   Arden moving up to second.
+2. **The downloadable resume now says the same thing as the site.** The PDF in
+   assets/ was a June export of an older, bolder framing; the site was built
+   from the July rewrite. The resume is rebuilt from that rewrite plus
+   everything the site had that it lacked: Margaux & Arden, two missing
+   courses (Database Systems, Software Engineering), and Fineas listed first
+   with Co-founder credit.
+3. **The two can't drift silently again.** The editable resume source lives at
+   the repo root, untracked (`*.docx` is gitignored), and exports through
+   LibreOffice. A local pre-push hook flags any push where portfolio content
+   files and the resume PDF change on one side only.
+
+### Design notes
+
+- Featured card: `.pl-pcard-feat { grid-column: 1 / -1 }` on the existing
+  2-col grid; mobile and print already collapse to one column, so the span is
+  inert there. Tag capped at 62ch so the wide card doesn't run a full line.
+- Status chip `.pl-pcard-status`: dashed border marks it non-interactive next
+  to the solid link chips; the lightbox clones it like any acts row.
+- New sprite glyph `pi-wallet` (body, card band, pocket clasp) in the house
+  1.8px stroke language.
+- Resume pipeline: edit `Jose-Barrientos-Resume.docx` at the repo root, then
+  `soffice --headless --convert-to pdf`, output to
+  `assets/Jose-Barrientos-Resume.pdf`. Word AppleScript export fails on this
+  machine; LibreOffice is the converter.
+- Spanish strings ship for every new key; fig labels and stack chips stay
+  English by convention.
+
+---
+
 ## 2026-07, Ambient card texture: the hero's ASCII field reaches the deck
 
 ### In plain language
