@@ -1747,8 +1747,12 @@ html[data-theme="light"] .theme-toggle .ic-sun {
   display: none;
 }
 /* theme toggle: circle-expand reveal (View Transitions API). Scoped to the
-   toggle's .theme-vt class so the new theme grows in a clip-path circle (set in
-   main.js) instead of the default cross-fade. */
+   toggle's .theme-vt class so the new theme grows in a clip-path circle
+   instead of the default cross-fade. main.js writes the button center and the
+   far-corner radius, as percentages of the layer box, into --vt-x/--vt-y/--vt-r
+   on <html>, which the pseudo tree inherits. The curve holds a small circle
+   around the button for the first frames so the origin reads, then sweeps the
+   rest of the page. */
 html.theme-vt::view-transition-old(root),
 html.theme-vt::view-transition-new(root) {
   animation: none;
@@ -1759,6 +1763,15 @@ html.theme-vt::view-transition-old(root) {
 }
 html.theme-vt::view-transition-new(root) {
   z-index: 1;
+  animation: themeReveal 0.68s cubic-bezier(0.7, 0, 0.3, 1) both;
+}
+@keyframes themeReveal {
+  from {
+    clip-path: circle(0% at var(--vt-x) var(--vt-y));
+  }
+  to {
+    clip-path: circle(var(--vt-r) at var(--vt-x) var(--vt-y));
+  }
 }
 
 /* scroll reveal. Hidden pre-animation states are gated on html.js (set by an

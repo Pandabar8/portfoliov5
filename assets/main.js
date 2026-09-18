@@ -1269,29 +1269,27 @@
       var r = btn.getBoundingClientRect();
       var x = r.left + r.width / 2;
       var y = r.top + r.height / 2;
-      var end = Math.hypot(
-        Math.max(x, window.innerWidth - x),
-        Math.max(y, window.innerHeight - y),
-      );
+      var w = window.innerWidth;
+      var h = window.innerHeight;
+      var end = Math.hypot(Math.max(x, w - x), Math.max(y, h - y));
+      // The circle itself is a CSS keyframe on ::view-transition-new(root)
+      // (styles.css) that reads these custom properties, so it starts on the
+      // same frame the snapshot tree appears; the JS only supplies geometry.
+      // Percentages, not px: Chrome 151 applies px lengths on the transition
+      // layer in device pixels on Retina screens, which put the circle at half
+      // the button's coordinates. Percentages resolve against the layer box
+      // itself, so they land on the button regardless. A percentage radius
+      // resolves against hypot(w, h) / sqrt(2).
       var root = document.documentElement;
+      root.style.setProperty("--vt-x", (x / w) * 100 + "%");
+      root.style.setProperty("--vt-y", (y / h) * 100 + "%");
+      root.style.setProperty(
+        "--vt-r",
+        (end / (Math.hypot(w, h) / Math.SQRT2)) * 100 + "%",
+      );
       root.classList.add("theme-vt");
       var vt = document.startViewTransition(function () {
         apply(next, true);
-      });
-      vt.ready.then(function () {
-        root.animate(
-          {
-            clipPath: [
-              "circle(0px at " + x + "px " + y + "px)",
-              "circle(" + end + "px at " + x + "px " + y + "px)",
-            ],
-          },
-          {
-            duration: 540,
-            easing: "cubic-bezier(0.4, 0, 0.2, 1)",
-            pseudoElement: "::view-transition-new(root)",
-          },
-        );
       });
       vt.finished.finally(function () {
         root.classList.remove("theme-vt");
