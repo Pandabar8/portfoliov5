@@ -86,7 +86,16 @@
     if (!btn) return;
     btn.addEventListener("click", function () {
       var next = I18N.current() === "es" ? "en" : "es";
-      I18N.apply(next);
+      // Swap under the View Transitions default cross-fade so the page
+      // settles into the new language instead of snapping; instant when the
+      // API is unavailable or motion is reduced, same contract as the theme.
+      if (reduceMotion || !document.startViewTransition) {
+        I18N.apply(next);
+      } else {
+        document.startViewTransition(function () {
+          I18N.apply(next);
+        });
+      }
       // Persist only explicit choices, same contract as the theme toggle.
       try {
         localStorage.setItem("lang", next);
